@@ -1,0 +1,85 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_network/presentation/blocs/auth/auth_bloc.dart';
+import 'package:social_network/presentation/screens/clients/cart/cart_screen.dart';
+import 'package:social_network/presentation/screens/clients/dashboard/home_page/home_page.dart';
+import 'package:social_network/presentation/screens/clients/dashboard/settings/setting_screen.dart';
+import 'package:social_network/router.dart';
+import 'package:social_network/utils/constants.dart';
+
+class DashBoardClientScreen extends StatefulWidget {
+  const DashBoardClientScreen({super.key});
+
+  @override
+  State<DashBoardClientScreen> createState() => _DashBoardClientScreenState();
+}
+
+class _DashBoardClientScreenState extends State<DashBoardClientScreen> {
+  final List<Widget> _pages = [
+    const HomePage(),
+    const CartScreen(),
+    const SettingScreen(),
+  ];
+  final PageController _pageController = PageController();
+  int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  onTap(int index) {
+    setState(() {
+      _selectedIndex = index;
+      _pageController.jumpToPage(index);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is UnAuthenticated) {
+          Navigator.pushNamedAndRemoveUntil(
+              context, AppRouter.signIn, (route) => false);
+        }
+      },
+      child: Scaffold(
+        // appBar: AppBar(
+        //   title: const Text('DashBoard'),
+        // ),
+        body: PageView(
+          controller: _pageController,
+          padEnds: true,
+          physics: const NeverScrollableScrollPhysics(),
+          children: _pages,
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Trang chủ',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_cart),
+              label: 'Giỏ hàng',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Cài đặt',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: kPrimaryColor,
+          onTap: onTap,
+        ),
+      ),
+    );
+  }
+}
