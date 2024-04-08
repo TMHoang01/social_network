@@ -4,9 +4,11 @@ import 'package:social_network/data/datasources/ecom/category_repository.dart';
 import 'package:social_network/data/datasources/ecom/infor_contact_remote.dart';
 import 'package:social_network/data/datasources/ecom/order_remote.dart';
 import 'package:social_network/data/datasources/ecom/product_repository.dart';
+import 'package:social_network/data/datasources/user_remote.dart';
 import 'package:social_network/main.dart';
 import 'package:social_network/presentation/blocs/admins/category/category_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/products/product_bloc.dart';
+import 'package:social_network/presentation/blocs/admins/users/users_bloc.dart';
 import 'package:social_network/presentation/blocs/auth/auth_bloc.dart';
 import 'package:social_network/presentation/screens/admins/router_admin.dart';
 import 'package:social_network/sl.dart';
@@ -22,6 +24,7 @@ class AdminApp extends StatelessWidget {
         RepositoryProvider(create: (context) => sl<OrderRemote>()),
         RepositoryProvider(create: (context) => sl<ProductRemote>()),
         RepositoryProvider(create: (context) => sl<CategoryRemote>()),
+        RepositoryProvider(create: (_) => sl<UserRemote>()),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -32,6 +35,7 @@ class AdminApp extends StatelessWidget {
             create: (context) => sl<CategoryBloc>(),
           ),
           // BlocProvider(create: (context) => PostCreateBloc()),
+          BlocProvider(create: (_) => sl<UsersBloc>()..add(UsersGetAllUsers())),
         ],
         child: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {

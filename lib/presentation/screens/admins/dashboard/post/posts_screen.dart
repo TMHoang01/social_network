@@ -6,6 +6,7 @@ import 'package:social_network/presentation/blocs/admins/posts/posts_bloc.dart';
 import 'package:social_network/presentation/screens/admins/posts/widgets/post_card.dart';
 import 'package:social_network/presentation/screens/admins/router_admin.dart';
 import 'package:social_network/presentation/widgets/widgets.dart';
+import 'package:social_network/router.dart';
 import 'package:social_network/sl.dart';
 import 'package:social_network/utils/utils.dart';
 
@@ -45,7 +46,7 @@ class _PostsScreenState extends State<PostsScreen>
       },
     );
 
-    Navigator.pushNamed(context, RouterAdmin.postAdd, arguments: bloc);
+    navService.pushNamed(context, RouterAdmin.postAdd, args: bloc);
   }
 
   _handlePostReTry(PostCreateBloc bloc) {
@@ -166,6 +167,14 @@ class _PostsScreenState extends State<PostsScreen>
               // color: Colors.white,
             ),
           ),
+          PopupMenuButton(
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 1,
+                child: Text('Đăng xuất'),
+              ),
+            ],
+          ),
         ],
       ),
       body: BlocProvider.value(
@@ -210,13 +219,13 @@ class _PostsScreenState extends State<PostsScreen>
 
                 const SizedBox(height: 10),
                 ...pendingPosts,
-                PostCardWidget(
-                  post: PostModel(
-                    title: 'title',
-                    content: 'content',
-                    image: 'https://picsum.photos/200/300',
-                  ),
-                ),
+                // PostCardWidget(
+                //   post: PostModel(
+                //     title: 'title',
+                //     content: 'content',
+                //     image: 'https://picsum.photos/200/300',
+                //   ),
+                // ),
                 _buildListPost(),
               ],
             ),

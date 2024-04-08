@@ -86,7 +86,7 @@ class CustomTextFormField extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         borderSide: const BorderSide(
           // color red when validate error
-          color: kLightWhite,
+          color: kOfWhite,
           width: 1,
         ),
       ),

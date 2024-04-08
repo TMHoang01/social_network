@@ -14,16 +14,18 @@ class AuthFirebase {
     try {
       final newUser = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
-      // tạm thời làm sao để có thể ghi vào firestore
-
       // create a new user in the database
       await saveUserToFirestore(newUser.user!.displayName ?? '', newUser.user!,
           newUser.user!.email ?? '', '');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        throw Exception('The password provided is too weak.');
+        throw Exception('Mật khẩu quá yếu.');
       } else if (e.code == 'email-already-in-use') {
-        throw Exception('The account already exists for that email.');
+        throw Exception('Tài khoản đã tồn tại.');
+      } else if (e.code == 'invalid-email') {
+        throw Exception('Email không hợp lệ.');
+      } else if (e.code == 'operation-not-allowed') {
+        throw Exception('Không thể thực hiện thao tác này.');
       }
     } catch (e) {
       logger.e(e);
@@ -41,11 +43,25 @@ class AuthFirebase {
           .signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
       logger.e(e);
-      if (e.code == 'user-not-found') {
-        throw Exception('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        throw Exception('Wrong password provided for that user.');
+      switch (e.code) {
+        case 'user-not-found':
+          throw Exception('Không tìm thấy tài khoản.');
+        case 'wrong-password':
+          throw Exception('Sai mật khẩu.');
+        case 'invalid-email':
+          throw Exception('Email không hợp lệ.');
+        case 'user-disabled':
+          throw Exception('Tài khoản đã bị vô hiệu hóa.');
+        case 'too-many-requests':
+          throw Exception('Quá nhiều yêu cầu.');
+        case 'operation-not-allowed':
+          throw Exception('Không thể thực hiện thao tác này.');
+        default:
+          throw Exception('Đã xảy ra lỗi.');
       }
+    } catch (e) {
+      logger.e(e);
+      throw Exception(e.toString());
     }
   }
 
@@ -103,8 +119,7 @@ class AuthFirebase {
               'email': _firebaseAuth.currentUser?.email ?? '',
               'created_at': DateTime.now(),
               'id': uid,
-              'bio': "",
-              'photoUrl': _firebaseAuth.currentUser?.photoURL ?? '',
+              'avatar': _firebaseAuth.currentUser?.photoURL ?? '',
             });
           }
         });
@@ -123,15 +138,25 @@ class AuthFirebase {
   Future<void> saveUserToFirestore(
       String name, User user, String email, String country) async {
     try {
-      await usersRef.doc(user.uid).set({
+      UserModel userModel = UserModel.fromJson({
+        'id': user.uid,
         'username': name,
         'email': email,
-        'created_at': Timestamp.now(),
-        'id': user.uid,
-        'bio': "",
         'country': country,
-        'photoUrl': user.photoURL ?? '',
+        'avatar': user.photoURL ?? '',
+        'bio': '',
+        'createdAt': DateTime.now(),
       });
+      await usersRef.doc(user.uid).set(userModel.toJson());
+    } catch (e) {
+      logger.e(e);
+      throw Exception(e);
+    }
+  }
+
+  Future<void> updateInforUser(UserModel user) async {
+    try {
+      await usersRef.doc(user.id).update(user.toJson());
     } catch (e) {
       logger.e(e);
       throw Exception(e);

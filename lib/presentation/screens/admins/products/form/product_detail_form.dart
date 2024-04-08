@@ -197,7 +197,7 @@ class _ProductFormDetailState extends State<ProductFormDetail> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: const BorderSide(
-                              color: kLightWhite,
+                              color: kOfWhite,
                               width: 1,
                             ),
                           ),

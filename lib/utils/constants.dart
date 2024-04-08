@@ -5,13 +5,10 @@ const kPrimaryColor = Color(0xFF30b9b2);
 const kPrimaryLightColor = Color(0xFF40F3EA);
 const kSecondaryColor = Color(0xffffa44f);
 const kSecondaryLightColor = Color(0xFFffe5db);
-const kAccentColor = Color(0xFFFFC107);
-const kTertiary = Color(0xff0078a6);
 const kGray = Color(0xff83829A);
 const kGrayLight = Color(0xffC1C0C8);
-const kLightGray = Color(0xFF9B9B9B);
 
-const kLightWhite = Color(0xffFAFAFC);
+// const kLightWhite = Color(0xffFAFAFC);
 const kWhite = Color(0xfffFFFFF);
 const kDark = Color(0xff000000);
 const kRed = Color(0xffe81e4d);

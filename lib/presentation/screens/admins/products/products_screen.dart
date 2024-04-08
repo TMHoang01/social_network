@@ -5,6 +5,7 @@ import 'package:social_network/presentation/blocs/admins/products/product_bloc.d
 import 'package:social_network/presentation/screens/admins/router_admin.dart';
 import 'package:social_network/presentation/widgets/custom_image_view.dart';
 import 'package:social_network/presentation/widgets/custom_input.dart';
+import 'package:social_network/router.dart';
 import 'package:social_network/utils/utils.dart';
 
 class ManageProductsScreen extends StatefulWidget {
@@ -66,9 +67,9 @@ class _ManageProductsScreenState extends State<ManageProductsScreen> {
                         ProductModel product = products[index];
                         return InkWell(
                           onTap: () {
-                            Navigator.pushNamed(
+                            navService.pushNamed(
                                 context, RouterAdmin.productDetail,
-                                arguments: product);
+                                args: product);
                           },
                           child: ListTile(
                             leading: CustomImageView(
@@ -115,7 +116,7 @@ class _ManageProductsScreenState extends State<ManageProductsScreen> {
         IconButton(
           style: ButtonStyle(),
           onPressed: () {
-            Navigator.pushNamed(context, RouterAdmin.productAdd);
+            navService.pushNamed(context, RouterAdmin.productAdd);
           },
           icon: const Icon(Icons.add),
         ),
@@ -124,7 +125,6 @@ class _ManageProductsScreenState extends State<ManageProductsScreen> {
   }
 
   _showPopupMenu(BuildContext context, ProductModel product) {
-    Navigator.of(context)
-        .pushNamed(RouterAdmin.productDetail, arguments: product);
+    navService.pushNamed(context, RouterAdmin.productDetail, args: product);
   }
 }

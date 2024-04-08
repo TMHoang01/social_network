@@ -42,10 +42,11 @@ class _SettingScreenState extends State<SettingScreen>
           ),
           BlocConsumer<AuthBloc, AuthState>(
             listener: (context, state) {
-              if (state is UnAuthenticated) {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, AppRouter.signIn, (route) => false);
-              }
+              // if (state is UnAuthenticated) {
+              //   Navigator.pushNamedAndRemoveUntil(
+              //       context, AppRouter.signIn, (route) => false);
+              // }
+              navService.pushNamedAndRemoveUntil(context, AppRouter.signIn);
             },
             builder: (context, state) {
               return ElevatedButton(

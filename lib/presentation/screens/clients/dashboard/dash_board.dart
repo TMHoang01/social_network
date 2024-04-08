@@ -46,8 +46,7 @@ class _DashBoardClientScreenState extends State<DashBoardClientScreen> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is UnAuthenticated) {
-          Navigator.pushNamedAndRemoveUntil(
-              context, AppRouter.signIn, (route) => false);
+          navService.pushNamedAndRemoveUntil(context, AppRouter.signIn);
         }
       },
       child: Scaffold(

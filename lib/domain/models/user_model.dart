@@ -1,28 +1,54 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-enum Role { admin, user }
+enum Role {
+  admin,
+  user,
+  provider,
+  resident;
+
+  String toJson() => name;
+  static Role fromJson(String json) => values.byName(json);
+}
+
+enum StatusUser {
+  active,
+  rejected,
+  pending,
+  locked;
+
+  String toJson() => name;
+  static StatusUser fromJson(String json) => values.byName(json);
+}
 
 class UserModel {
   final String? id;
-  final String? username;
   final String? email;
-  final String? phoneNumber;
+  final String? phone;
+  final String? address;
   final DateTime? createdAt;
   final Role? roles;
-  final String? bio; // short description
-  final String? photoUrl;
-  final String? address;
-
+  final String? avatar;
+  final String? username;
+  final StatusUser? status;
+  // Role.resident
+  final DateTime? birthDay;
+  final String? job;
+  // Role.provider
+  final String? description;
+  // final
   UserModel({
     this.username,
     this.email,
-    this.phoneNumber,
+    this.phone,
+    this.job,
+    this.address,
+    this.birthDay,
     this.createdAt,
     this.roles,
     this.id,
-    this.bio,
-    this.photoUrl,
-    this.address,
+    this.description,
+    this.avatar,
+    this.status,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -30,24 +56,43 @@ class UserModel {
       id: json['id'],
       username: json['username'],
       email: json['email'],
+      phone: json['phone'],
+      address: json['address'],
       createdAt: json["create_at"] != null
           ? (json["create_at"] as Timestamp).toDate()
           : DateTime.now(),
-      roles: json['roles'] == 'admin' ? Role.admin : Role.user,
-      bio: json['bio'],
-      photoUrl: json['photoUrl'],
+      roles: json['roles'] != null ? Role.fromJson(json['roles']) : null,
+      description: json['bio'],
+      avatar: json['avatar'],
+      status:
+          json['status'] != null ? StatusUser.fromJson(json['status']) : null,
+
+      // Role.resident
+      job: json['job'],
+      birthDay: json['birth_day'] != null
+          ? (json['birth_day'] as Timestamp).toDate()
+          : null,
+      // Role.provider
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'username': username,
-      'email': email,
-      'created_at': createdAt,
-      'roles': roles == Role.admin ? 'admin' : 'user',
-      'bio': bio,
-      'photoUrl': photoUrl,
+      if (id != null) 'id': id,
+      if (username != null) 'username': username,
+      if (email != null) 'email': email,
+      if (createdAt != null) 'created_at': createdAt,
+      if (roles != null) 'roles': roles?.toJson(),
+      if (avatar != null) 'avatar': avatar,
+      if (phone != null) 'phone': phone,
+      if (address != null) 'address': address,
+      if (status != null) 'status': status?.toJson(),
+
+      // Role.resident
+      if (job != null) 'job': job,
+      if (birthDay != null) 'birth_day': birthDay,
+      // Role.provider
+      if (description != null) 'bio': description,
     };
   }
 
@@ -60,23 +105,29 @@ class UserModel {
     String? id,
     String? username,
     String? email,
-    String? phoneNumber,
+    String? phone,
+    String? job,
+    String? address,
+    DateTime? birthDay,
     DateTime? createdAt,
     Role? roles,
-    String? bio,
-    String? photoUrl,
-    String? address,
+    String? description,
+    String? avatar,
+    StatusUser? status,
   }) {
     return UserModel(
       id: id ?? this.id,
       username: username ?? this.username,
       email: email ?? this.email,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
+      phone: phone ?? this.phone,
       createdAt: createdAt ?? this.createdAt,
       roles: roles ?? this.roles,
-      bio: bio ?? this.bio,
-      photoUrl: photoUrl ?? this.photoUrl,
+      description: description ?? this.description,
+      avatar: avatar ?? this.avatar,
       address: address ?? this.address,
+      job: job ?? this.job,
+      birthDay: birthDay ?? this.birthDay,
+      status: status ?? this.status,
     );
   }
 

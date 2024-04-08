@@ -3,6 +3,7 @@ import 'package:social_network/presentation/screens/admins/dashboard/home_page/h
 import 'package:social_network/presentation/screens/admins/dashboard/post/posts_screen.dart';
 import 'package:social_network/presentation/screens/admins/dashboard/settings/setting_screen.dart';
 import 'package:social_network/presentation/screens/admins/products/products_screen.dart';
+import 'package:social_network/router.dart';
 import 'package:social_network/utils/constants.dart';
 
 class DashBoarAdmindScreen extends StatefulWidget {
@@ -29,8 +30,11 @@ class _DashBoarAdmindScreenState extends State<DashBoarAdmindScreen> {
 
   @override
   void initState() {
-    if (Navigator.canPop(context)) {
-      Navigator.pop(context);
+    // if (Navigator.canPop(context)) {
+    //   Navigator.pop(context);
+    // }
+    if (navService.canPop(context)) {
+      navService.pop(context);
     }
     super.initState();
   }

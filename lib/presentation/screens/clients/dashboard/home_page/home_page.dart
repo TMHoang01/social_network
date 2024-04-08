@@ -2,19 +2,14 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:social_network/domain/models/ecom/cart_item.dart';
 import 'package:social_network/domain/models/ecom/product_model.dart';
-import 'package:social_network/presentation/blocs/clients/products/product_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/cart/cart_bloc.dart';
+import 'package:social_network/presentation/blocs/clients/products/product_bloc.dart';
 import 'package:social_network/presentation/screens/clients/cart/widget/change_num_btn.dart';
 import 'package:social_network/presentation/screens/clients/router_client.dart';
-import 'package:social_network/presentation/screens/admins/products/products_screen.dart';
-import 'package:social_network/presentation/screens/clients/dashboard/home_page/widgets/list_product.dart';
-import 'package:social_network/utils/app_styles.dart';
-import 'package:social_network/utils/constants.dart';
-import 'package:social_network/utils/logger.dart';
 import 'package:social_network/presentation/widgets/custom_image_view.dart';
+import 'package:social_network/router.dart';
 import 'package:social_network/utils/utils.dart';
 
 class HomePage extends StatefulWidget {
@@ -48,7 +43,7 @@ class _HomePageState extends State<HomePage>
                   // Text(' ');
                   IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, RouterCLient.cart);
+                      navService.pushNamed(context, RouterClient.cart);
                     },
                     icon: const Icon(Icons.shopping_cart),
                   ),
@@ -151,7 +146,7 @@ class _HomePageState extends State<HomePage>
 
             Container(
               padding: const EdgeInsets.all(8),
-              height: 100,
+              height: 10,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: 10,
@@ -163,10 +158,8 @@ class _HomePageState extends State<HomePage>
                         InkWell(
                           onTap: () {
                             if (index == 4) {
-                              Navigator.pushNamed(
-                                context,
-                                RouterCLient.products,
-                              );
+                              navService.pushNamed(
+                                  context, RouterClient.products);
                             }
                           },
                           child: Container(
@@ -214,15 +207,17 @@ class _HomePageState extends State<HomePage>
                 if (state is ProductSuccess) {
                   final products = state.products;
                   return SizedBox(
-                    height: size.width * 0.3,
+                    height: size.width * 0.4,
                     child: ListView.separated(
                       itemCount: products.length,
                       separatorBuilder: (context, index) {
-                        return Divider();
+                        return const Divider();
                       },
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (conxtext, index) {
-                        return PreviewProductWidget(product: products[index]);
+                        return Expanded(
+                          child: PreviewProductWidget(product: products[index]),
+                        );
                       },
                     ),
                   );
@@ -276,7 +271,7 @@ class PreviewProductWidget extends StatelessWidget {
     ThemeData theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(8),
-      width: size.width * 0.6,
+      width: size.width * 0.8,
       decoration: BoxDecoration(
         color: kOfWhite,
         borderRadius: BorderRadius.circular(10),
@@ -284,11 +279,15 @@ class PreviewProductWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomImageView(
-            borderRadius: BorderRadius.circular(10),
-            url: product.imageUrl,
-            width: size.width * 0.24,
-            height: size.width * 0.20,
+          Stack(
+            children: [
+              CustomImageView(
+                borderRadius: BorderRadius.circular(10),
+                url: product.imageUrl,
+                width: size.width * 0.3,
+                height: size.width * 0.6,
+              ),
+            ],
           ),
           const SizedBox(width: 10),
           Flexible(
@@ -298,7 +297,7 @@ class PreviewProductWidget extends StatelessWidget {
                 Text("${product.name}",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.titleLarge),
+                    style: theme.textTheme.titleMedium),
                 FittedBox(
                   child: Text(
                     "${TextFormat.formatMoney(product.price ?? 0)} đ",
@@ -306,37 +305,35 @@ class PreviewProductWidget extends StatelessWidget {
                         ?.copyWith(color: kSecondaryColor),
                   ),
                 ),
-                FittedBox(
-                  child: Row(
-                    children: [
-                      // IconButton(
-                      //   onPressed: () {},
-                      //   icon: const Icon(Icons.favorite),
-                      // ),
-                      isExist == false
-                          ? IconButton.filled(
-                              iconSize: 18,
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all(kPrimaryColor),
-                              ),
-                              onPressed: () {
-                                context.read<CartBloc>().add(
-                                      AddItemCart(item: product),
-                                    );
-                                // _showBottomSheetAddCart(context, product);
-                              },
-                              icon: const Icon(
-                                Icons.add_shopping_cart,
-                                color: Colors.white,
-                              ),
-                            )
-                          : ButtonAddCart(
-                              item: items.firstWhere(
-                                  (element) => element.productId == product.id),
+                Row(
+                  children: [
+                    // IconButton(
+                    //   onPressed: () {},
+                    //   icon: const Icon(Icons.favorite),
+                    // ),
+                    isExist == false
+                        ? IconButton.filled(
+                            iconSize: 18,
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(kPrimaryColor),
                             ),
-                    ],
-                  ),
+                            onPressed: () {
+                              context.read<CartBloc>().add(
+                                    AddItemCart(item: product),
+                                  );
+                              // _showBottomSheetAddCart(context, product);
+                            },
+                            icon: const Icon(
+                              Icons.add_shopping_cart,
+                              color: Colors.white,
+                            ),
+                          )
+                        : ButtonAddCart(
+                            item: items.firstWhere(
+                                (element) => element.productId == product.id),
+                          ),
+                  ],
                 ),
               ],
             ),
@@ -381,7 +378,7 @@ class PreviewProductWidget extends StatelessWidget {
                   context.read<CartBloc>().add(
                         AddItemCart(item: product),
                       );
-                  Navigator.pop(context);
+                  navService.pop(context);
                 },
                 child: const Text("Add to cart"),
               ),

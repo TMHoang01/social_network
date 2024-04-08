@@ -4,6 +4,7 @@ import 'package:social_network/domain/models/ecom/cart_item.dart';
 import 'package:social_network/presentation/blocs/clients/cart/cart_bloc.dart';
 import 'package:social_network/presentation/screens/clients/cart/widget/change_num_btn.dart';
 import 'package:social_network/presentation/widgets/widgets.dart';
+import 'package:social_network/router.dart';
 
 class CartItemWidget extends StatelessWidget {
   final CartItem item;
@@ -101,7 +102,7 @@ class CartItemWidget extends StatelessWidget {
               ),
               child: const Text('Không'),
               onPressed: () {
-                Navigator.of(context).pop();
+                navService.pop(context);
               },
             ),
             TextButton(
@@ -113,7 +114,7 @@ class CartItemWidget extends StatelessWidget {
                 context
                     .read<CartBloc>()
                     .add(RemoveItemCart(productId: item.productId));
-                Navigator.of(context).pop();
+                navService.pop(context);
               },
             ),
           ],

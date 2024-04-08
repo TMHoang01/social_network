@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/cart/cart_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/infor_contact/infor_contact_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/order/order_bloc.dart';
+import 'package:social_network/presentation/screens/clients/router_client.dart';
 import 'package:social_network/presentation/widgets/custom_button.dart';
 import 'package:social_network/presentation/widgets/custom_input.dart';
-import 'package:social_network/presentation/screens/clients/router_client.dart';
+import 'package:social_network/router.dart';
 import 'package:social_network/utils/utils.dart';
 
 import 'widgets/widgets.dart';
@@ -22,7 +23,7 @@ class CheckOutScreen extends StatelessWidget {
       listener: (context, state) {
         if (state is OrderSuccessAdd) {
           BlocProvider.of<CartBloc>(context).add(ClearCart());
-          Navigator.pushNamed(context, RouterCLient.complete);
+          navService.pushNamed(context, RouterClient.complete);
         } else if (state is OrderLoadError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -123,15 +124,13 @@ class CheckOutScreen extends StatelessWidget {
                               address: address,
                             ),
                           );
-                      // Navigator.pushNamed(context, AppRouter.complete);
+                      navService.pushNamed(context, RouterClient.complete);
                     });
               }
               return CustomButton(
                 height: 54.0,
                 title: 'Đặt hàng',
-                onPressed: () =>
-                    // Navigator.pushNamed(context, AppRouter.contact),
-                    logger.i('onPressed'),
+                onPressed: () => logger.i('onPressed'),
               );
             },
           ),
@@ -172,7 +171,7 @@ class CheckOutScreen extends StatelessWidget {
                         },
                         child: InkWell(
                           onTap: () {
-                            Navigator.pushNamed(context, RouterCLient.contact);
+                            navService.pushNamed(context, RouterClient.contact);
                           },
                           child: const Text(
                             'Thay đổi',
@@ -226,7 +225,7 @@ class CheckOutScreen extends StatelessWidget {
       color: Colors.white,
       boxShadow: [
         BoxShadow(
-          color: kLightGray.withOpacity(0.3),
+          color: kGrayLight.withOpacity(0.3),
           blurRadius: 8,
           offset: const Offset(0.0, 8),
         )

@@ -49,15 +49,15 @@ class PostModel extends Equatable {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'title': title,
-      'content': content,
-      'image': image,
-      'createdBy': createdBy,
-      'updatedBy': updatedBy,
-      'createdAt': createdAt?.toIso8601String(),
-      'updatedAt': updatedAt?.toIso8601String(),
-      'status': status,
+      if (id != null) 'id': id,
+      if (title != null) 'title': title,
+      if (content != null) 'content': content,
+      if (image != null) 'image': image,
+      if (createdBy != null) 'createdBy': createdBy,
+      if (updatedBy != null) 'updatedBy': updatedBy,
+      if (createdAt != null) 'createdAt': createdAt?.toIso8601String(),
+      if (updatedAt != null) 'updatedAt': updatedAt?.toIso8601String(),
+      if (status != null) 'status': status,
     };
   }
 

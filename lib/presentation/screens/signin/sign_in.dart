@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:social_network/presentation/blocs/auth/auth_bloc.dart';
-import 'package:social_network/presentation/blocs/sigin/signin_cubit.dart';
+import 'package:social_network/presentation/blocs/signin/signin_cubit.dart';
 import 'package:social_network/presentation/widgets/widgets.dart';
 import 'package:social_network/presentation/screens/clients/router_client.dart';
 import 'package:social_network/router.dart';
@@ -46,12 +46,12 @@ class SignInScreen extends StatelessWidget {
           body: BlocConsumer<AuthBloc, AuthState>(
             listener: (context, state) {
               if (state is Authenticated) {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    RouterCLient.dashboard, (route) => false);
-              }
-              if (state is AuthError) {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text(state.error)));
+                // navService.pushNamedAndRemoveUntil(
+                //     context, RouterClient.dashboard);
+              } else if (state is AuthRegisterNeedInfo) {
+                navService.pushNamed(context, AppRouter.signUpfor);
+              } else if (state is AuthError) {
+                showSnackBar(context, state.error, Colors.red);
               }
               if (state is UnAuthenticated) {}
             },
@@ -68,10 +68,7 @@ class SignInScreen extends StatelessWidget {
                         children: [
                           InkWell(
                             onTap: () {
-                              // context
-                              //     .read<AuthBloc>()
-                              //     .add(CheckAuthRequested());
-                              Navigator.of(context).pushNamed(AppRouter.signUp);
+                              navService.pushNamed(context, AppRouter.signUp);
                             },
                             child: Text(
                               "Đăng ký",
@@ -183,39 +180,40 @@ class FormLogin extends StatelessWidget {
                   previous.status != current.status,
               listener: (context, state) {
                 if (state.status == FormzSubmissionStatus.inProgress) {
-                  // ScaffoldMessenger.of(context).showSnackBar(
-                  //   const SnackBar(
-                  //     content: Text("Vui lòng điền đủ thông tin"),
-                  //     backgroundColor: Colors.red,
-                  //   ),
-                  // );
                   showSnackBar(
                       context, 'Vui lòng điền đủ thông tin', Colors.red);
                 }
-                if (state.status == FormzSubmissionStatus.failure) {
-                  // ScaffoldMessenger.of(context).showSnackBar(
-                  //   const SnackBar(
-                  //     content: Text("Thông tin không hợp lệ"),
-                  //     backgroundColor: Colors.green,
-                  //   ),
-                  // );
-                }
+                if (state.status == FormzSubmissionStatus.failure) {}
               },
-              child: CustomButton(
-                height: 50,
-                title: "Đăng nhập",
-                margin: const EdgeInsets.only(left: 1, top: 10),
-                onPressed: () {
-                  final cubitLogin = context.read<SigninCubit>();
-                  cubitLogin.checkValidation();
-                  if (cubitLogin.state.isValid) {
-                    context.read<AuthBloc>().add(
-                          SignInRequested(cubitLogin.state.email.value,
-                              cubitLogin.state.password.value),
-                        );
-                  } else {
-                    logger.i('Form login chưa chuẩn');
-                  }
+              child: BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  bool isLoading = (state is AuthLoginLoading);
+
+                  return CustomButton(
+                    height: 50,
+                    title: "Đăng nhập",
+                    margin: const EdgeInsets.only(left: 1, top: 10),
+                    prefixWidget: isLoading
+                        ? Transform.scale(
+                            scale: 0.5,
+                            child: const CircularProgressIndicator(),
+                          )
+                        : null,
+                    onPressed: () {
+                      if (isLoading) return;
+                      FocusScope.of(context).unfocus();
+                      final cubitLogin = context.read<SigninCubit>();
+                      cubitLogin.checkValidation();
+                      if (cubitLogin.state.isValid) {
+                        context.read<AuthBloc>().add(
+                              SignInRequested(cubitLogin.state.email.value,
+                                  cubitLogin.state.password.value),
+                            );
+                      } else {
+                        logger.i('Form login chưa chuẩn');
+                      }
+                    },
+                  );
                 },
               ),
             ),

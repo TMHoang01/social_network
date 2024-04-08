@@ -32,3 +32,5 @@ class AuthError extends AuthState {
 class AuthRegisterLoading extends AuthState {}
 
 class AuthRegisterSuccess extends AuthState {}
+
+class AuthRegisterNeedInfo extends AuthState {}

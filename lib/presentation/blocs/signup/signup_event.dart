@@ -19,3 +19,21 @@ final class SignupSubmitted extends SignupEvent {
   @override
   List<Object> get props => [email, password];
 }
+
+class SignupUpdateTypeUserInit extends SignupEvent {}
+
+class SignupSelectRoleAccount extends SignupEvent {
+  final Role role;
+
+  const SignupSelectRoleAccount({required this.role});
+
+  @override
+  List<Object> get props => [role];
+}
+
+class SinupUpdateInforInit extends SignupEvent {
+  const SinupUpdateInforInit();
+
+  @override
+  List<Object> get props => [];
+}

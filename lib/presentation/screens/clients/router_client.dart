@@ -12,7 +12,7 @@ import 'package:social_network/presentation/screens/clients/orders/orders_detail
 import 'package:social_network/presentation/screens/splash/splash.dart';
 import 'package:social_network/router.dart';
 
-class RouterCLient extends AppRouter {
+class RouterClient extends AppRouter {
   static const String initialRoute = dashboard;
 
   static const String home = '/';

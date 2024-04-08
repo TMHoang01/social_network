@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_network/domain/models/ecom/cart_item.dart';
 import 'package:social_network/presentation/blocs/clients/cart/cart_bloc.dart';
+import 'package:social_network/router.dart';
 
 class ChangeNumButton extends StatelessWidget {
   final Function(int) onNumChange;
@@ -91,7 +92,7 @@ class ButtonAddCart extends StatelessWidget {
               ),
               child: const Text('Không'),
               onPressed: () {
-                Navigator.of(context).pop();
+                navService.pop(context);
               },
             ),
             TextButton(
@@ -103,7 +104,7 @@ class ButtonAddCart extends StatelessWidget {
                 context
                     .read<CartBloc>()
                     .add(RemoveItemCart(productId: item.productId));
-                Navigator.of(context).pop();
+                navService.pop(context);
               },
             ),
           ],

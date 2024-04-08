@@ -13,9 +13,10 @@ class SplashScreen extends StatelessWidget {
       listener: (context, state) {
         if (state is UnAuthenticated || state is AuthError) {
           logger.d('UhAuthenticated');
-          Navigator.of(context)
-              .pushNamedAndRemoveUntil(AppRouter.signIn, (route) => false);
-        }
+          navService.pushNamedAndRemoveUntil(context, AppRouter.signIn);
+        } else if (state is AuthRegisterNeedInfo) {
+          navService.pushNamedAndRemoveUntil(context, AppRouter.signUpfor);
+        } else {}
       },
       child: const Scaffold(
         body: Center(

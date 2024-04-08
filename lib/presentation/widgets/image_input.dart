@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:social_network/presentation/widgets/widgets.dart';
 import 'package:social_network/utils/constants.dart';
 import 'package:social_network/utils/logger.dart';
 import 'package:social_network/presentation/widgets/custom_image_view.dart';
@@ -40,11 +41,16 @@ class _ImageInputPikerState extends State<ImageInputPiker> {
       if (pickedFile != null) {
         // check size
         if (File(pickedFile.path).lengthSync() > widget.limitSize) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                  "Vui lòng chọn ảnh có dung lượng nhỏ hơn ${widget.limitSize}MB"),
-            ),
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(
+          //     content: Text(
+          //         "Vui lòng chọn ảnh có dung lượng nhỏ hơn ${widget.limitSize}MB"),
+          //   ),
+          // );
+          showSnackBar(
+            context,
+            "Vui lòng chọn ảnh có dung lượng nhỏ hơn ${widget.limitSize}MB",
+            Colors.yellow,
           );
           return;
         }

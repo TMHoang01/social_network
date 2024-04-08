@@ -16,15 +16,16 @@ import 'package:social_network/utils/logger.dart';
 class SimpleBlocDelegate extends BlocObserver {
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    logger.d('transition  ${bloc.runtimeType}:\n'
-        '  ${transition.currentState.runtimeType} -> ${transition.event.runtimeType} '
-        ' -> ${transition.nextState.runtimeType}');
+    logger.d('bloc transition  ${bloc.runtimeType}:\n'
+        'bloc   ${transition.currentState.runtimeType} ->'
+        'event ${transition.event.runtimeType} '
+        'bloc -> ${transition.nextState.runtimeType}');
     super.onTransition(bloc, transition);
   }
 
   @override
   void onEvent(Bloc bloc, Object? event) {
-    logger.d('event ${bloc.runtimeType}: $event');
+    // logger.d('event ${bloc.runtimeType}: $event');
     super.onEvent(bloc, event);
   }
 
@@ -37,7 +38,7 @@ class SimpleBlocDelegate extends BlocObserver {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Bloc.observer = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocDelegate();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await setupLocator();
 
@@ -91,6 +92,7 @@ class MyMaterialApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Social Network',
+      locale: const Locale('vi', 'VN'),
       theme: ThemeData(
         useMaterial3: true,
         primaryColor: kPrimaryColor,

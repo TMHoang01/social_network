@@ -41,4 +41,9 @@ class AuthRepositoryIml implements AuthRepository {
       String name, User user, String email, String country) async {
     await _authService.saveUserToFirestore(name, user, email, country);
   }
+
+  @override
+  Future<void> updateInforUser(UserModel user) async {
+    await _authService.updateInforUser(user);
+  }
 }

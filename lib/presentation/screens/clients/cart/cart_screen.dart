@@ -6,6 +6,7 @@ import 'package:social_network/presentation/blocs/clients/infor_contact/infor_co
 import 'package:social_network/presentation/screens/clients/cart/widget/cart_item_widget.dart';
 import 'package:social_network/presentation/screens/clients/router_client.dart';
 import 'package:social_network/presentation/widgets/custom_button.dart';
+import 'package:social_network/router.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
@@ -52,8 +53,7 @@ class CartScreen extends StatelessWidget {
               child: BlocConsumer<InforContactBloc, InforContactState>(
                 listener: (context, state) {
                   if (state is InforContactUpdated) {
-                    Navigator.pushNamed(context, RouterCLient.checkOut);
-                    // logger.i('InforContactEmpty');
+                    navService.pushNamed(context, RouterClient.checkOut);
                   }
                 },
                 builder: (context, state) {
@@ -61,11 +61,11 @@ class CartScreen extends StatelessWidget {
 
                   if (state is InforContactLoaded) {
                     onPressed = () =>
-                        Navigator.pushNamed(context, RouterCLient.checkOut);
+                        navService.pushNamed(context, RouterClient.checkOut);
                   } else {
                     //if (state is InforContactEmpty)
                     onPressed = () =>
-                        Navigator.pushNamed(context, RouterCLient.contact);
+                        navService.pushNamed(context, RouterClient.contact);
                   }
 
                   return CustomButton(

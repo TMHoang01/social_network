@@ -5,7 +5,7 @@ import 'package:social_network/data/datasources/ecom/cart_remote.dart';
 import 'package:social_network/data/datasources/ecom/category_repository.dart';
 import 'package:social_network/data/datasources/ecom/infor_contact_remote.dart';
 import 'package:social_network/data/datasources/ecom/order_remote.dart';
-import 'package:social_network/data/datasources/file_repository.dart';
+import 'package:social_network/data/datasources/file_store.dart';
 import 'package:social_network/domain/repository/ecom/category_repository.dart';
 import 'package:social_network/domain/repository/ecom/product_repository.dart';
 import 'package:social_network/domain/repository/file_repository.dart';
@@ -52,7 +52,7 @@ Future<void> main() async {
 }
 
 final CategoryRepository categoryRepository = CategoryRemote();
-final FileRepository fileRepository = FileRepositoryIml();
+final FileRepository fileRepository = FileStoreIml();
 
 class ClientApp extends StatelessWidget {
   const ClientApp({Key? key}) : super(key: key);
@@ -98,9 +98,9 @@ class ClientApp extends StatelessWidget {
               context.read<OrderBloc>().add(const GetAllOrder());
             }
             return MyMaterialApp(
-              initialRoute: RouterCLient.initialRoute,
-              routes: RouterCLient.routes,
-              onGenerateRoute: RouterCLient.onGenerateRoute,
+              initialRoute: RouterClient.initialRoute,
+              routes: RouterClient.routes,
+              onGenerateRoute: RouterClient.onGenerateRoute,
             );
           },
         ),

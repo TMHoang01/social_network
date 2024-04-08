@@ -6,3 +6,4 @@ export 'image_input.dart';
 export 'custom_input.dart';
 export 'show_snackbar.dart';
 export 'chip_card.dart';
+export 'select_widget.dart';

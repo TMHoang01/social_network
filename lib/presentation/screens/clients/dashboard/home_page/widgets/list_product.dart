@@ -6,6 +6,7 @@ import 'package:social_network/presentation/blocs/clients/cart/cart_bloc.dart';
 import 'package:social_network/presentation/screens/clients/cart/widget/change_num_btn.dart';
 import 'package:social_network/presentation/screens/clients/router_client.dart';
 import 'package:social_network/presentation/widgets/custom_image_view.dart';
+import 'package:social_network/router.dart';
 import 'package:social_network/utils/app_styles.dart';
 import 'package:social_network/utils/constants.dart';
 import 'package:social_network/utils/text_format.dart';
@@ -73,11 +74,13 @@ class ProductItem extends StatelessWidget {
       ),
       // color: kTertiary,
       child: InkWell(
-        onTap: () => Navigator.pushNamed(
-          context,
-          RouterCLient.productDetail,
-          arguments: product,
-        ),
+        // onTap: () => Navigator.pushNamed(
+        //   context,
+        //   RouterClient.productDetail,
+        //   arguments: product,
+        // ),
+        onTap: () => navService.pushNamed(context, RouterClient.productDetail,
+            args: product),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -200,7 +203,7 @@ class ProductItem extends StatelessWidget {
                   context.read<CartBloc>().add(
                         AddItemCart(item: product),
                       );
-                  Navigator.pop(context);
+                  navService.pop(context);
                 },
                 child: const Text("Add to cart"),
               ),

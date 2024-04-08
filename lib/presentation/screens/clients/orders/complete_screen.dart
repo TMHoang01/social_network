@@ -5,6 +5,7 @@ import 'package:social_network/presentation/blocs/clients/order/order_bloc.dart'
 import 'package:social_network/presentation/widgets/custom_button.dart';
 import 'package:social_network/presentation/widgets/custom_image_view.dart';
 import 'package:social_network/presentation/screens/clients/router_client.dart';
+import 'package:social_network/router.dart';
 import 'package:social_network/utils/constants.dart';
 
 class CompleteScreen extends StatelessWidget {
@@ -50,8 +51,8 @@ class CompleteScreen extends StatelessWidget {
                 CustomButton(
                   title: "Quay trở lại trang chủ",
                   onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, RouterCLient.dashboard, (route) => false);
+                    navService.pushNamedAndRemoveUntil(
+                        context, RouterClient.dashboard);
                   },
                 ),
                 const SizedBox(height: 5),

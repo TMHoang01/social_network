@@ -34,9 +34,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _getCurrentUser(Emitter<AuthState> emit) async {
     final user = await authRepository.getCurrentUser();
-    // logger.d('user: $user');
     if (user != null) {
-      emit(Authenticated(user));
+      if (user.roles == null) {
+        emit(AuthRegisterNeedInfo());
+      } else {
+        emit(Authenticated(user));
+      }
     } else {
       emit(UnAuthenticated());
     }

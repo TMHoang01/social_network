@@ -5,7 +5,7 @@ import 'package:social_network/domain/repository/file_repository.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:social_network/utils/logger.dart';
 
-class FileRepositoryIml extends FileRepository {
+class FileStoreIml extends FileRepository {
   final storageRef = FirebaseStorage.instance.ref();
 
   @override

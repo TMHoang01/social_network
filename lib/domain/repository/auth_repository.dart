@@ -13,4 +13,6 @@ abstract class AuthRepository {
   Future<void> signUp({required String email, required String password});
   Future<void> saveUserToFirestore(
       String name, User user, String email, String country);
+
+  Future<void> updateInforUser(UserModel user);
 }
