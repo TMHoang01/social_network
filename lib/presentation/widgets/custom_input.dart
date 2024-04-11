@@ -56,9 +56,7 @@ class CustomTextFormField extends StatelessWidget {
 
   _buildTextFormFieldWidget() {
     return Container(
-      width: width ?? double.maxFinite,
-      // padding: ,
-      // height: 50,
+      width: width ?? double.infinity,
       margin: margin ?? const EdgeInsets.only(left: 20, right: 20, top: 4),
       child: TextFormField(
         controller: controller,

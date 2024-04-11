@@ -1,10 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
-enum PostType { event, news, other, jobs }
+enum PostType {
+  event,
+  news,
+  other;
+
+  String toJson() => name;
+  static PostType fromJson(String json) => values.byName(json);
+  String toName() {
+    switch (this) {
+      case PostType.event:
+        return 'Sự kiện';
+      case PostType.news:
+        return 'Tin tức';
+      case PostType.other:
+        return 'Bài viết';
+      default:
+        return '';
+    }
+  }
+}
 
 class PostModel extends Equatable {
   final String? id;
+  final PostType? type;
   final String? title;
   final String? content;
   final String? image;
@@ -16,6 +36,7 @@ class PostModel extends Equatable {
 
   PostModel({
     this.id,
+    this.type,
     this.title,
     this.content,
     this.image,
@@ -29,6 +50,7 @@ class PostModel extends Equatable {
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
       id: json['id'],
+      type: json['type'] != null ? PostType.fromJson(json['type']) : null,
       title: json['title'],
       content: json['content'],
       image: json['image'],
@@ -50,6 +72,7 @@ class PostModel extends Equatable {
   Map<String, dynamic> toJson() {
     return {
       if (id != null) 'id': id,
+      if (type != null) 'type': type?.toJson(),
       if (title != null) 'title': title,
       if (content != null) 'content': content,
       if (image != null) 'image': image,
@@ -63,6 +86,7 @@ class PostModel extends Equatable {
 
   PostModel copyWith({
     String? id,
+    PostType? type,
     String? title,
     String? content,
     String? image,
@@ -74,6 +98,7 @@ class PostModel extends Equatable {
   }) {
     return PostModel(
       id: id ?? this.id,
+      type: type ?? this.type,
       title: title ?? this.title,
       content: content ?? this.content,
       image: image ?? this.image,
@@ -87,5 +112,5 @@ class PostModel extends Equatable {
 
   @override
   List<Object?> get props =>
-      [id, title, content, image, createdAt, createdBy, updatedAt];
+      [id, type, title, content, image, createdAt, createdBy, updatedAt];
 }

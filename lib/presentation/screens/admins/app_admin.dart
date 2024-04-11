@@ -7,6 +7,7 @@ import 'package:social_network/data/datasources/ecom/product_repository.dart';
 import 'package:social_network/data/datasources/user_remote.dart';
 import 'package:social_network/main.dart';
 import 'package:social_network/presentation/blocs/admins/category/category_bloc.dart';
+import 'package:social_network/presentation/blocs/admins/posts/posts_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/products/product_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/users/users_bloc.dart';
 import 'package:social_network/presentation/blocs/auth/auth_bloc.dart';
@@ -34,7 +35,8 @@ class AdminApp extends StatelessWidget {
           BlocProvider(
             create: (context) => sl<CategoryBloc>(),
           ),
-          // BlocProvider(create: (context) => PostCreateBloc()),
+          BlocProvider(
+              create: (context) => sl.get<PostsBloc>()..add(PostsStarted())),
           BlocProvider(create: (_) => sl<UsersBloc>()..add(UsersGetAllUsers())),
         ],
         child: BlocBuilder<AuthBloc, AuthState>(

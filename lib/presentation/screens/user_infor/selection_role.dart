@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_network/domain/models/user_model.dart';
-import 'package:social_network/presentation/blocs/auth/auth_bloc.dart';
 import 'package:social_network/presentation/blocs/user_infor/user_infor_bloc.dart';
 import 'package:social_network/presentation/widgets/custom_button.dart';
 import 'package:social_network/presentation/widgets/select_widget.dart';
-import 'package:social_network/router.dart';
 
 class SlectionRoleUser extends StatelessWidget {
   const SlectionRoleUser({super.key});

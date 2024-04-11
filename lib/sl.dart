@@ -18,6 +18,7 @@ import 'package:social_network/domain/repository/post/post_repository.dart';
 import 'package:social_network/domain/repository/user_repository.dart';
 import 'package:social_network/presentation/blocs/admins/category/category_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/post_create/post_create_bloc.dart';
+import 'package:social_network/presentation/blocs/admins/post_detail/post_detail_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/posts/posts_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/products/product_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/users/users_bloc.dart';
@@ -72,6 +73,9 @@ Future<void> setupLocator() async {
   sl.registerFactory<PostsBloc>(() => PostsBloc(sl.call()));
   sl.registerFactory<PostCreateBloc>(
     () => PostCreateBloc(postRepository: sl.call(), fileRepository: sl.call()),
+  );
+  sl.registerFactory<PostDetailBloc>(
+    () => PostDetailBloc(sl.call(), sl.call()),
   );
 
   sl.registerLazySingleton<UserRemote>(() => UserRemote());

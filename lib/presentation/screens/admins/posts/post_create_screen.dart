@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_network/domain/models/post/post.dart';
 import 'package:social_network/presentation/blocs/admins/post_create/post_create_bloc.dart';
-import 'package:social_network/presentation/widgets/widgets.dart';
-import 'package:social_network/router.dart';
-import 'package:social_network/utils/logger.dart';
+import 'package:social_network/presentation/screens/admins/posts/widgets/form_event_create.dart';
+import 'package:social_network/presentation/screens/admins/posts/widgets/form_news_create.dart';
 
 class PostCreateScreen extends StatefulWidget {
   final PostCreateBloc _postCreateBloc;
@@ -15,100 +16,35 @@ class PostCreateScreen extends StatefulWidget {
 }
 
 class _PostCreateScreenState extends State<PostCreateScreen> {
-  final _keyForm = GlobalKey<FormState>();
-  final _titleController = TextEditingController(text: 'Hoangf');
-  final _contentController = TextEditingController();
-  final _imageController = TextEditingController();
+  late final _typePost = switch (widget._postCreateBloc.state) {
+    // PostInsertStarted(post: final post) => post.type,
+    PostCreateStarting(type: final type) => type,
+    PostEditStarting(post: final post) => post.type,
+    _ => PostType.news,
+  };
 
   @override
   void dispose() {
-    _titleController.dispose();
-    _contentController.dispose();
-    _imageController.dispose();
-
     super.dispose();
-  }
-
-  void _handleSubmit(BuildContext context) {
-    if (!_keyForm.currentState!.validate()) {
-      showSnackBar(context, 'Vui lòng nhập đủ thông tin', Colors.red);
-      return;
-    }
-    if (_imageController.text.isEmpty) {
-      showSnackBar(context, 'Vui lòng chọn ảnh', Colors.red);
-      return;
-    } else {
-      widget._postCreateBloc.add(PostCreateStarted(
-        image: _imageController.text,
-        title: _titleController.text,
-        content: _contentController.text,
-      ));
-      navService.pop(context);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final submitButton = CustomButton(
-      title: 'Xác nhận',
-      onPressed: () {
-        logger.i('onPressed save infor contact');
-        _handleSubmit(context);
-      },
-    );
-    final child = Scaffold(
+    Widget child = switch (_typePost) {
+      PostType.event => FormEventCreate(),
+      PostType.news => const FormNewsCreate(),
+      _ => const FormNewsCreate(),
+    };
+    child = Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Create Post'),
+        title: Text('Tạo bài đăng ${_typePost}'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Form(
-          key: _keyForm,
-          child: Column(
-            children: [
-              // image,
-
-              ImageInputPiker(
-                url: _imageController.text,
-                onFileSelected: (file) {
-                  _imageController.text = file!.path;
-                },
-              ),
-              const SizedBox(height: 12),
-
-              CustomTextFormField(
-                controller: _titleController,
-                hintText: 'Nhập tiêu đề bài viết',
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Vui lòng nhập tiêu đề';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 12),
-              // Expanded(child: contentField),
-              const SizedBox(height: 12),
-              CustomTextFormField(
-                controller: _contentController,
-                maxLines: 10,
-                hintText: 'Nhập nội dung bài viết',
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Vui lòng nhập nội dung';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 12),
-
-              submitButton,
-            ],
-          ),
-        ),
+      body: BlocProvider.value(
+        value: widget._postCreateBloc,
+        child: SingleChildScrollView(child: child),
       ),
     );
     return child;

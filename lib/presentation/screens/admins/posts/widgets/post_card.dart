@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:social_network/domain/models/post/post.dart';
+import 'package:social_network/presentation/screens/admins/router_admin.dart';
 import 'package:social_network/presentation/widgets/widgets.dart';
+import 'package:social_network/router.dart';
 import 'package:social_network/utils/utils.dart';
 
 class PostCardWidget extends StatelessWidget {
@@ -18,7 +18,7 @@ class PostCardWidget extends StatelessWidget {
     final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      height: size.height * 0.16,
+      height: 144,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -31,55 +31,61 @@ class PostCardWidget extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
-        children: [
-          CustomImageView(
-            imagePath: file?.path,
-            url: post.image ?? '',
-            width: size.width * 0.3,
-            // height: size.height * 0.16,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(12),
-              bottomLeft: Radius.circular(12),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${post.title}',
-                          maxLines: 1,
-                          style: theme.textTheme.bodyMedium!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          '${post.content}',
-                          style: theme.textTheme.bodyMedium,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                  post.createdAt == null
-                      ? const SizedBox()
-                      : ChipCard(label: TextFormat.formatDate(post.createdAt))
-                ],
+      child: InkWell(
+        onTap: () => _onNavigateToPostDetail(context),
+        child: Row(
+          children: [
+            CustomImageView(
+              imagePath: file?.path,
+              url: post.image ?? '',
+              width: size.width * 0.3,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                bottomLeft: Radius.circular(12),
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${post.title}',
+                            maxLines: 1,
+                            style: theme.textTheme.bodyMedium!.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            '${post.content}',
+                            style: theme.textTheme.bodyMedium,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                    post.createdAt == null
+                        ? const SizedBox()
+                        : ChipCard(label: TextFormat.formatDate(post.createdAt))
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  _onNavigateToPostDetail(BuildContext context) {
+    navService.pushNamed(context, RouterAdmin.postDetail, args: post);
   }
 }

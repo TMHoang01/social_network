@@ -9,8 +9,13 @@ class FileStoreIml extends FileRepository {
   final storageRef = FirebaseStorage.instance.ref();
 
   @override
-  Future<void> deleteFile({required String path}) {
-    return storageRef.child(path).delete();
+  Future<void> deleteFile({required String path}) async {
+    try {
+      FirebaseStorage.instance.refFromURL(path).delete();
+    } catch (e) {
+      logger.e(e);
+      throw Exception(e.toString());
+    }
   }
 
   @override

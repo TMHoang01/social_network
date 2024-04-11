@@ -16,4 +16,8 @@ class TextFormat {
     if (date == null) return '';
     return DateFormat('dd/MM/yyyy').format(date);
   }
+
+  static DateTime parseDate(String date) {
+    return DateFormat('dd/MM/yyyy').parse(date);
+  }
 }

@@ -7,27 +7,31 @@ sealed class PostCreateEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class PostCreateStarted extends PostCreateEvent {
-  final String image;
-  final String title;
-  final String content;
+class PostCreateInitEvent extends PostCreateEvent {
+  final PostType type;
 
-  const PostCreateStarted({
+  const PostCreateInitEvent(this.type);
+}
+
+class PostCreateStartEvent extends PostCreateEvent {
+  final PostModel post;
+  final String image;
+
+  const PostCreateStartEvent({
+    required this.post,
     required this.image,
-    required this.title,
-    required this.content,
   });
 
   @override
-  List<Object> get props => [title, content, image];
+  List<Object> get props => [post, image];
 }
 
-class PostCreateRetryStared extends PostCreateEvent {
+class PostCreateRetryStartEvent extends PostCreateEvent {
   final String imagePath;
   final String title;
   final String content;
 
-  const PostCreateRetryStared({
+  const PostCreateRetryStartEvent({
     required this.imagePath,
     required this.title,
     required this.content,
@@ -35,4 +39,23 @@ class PostCreateRetryStared extends PostCreateEvent {
 
   @override
   List<Object> get props => [title, content, imagePath];
+}
+
+class PostEditInitEvent extends PostCreateEvent {
+  final PostModel post;
+
+  const PostEditInitEvent(this.post);
+}
+
+class PostEditStartEvent extends PostCreateEvent {
+  final PostModel post;
+  final String image;
+
+  const PostEditStartEvent({
+    required this.post,
+    required this.image,
+  });
+
+  @override
+  List<Object> get props => [post, image];
 }

@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:social_network/domain/models/post/event.dart';
+import 'package:social_network/domain/models/post/news.dart';
 import 'package:social_network/domain/models/post/post.dart';
 import 'package:social_network/utils/utils.dart';
 
@@ -10,12 +12,12 @@ abstract class PostRemoteDataSource {
 }
 
 class PostRemoteDataSourceImpl implements PostRemoteDataSource {
-  final CollectionReference colection = firestore.collection('posts');
-
+  final CollectionReference colection =
+      FirebaseFirestore.instance.collection('posts');
   @override
   Future<String?> add({required PostModel post}) async {
     try {
-      final response = await colection.add(post?.toJson());
+      final response = await colection.add(post.toJson());
       return response.id;
     } on FirebaseException catch (e) {
       throw Exception(e.toString());
@@ -45,10 +47,19 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
   @override
   Future<List<PostModel>> getAll() async {
     try {
-      final response = await colection.get();
-      return response.docs
-          .map((e) => PostModel.fromDocumentSnapshot(e))
-          .toList();
+      final response =
+          await colection.orderBy('createdAt', descending: true).get();
+      return response.docs.map((e) {
+        final data = e.data() as Map<String, dynamic>;
+        switch (data['type']) {
+          case 'news':
+            return NewsModel.fromDocumentSnapshot(e);
+          case 'event':
+            return EventModel.fromDocumentSnapshot(e);
+          default:
+            return PostModel.fromDocumentSnapshot(e);
+        }
+      }).toList();
     } on FirebaseException catch (e) {
       logger.e(e.toString());
       throw Exception(e.toString());

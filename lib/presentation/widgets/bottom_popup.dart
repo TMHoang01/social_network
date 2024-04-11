@@ -1,6 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:social_network/utils/constants.dart';
 
+void showBottomSheetApp({
+  required BuildContext context,
+  required Widget child,
+  String title = '',
+}) {
+  showModalBottomSheet(
+    context: context,
+    builder: (context) => Wrap(
+      children: [
+        BottomPopup(child: child, title: title),
+      ],
+    ),
+    isScrollControlled: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+      ),
+    ),
+  );
+}
+
 class BottomPopup extends StatelessWidget {
   final Widget child;
   final String title;
@@ -24,7 +46,6 @@ class BottomPopup extends StatelessWidget {
             )),
         width: fullWidth,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Container(
               padding: const EdgeInsets.all(15),
@@ -37,7 +58,7 @@ class BottomPopup extends StatelessWidget {
                 ),
               ),
             ),
-            title != ''
+            title.isEmpty
                 ? Text(title, style: _theme.textTheme.titleMedium)
                 : Container(),
             const Padding(

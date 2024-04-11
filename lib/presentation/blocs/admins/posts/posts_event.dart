@@ -32,3 +32,25 @@ class PostInsertStarted extends PostsEvent {
   @override
   List<Object> get props => [post];
 }
+
+class PostUpdateStarted extends PostsEvent {
+  final PostModel post;
+
+  const PostUpdateStarted({
+    required this.post,
+  });
+
+  @override
+  List<Object> get props => [post];
+}
+
+class PostDeleteStarted extends PostsEvent {
+  final PostModel post;
+
+  const PostDeleteStarted({
+    required this.post,
+  });
+
+  @override
+  List<Object> get props => [post];
+}

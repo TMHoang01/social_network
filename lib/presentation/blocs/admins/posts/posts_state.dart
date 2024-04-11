@@ -30,3 +30,5 @@ final class PostsLoadFailure extends PostsState {
 }
 
 final class PostsModifyInProgress extends PostsState {}
+
+final class PostsDeleteInProgress extends PostsState {}

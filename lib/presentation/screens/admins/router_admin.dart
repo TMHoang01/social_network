@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:social_network/domain/models/ecom/product_model.dart';
+import 'package:social_network/domain/models/post/post.dart';
 import 'package:social_network/domain/models/user_model.dart';
 import 'package:social_network/presentation/blocs/admins/post_create/post_create_bloc.dart';
 import 'package:social_network/presentation/screens/admins/dashboard/dash_board.dart';
 import 'package:social_network/presentation/screens/admins/posts/post_create_screen.dart';
-import 'package:social_network/presentation/screens/admins/products/product_detail.dart';
+import 'package:social_network/presentation/screens/admins/posts/post_detail_screen.dart';
 import 'package:social_network/presentation/screens/admins/products/form/product_detail_form.dart';
+import 'package:social_network/presentation/screens/admins/products/product_detail.dart';
 import 'package:social_network/presentation/screens/admins/products/products_screen.dart';
 import 'package:social_network/presentation/screens/admins/users/user_details_screen.dart';
 import 'package:social_network/presentation/screens/admins/users/users_screen.dart';
-
-import 'package:social_network/presentation/screens/splash/splash.dart';
 import 'package:social_network/router.dart';
 
 class RouterAdmin extends AppRouter {
@@ -61,6 +61,11 @@ class RouterAdmin extends AppRouter {
         return MaterialPageRoute(
           builder: (context) => PostCreateScreen(bloc: args as PostCreateBloc),
         );
+      case postDetail:
+        return MaterialPageRoute(
+          builder: (context) => PostDetailScreen(post: args as PostModel),
+        );
+
       case userDetail:
         return MaterialPageRoute(
           builder: (context) => UserDetailScreen(user: args as UserModel),

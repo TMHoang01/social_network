@@ -1,36 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:flutter/widgets.dart';
 import 'package:social_network/presentation/widgets/widgets.dart';
 import 'package:social_network/utils/text_format.dart';
 
 class PickerDateInput extends StatefulWidget {
   final Function(DateTime) onDateSelected;
+  final TextEditingController? controller;
   final BuildContext context;
-  PickerDateInput(this.context, {super.key, required this.onDateSelected});
+  final String? title;
+  final EdgeInsets? margin;
+  const PickerDateInput(this.context,
+      {super.key,
+      required this.onDateSelected,
+      this.title,
+      this.margin,
+      this.controller});
 
   @override
   State<PickerDateInput> createState() => _PickerDateInputState();
 }
 
 class _PickerDateInputState extends State<PickerDateInput> {
-  final _dateController = TextEditingController();
-  DateTime _dates = DateTime.now();
-
-  @override
-  void dispose() {
-    _dateController.dispose();
-    super.dispose();
-  }
+  DateTime dates = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     return CustomTextFormField(
-      hintText: 'Ngày sinh',
-      controller: _dateController,
+      margin:
+          widget.margin ?? const EdgeInsets.only(left: 20, right: 20, top: 4),
+      hintText: widget.title ?? 'Chọn thờ gian',
+      controller: widget.controller,
       textInputType: TextInputType.datetime,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Vui lòng nhập ngày sinh';
+          return 'Vui lòng nhập chọn thời gian';
         }
         return null;
       },
@@ -39,7 +42,6 @@ class _PickerDateInputState extends State<PickerDateInput> {
         onPressed: () {
           showDatePicker(
             context: widget.context,
-            // locale: const Locale('vi', 'VN'),
             initialDate: DateTime.now(),
             firstDate: DateTime(1900),
             lastDate: DateTime(2050),
@@ -47,8 +49,8 @@ class _PickerDateInputState extends State<PickerDateInput> {
             if (value != null) {
               widget.onDateSelected(value);
               setState(() {
-                _dates = value;
-                _dateController.text = TextFormat.formatDate(value);
+                dates = value;
+                widget.controller!.text = TextFormat.formatDate(value);
               });
             }
           });

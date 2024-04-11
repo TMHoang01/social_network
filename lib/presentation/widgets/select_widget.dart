@@ -27,17 +27,17 @@ class _SelectWidgetState extends State<SelectWidget> {
           width: size.width,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
-            color: widget.isSelect! ? kSecondaryColor : Colors.white,
+            color: widget.isSelect ? kSecondaryColor : Colors.white,
             borderRadius: BorderRadius.circular(5),
             border: Border.all(
-              color: widget.isSelect! ? kSecondaryColor : Colors.grey,
+              color: widget.isSelect ? kSecondaryColor : Colors.grey,
               width: 1,
             ),
           ),
           child: Text(
             widget.text,
             style: theme.textTheme.titleMedium!.copyWith(
-              color: widget.isSelect! ? Colors.white : Colors.black,
+              color: widget.isSelect ? Colors.white : Colors.black,
             ),
           ),
         ),

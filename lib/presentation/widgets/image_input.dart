@@ -41,12 +41,6 @@ class _ImageInputPikerState extends State<ImageInputPiker> {
       if (pickedFile != null) {
         // check size
         if (File(pickedFile.path).lengthSync() > widget.limitSize) {
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   SnackBar(
-          //     content: Text(
-          //         "Vui lòng chọn ảnh có dung lượng nhỏ hơn ${widget.limitSize}MB"),
-          //   ),
-          // );
           showSnackBar(
             context,
             "Vui lòng chọn ảnh có dung lượng nhỏ hơn ${widget.limitSize}MB",
@@ -59,9 +53,7 @@ class _ImageInputPikerState extends State<ImageInputPiker> {
           onFileSelected(file);
         });
         // onImageSelected(file);
-      } else {
-        print('No image selected.');
-      }
+      } else {}
     } on PlatformException catch (e) {
       logger.e(e);
     }

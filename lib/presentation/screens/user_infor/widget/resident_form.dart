@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_network/domain/models/user_model.dart';
 import 'package:social_network/presentation/blocs/user_infor/user_infor_bloc.dart';
-import 'package:social_network/presentation/widgets/picker_date_input.dart';
 import 'package:social_network/presentation/widgets/widgets.dart';
 import 'package:social_network/utils/utils.dart';
 

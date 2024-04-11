@@ -10,7 +10,7 @@ import 'package:social_network/router.dart';
 import 'package:social_network/sl.dart';
 import 'package:social_network/utils/utils.dart';
 
-final blocPosts = sl.get<PostsBloc>()..add(PostsStarted());
+// final  context.read<PostsBloc>() = sl.get<PostsBloc>()..add(PostsStarted());
 
 class PostsScreen extends StatefulWidget {
   const PostsScreen({super.key});
@@ -20,27 +20,49 @@ class PostsScreen extends StatefulWidget {
 }
 
 class _PostsScreenState extends State<PostsScreen>
-    with AutomaticKeepAliveClientMixin<PostsScreen> {
-  @override
-  bool get wantKeepAlive => true;
+// with AutomaticKeepAliveClientMixin<PostsScreen>
+{
+  // @override
+  // bool get wantKeepAlive => true;
 
   final List<PostCreateBloc> _postCreateBlocs = [];
   _handleNewPostBtn(BuildContext context) {
-    final bloc = sl.get<PostCreateBloc>();
-    // _postCreateBlocs.add(bloc);
+    // show bottompopup
+    showBottomSheetApp(
+      context: context,
+      title: 'Tạo bài đăng',
+      child: Column(
+        children: [
+          ListTile(
+            title: const Text('Tạo bài viết'),
+            onTap: () {
+              navService.pop(context);
+              _navigateToPostCreateScreen(context, PostType.news);
+            },
+          ),
+          ListTile(
+            title: const Text('Tạo sự kiện'),
+            onTap: () {
+              navService.pop(context);
+              _navigateToPostCreateScreen(context, PostType.event);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _navigateToPostCreateScreen(BuildContext context, PostType type) {
+    final bloc = sl.get<PostCreateBloc>()..add(PostCreateInitEvent(type));
     setState(() {
       _postCreateBlocs.insert(0, bloc);
     });
-    // logger.i({'_postCreateBlocs add': _postCreateBlocs.length});
     bloc.stream.listen(
       (state) {
-        // logger.i({'state': state});
         if (state is PostCreateSuccess) {
-          // _postCreateBlocs.remove(bloc);
           setState(() {
             _postCreateBlocs.remove(bloc);
           });
-          // logger.i({'_postCreateBlocs remove': _postCreateBlocs.length});
           bloc.close();
         }
       },
@@ -52,7 +74,7 @@ class _PostsScreenState extends State<PostsScreen>
   _handlePostReTry(PostCreateBloc bloc) {
     final state = bloc.state as PostCreateFailure;
 
-    bloc.add(PostCreateRetryStared(
+    bloc.add(PostCreateRetryStartEvent(
       title: state.post.title ?? '',
       content: state.post.content ?? '',
       imagePath: state.post.image ?? '',
@@ -126,7 +148,7 @@ class _PostsScreenState extends State<PostsScreen>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    // super.build(context);
     Size size = MediaQuery.of(context).size;
 
     final pendingPosts = _postCreateBlocs.map(
@@ -137,11 +159,12 @@ class _PostsScreenState extends State<PostsScreen>
             bloc: bloc,
             listener: (context, state) {
               if (state is PostCreateSuccess) {
-                blocPosts.add(PostInsertStarted(post: state.post));
+                context
+                    .read<PostsBloc>()
+                    .add(PostInsertStarted(post: state.post));
               }
             },
             builder: (context, state) {
-              logger.i({'bloc build': bloc.state.runtimeType});
               if (state is PostCreateInProcess) {
                 return _buildPendingPost(state);
               } else if (state is PostCreateFailure) {
@@ -156,7 +179,7 @@ class _PostsScreenState extends State<PostsScreen>
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Tin tức'),
+        title: const Text('Bài đăng'),
         actions: [
           IconButton(
             onPressed: () {
@@ -178,7 +201,7 @@ class _PostsScreenState extends State<PostsScreen>
         ],
       ),
       body: BlocProvider.value(
-        value: blocPosts,
+        value: context.read<PostsBloc>(),
         child: Container(
           width: size.width,
           height: size.height,
@@ -204,7 +227,9 @@ class _PostsScreenState extends State<PostsScreen>
                         ChipCard(
                           label: 'Tất cả',
                           backgroundColor: kPrimaryColor,
-                          onTap: () {},
+                          onTap: () {
+                            context.read<PostsBloc>().add(PostsStarted());
+                          },
                         ),
                         const ChipCard(
                           label: 'Chờ xác nhận',
@@ -237,7 +262,7 @@ class _PostsScreenState extends State<PostsScreen>
 
   Widget _buildListPost() {
     return BlocBuilder<PostsBloc, PostsState>(
-      bloc: blocPosts,
+      bloc: context.read<PostsBloc>(),
       builder: (context, state) {
         return (switch (state) {
           PostsLoadInProgress() => const Center(
@@ -252,6 +277,14 @@ class _PostsScreenState extends State<PostsScreen>
                 final post = posts[index];
                 return PostCardWidget(post: post);
               },
+            ),
+          PostsLoadFailure(error: final error) => Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  context.read<PostsBloc>().add(PostsStarted());
+                },
+                child: Text(error),
+              ),
             ),
           _ => const SizedBox(),
         });

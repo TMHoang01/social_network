@@ -12,6 +12,8 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     on<PostsEvent>((event, emit) {});
     on<PostsStarted>(_onPostsStarted);
     on<PostInsertStarted>(_onPostInsertStarted);
+    on<PostUpdateStarted>(_onPostUpdateStarted);
+    on<PostDeleteStarted>(_onPostDeleteStarted);
   }
 
   void _onPostsStarted(PostsStarted event, Emitter<PostsState> emit) async {
@@ -34,6 +36,40 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       );
 
       posts.insert(0, post);
+      emit(PostsLoadSuccess(posts: posts));
+    } catch (e) {
+      emit(PostsLoadFailure(error: e.toString()));
+    }
+  }
+
+  void _onPostUpdateStarted(
+      PostUpdateStarted event, Emitter<PostsState> emit) async {
+    final post = event.post;
+    try {
+      final posts = (state as PostsLoadSuccess).posts;
+      emit(
+        PostsModifyInProgress(),
+      );
+
+      final index = posts.indexWhere((element) => element.id == post.id);
+      posts[index] = post;
+      emit(PostsLoadSuccess(posts: posts));
+    } catch (e) {
+      emit(PostsLoadFailure(error: e.toString()));
+    }
+  }
+
+  void _onPostDeleteStarted(
+      PostDeleteStarted event, Emitter<PostsState> emit) async {
+    final id = event.post.id;
+    try {
+      final image = event.post.image;
+      final posts = (state as PostsLoadSuccess).posts;
+      emit(
+        PostsDeleteInProgress(),
+      );
+
+      posts.removeWhere((element) => element.id == id);
       emit(PostsLoadSuccess(posts: posts));
     } catch (e) {
       emit(PostsLoadFailure(error: e.toString()));
