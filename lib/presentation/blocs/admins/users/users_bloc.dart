@@ -16,6 +16,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
     on<UsersAcceptUser>(_acceptUser);
     on<UsersSwitchLockAccount>(_switchLockAccount);
     on<UsersLoadMore>(_loadMore);
+    on<UsersGetListNotInClude>(_getListNotInClude);
   }
 
   void _getAllUsers(UsersGetAllUsers event, Emitter<UsersState> emit) async {
@@ -60,6 +61,17 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
         final newUsers = await _userRepository.getUsersQuery(query);
         emit(UsersLoaded([...users, ...newUsers]));
       }
+    } catch (e) {
+      emit(UsersError(e.toString()));
+    }
+  }
+
+  void _getListNotInClude(
+      UsersGetListNotInClude event, Emitter<UsersState> emit) async {
+    try {
+      final users =
+          await _userRepository.getListNotInClude(event.userIds ?? []);
+      emit(UsersLoaded(users));
     } catch (e) {
       emit(UsersError(e.toString()));
     }

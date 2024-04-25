@@ -1,55 +1,65 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:social_network/data/datasources/auth_remote.dart';
+import 'package:social_network/data/datasources/ecom/cart_remote.dart';
 import 'package:social_network/data/datasources/ecom/category_repository.dart';
+import 'package:social_network/data/datasources/ecom/infor_contact_remote.dart';
+import 'package:social_network/data/datasources/ecom/order_remote.dart';
 import 'package:social_network/data/datasources/ecom/post_remote.dart';
 import 'package:social_network/data/datasources/ecom/product_repository.dart';
 import 'package:social_network/data/datasources/file_store.dart';
+import 'package:social_network/data/datasources/service/booking_service.dart';
+import 'package:social_network/data/datasources/service/service_remote.dart';
 import 'package:social_network/data/datasources/user_remote.dart';
+import 'package:social_network/data/repository/auth_repository.dart';
+import 'package:social_network/data/repository/ecom/cart_repository.dart';
 import 'package:social_network/data/repository/ecom/category_repository.dart';
+import 'package:social_network/data/repository/ecom/infor_contact_repository.dart';
+import 'package:social_network/data/repository/ecom/order_repository.dart';
 import 'package:social_network/data/repository/ecom/product_repository.dart';
 import 'package:social_network/data/repository/post/post_repository.dart';
 import 'package:social_network/data/repository/user_repository.dart';
+import 'package:social_network/domain/repository/auth_repository.dart';
+import 'package:social_network/domain/repository/ecom/cart_repository.dart';
 import 'package:social_network/domain/repository/ecom/category_repository.dart';
+import 'package:social_network/domain/repository/ecom/infor_contact_repository.dart';
+import 'package:social_network/domain/repository/ecom/order_repository.dart';
 import 'package:social_network/domain/repository/ecom/product_repository.dart';
 import 'package:social_network/domain/repository/file_repository.dart';
 import 'package:social_network/domain/repository/post/post_repository.dart';
+import 'package:social_network/domain/repository/service/booking_repository.dart';
+import 'package:social_network/domain/repository/service/service_repository.dart';
 import 'package:social_network/domain/repository/user_repository.dart';
 import 'package:social_network/presentation/blocs/admins/category/category_bloc.dart';
-import 'package:social_network/presentation/blocs/admins/post_create/post_create_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/post_detail/post_detail_bloc.dart';
+import 'package:social_network/presentation/blocs/admins/post_form/post_form_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/posts/posts_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/products/product_bloc.dart';
+import 'package:social_network/presentation/blocs/admins/service_form/service_form_bloc.dart';
+import 'package:social_network/presentation/blocs/admins/services/services_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/users/users_bloc.dart';
 import 'package:social_network/presentation/blocs/auth/auth_bloc.dart';
+import 'package:social_network/presentation/blocs/clients/booking_service_create/booking_service_create_bloc.dart';
+import 'package:social_network/presentation/blocs/clients/booking_service/booking_service_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/cart/cart_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/infor_contact/infor_contact_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/order/order_bloc.dart';
+import 'package:social_network/presentation/blocs/clients/post_detail/post_detail_bloc.dart';
+import 'package:social_network/presentation/blocs/clients/posts/posts_bloc.dart';
 import 'package:social_network/presentation/blocs/signin/signin_cubit.dart';
 import 'package:social_network/presentation/blocs/signup/signup_bloc.dart';
-import 'package:social_network/data/datasources/ecom/cart_remote.dart';
-import 'package:social_network/data/datasources/ecom/infor_contact_remote.dart';
-import 'package:social_network/data/datasources/ecom/order_remote.dart';
-import 'package:social_network/data/datasources/auth_remote.dart';
-import 'package:social_network/data/repository/auth_repository.dart';
-import 'package:social_network/data/repository/ecom/cart_repository.dart';
-import 'package:social_network/data/repository/ecom/infor_contact_repository.dart';
-import 'package:social_network/data/repository/ecom/order_repository.dart';
-import 'package:social_network/domain/repository/auth_repository.dart';
-import 'package:social_network/domain/repository/ecom/cart_repository.dart';
-import 'package:social_network/domain/repository/ecom/infor_contact_repository.dart';
-import 'package:social_network/domain/repository/ecom/order_repository.dart';
 import 'package:social_network/presentation/blocs/user_infor/user_infor_bloc.dart';
 
 final sl = GetIt.instance;
 
 Future<void> setupLocator() async {
-  final auth = FirebaseAuth.instance;
-  final fireStore = FirebaseFirestore.instance;
+  sl.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
+  sl.registerSingleton<FirebaseFirestore>(FirebaseFirestore.instance);
+  sl.registerSingleton<FirebaseStorage>(FirebaseStorage.instance);
 
-  sl.registerSingleton<FirebaseAuth>(auth);
-  sl.registerSingleton<FirebaseFirestore>(fireStore);
   sl.registerLazySingleton<GoogleSignIn>(() => GoogleSignIn());
 
   sl.registerLazySingleton<FileRepository>(() => FileStoreIml());
@@ -70,17 +80,24 @@ Future<void> setupLocator() async {
   sl.registerLazySingleton<PostRemoteDataSource>(
       () => PostRemoteDataSourceImpl());
   sl.registerLazySingleton<PostRepository>(() => PostRepositoryImpl(sl.call()));
-  sl.registerFactory<PostsBloc>(() => PostsBloc(sl.call()));
-  sl.registerFactory<PostCreateBloc>(
-    () => PostCreateBloc(postRepository: sl.call(), fileRepository: sl.call()),
-  );
-  sl.registerFactory<PostDetailBloc>(
-    () => PostDetailBloc(sl.call(), sl.call()),
-  );
 
   sl.registerLazySingleton<UserRemote>(() => UserRemote());
   sl.registerLazySingleton<UserRepository>(() => UserRepositoryIml(sl.call()));
   sl.registerFactory<UsersBloc>(() => UsersBloc(sl.call()));
+
+  sl.registerLazySingleton<ServiceRemoteDataSource>(
+      () => ServiceRemoteDataSourceImpl());
+  sl.registerLazySingleton<ServiceRepository>(
+      () => ServiceRepositoryImpl(sl.call()));
+  sl.registerFactory<ServicesBloc>(() => ServicesBloc(sl.call()));
+  sl.registerFactory<ServiceFormBloc>(
+      () => ServiceFormBloc(sl.call(), sl.call()));
+
+  // service
+  sl.registerLazySingleton<BookingRepository>(
+      () => BookingRepositoryIml(sl.call()));
+  sl.registerFactory<BookingServiceRemoteDataSource>(
+      () => BookingServiceRemoteDataSourceImpl());
 
   _initAuth();
   _initClient();
@@ -90,6 +107,15 @@ Future<void> setupLocator() async {
 void _initAdmin() {
   sl.registerFactory<ManageProductBloc>(() => ManageProductBloc(
       productRepository: sl.call(), fileRepository: sl.call()));
+
+  //post
+  sl.registerFactory<PostsBloc>(() => PostsBloc(sl.call()));
+  sl.registerFactory<PostFormBloc>(
+    () => PostFormBloc(postRepository: sl.call(), fileRepository: sl.call()),
+  );
+  sl.registerFactory<PostDetailBloc>(
+    () => PostDetailBloc(sl.call(), sl.call()),
+  );
 }
 
 void _initClient() {
@@ -102,6 +128,16 @@ void _initClient() {
   sl.registerFactory<CartBloc>(() => CartBloc(cartRepository: sl.call()));
   sl.registerFactory<InforContactBloc>(() => InforContactBloc(sl.call()));
   sl.registerFactory<OrderBloc>(() => OrderBloc(sl.call()));
+
+  // post
+  sl.registerFactory<PostsClientBloc>(() => PostsClientBloc(sl.call()));
+  sl.registerFactory<PostViewDetailBloc>(
+      () => PostViewDetailBloc(sl.call(), sl.call()));
+
+  // service
+  sl.registerFactory<BookingServiceBloc>(() => BookingServiceBloc(sl.call()));
+  sl.registerFactory<BookingServiceCreateBloc>(
+      () => BookingServiceCreateBloc(sl.call()));
 }
 
 void _initAuth() {

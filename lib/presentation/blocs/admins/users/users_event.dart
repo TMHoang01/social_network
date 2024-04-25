@@ -44,3 +44,12 @@ class UsersLoadMore extends UsersEvent {
   @override
   List<Object> get props => [];
 }
+
+class UsersGetListNotInClude extends UsersEvent {
+  final List<String>? userIds;
+
+  UsersGetListNotInClude(this.userIds);
+
+  @override
+  List<Object> get props => [];
+}

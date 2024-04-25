@@ -1,5 +1,6 @@
 import 'package:social_network/data/datasources/ecom/order_remote.dart';
 import 'package:social_network/domain/models/ecom/order_model.dart';
+import 'package:social_network/domain/models/service/booking_service.dart';
 import 'package:social_network/domain/repository/ecom/order_repository.dart';
 
 class OrderRepositoryIml implements OrderRepository {
@@ -10,6 +11,11 @@ class OrderRepositoryIml implements OrderRepository {
   Future<OrderModel> add({required OrderModel oderModel}) async {
     final id = await _orderRemote.add(oderModel: oderModel);
     return oderModel.copyWith(id: id);
+  }
+
+  @override
+  Future<BookingService> addService({required BookingService oderModel}) async {
+    return await _orderRemote.addService(oderModel: oderModel);
   }
 
   @override

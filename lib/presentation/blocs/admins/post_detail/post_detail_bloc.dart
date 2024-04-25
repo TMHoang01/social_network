@@ -18,8 +18,17 @@ class PostDetailBloc extends Bloc<PostDetailEvent, PostDetailState> {
         _fileRepository = fileRepository,
         super(PostDetailInitial()) {
     on<PostDetailEvent>((event, emit) {});
+
     on<PostDetailDeleteStarted>(_onPostDetailDeleteStarted);
+    on<PostDetailLoadStarted>(_onPostDetailLoadStarted);
     on<PostDetailModifyStarted>(_onPostDetailModifyStarted);
+  }
+
+  void _onPostDetailLoadStarted(
+    PostDetailLoadStarted event,
+    Emitter<PostDetailState> emit,
+  ) async {
+    emit(PostDetailLoadInProgress());
   }
 
   void _onPostDetailDeleteStarted(

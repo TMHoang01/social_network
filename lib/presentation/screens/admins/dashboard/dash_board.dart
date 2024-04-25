@@ -30,9 +30,6 @@ class _DashBoarAdmindScreenState extends State<DashBoarAdmindScreen> {
 
   @override
   void initState() {
-    // if (Navigator.canPop(context)) {
-    //   Navigator.pop(context);
-    // }
     if (navService.canPop(context)) {
       navService.pop(context);
     }
@@ -55,9 +52,6 @@ class _DashBoarAdmindScreenState extends State<DashBoarAdmindScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('DashBoard'),
-      // ),
       body: PageView(
         controller: _pageController,
         padEnds: true,
@@ -71,8 +65,8 @@ class _DashBoarAdmindScreenState extends State<DashBoarAdmindScreen> {
             label: 'Trang chủ',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Giỏ hàng',
+            icon: Icon(Icons.newspaper_rounded),
+            label: 'Tin tức',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.post_add_rounded),

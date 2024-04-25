@@ -2,19 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_network/domain/models/post/event.dart';
 import 'package:social_network/domain/models/post/post.dart';
-import 'package:social_network/presentation/blocs/admins/post_create/post_create_bloc.dart';
+import 'package:social_network/presentation/blocs/admins/post_form/post_form_bloc.dart';
 import 'package:social_network/presentation/widgets/widgets.dart';
 import 'package:social_network/router.dart';
 import 'package:social_network/utils/utils.dart';
 
 class FormEventCreate extends StatefulWidget {
-  FormEventCreate({super.key});
+  final PostModel? post;
+  final Function(PostModel post, String image)? handleSubmit;
+
+  FormEventCreate({super.key, this.post, this.handleSubmit});
 
   @override
   State<FormEventCreate> createState() => _FormEventCreateState();
 }
 
 class _FormEventCreateState extends State<FormEventCreate> {
+  late final post = widget.post as EventModel?;
   final _keyForm = GlobalKey<FormState>();
   final _typePost = PostType.event;
   final _imageController = TextEditingController();
@@ -33,20 +37,21 @@ class _FormEventCreateState extends State<FormEventCreate> {
   @override
   void initState() {
     super.initState();
-    final bloc = context.read<PostCreateBloc>().state;
-    if (bloc is PostEditStarting) {
+    final bloc = context.read<PostFormBloc>().state;
+    if (bloc is PostFormEditStarting) {
       final post = bloc.post as EventModel;
       id = post.id;
       _titleController.text = post.title ?? '';
       _contentController.text = post.content ?? '';
       _localtionController.text = post.location ?? '';
-      _maxJoinersController.text = post.maxJoiners?.toString() ?? '100';
+      _maxJoinersController.text = post.maxJoiners?.toString() ?? '';
       _beginDateController.text =
           TextFormat.formatDate(post.beginDate ?? DateTime.now());
       _endDateController.text =
           TextFormat.formatDate(post.endDate ?? DateTime.now());
       _showLimitInput = post.limitJoiners ?? false;
     }
+    id = post?.id;
   }
 
   @override
@@ -72,7 +77,8 @@ class _FormEventCreateState extends State<FormEventCreate> {
     //   return;
     // }
     else {
-      final post = EventModel(
+      EventModel post = EventModel(
+        id: id,
         title: _titleController.text,
         content: _contentController.text,
         type: _typePost,
@@ -82,23 +88,12 @@ class _FormEventCreateState extends State<FormEventCreate> {
         limitJoiners: _showLimitInput,
         maxJoiners:
             _showLimitInput ? int.parse(_maxJoinersController.text) : null,
+        image: widget.post?.image,
       );
-      if (context.read<PostCreateBloc>().state is PostEditStarting) {
-        context.read<PostCreateBloc>().add(
-              PostEditStartEvent(
-                post: post.copyWith(id: id),
-                image: _imageController.text,
-              ),
-            );
-      } else {
-        context.read<PostCreateBloc>().add(
-              PostCreateStartEvent(
-                post: post,
-                image: _imageController.text,
-              ),
-            );
+      if (id != null) {
+        post = post.copyWith(id: id);
       }
-      navService.pop(context);
+      widget.handleSubmit!(post, _imageController.text);
     }
   }
 
@@ -116,25 +111,25 @@ class _FormEventCreateState extends State<FormEventCreate> {
         key: _keyForm,
         child: Column(
           children: [
-            // image,
-
-            BlocBuilder<PostCreateBloc, PostCreateState>(
+            BlocBuilder<PostFormBloc, PostFormState>(
               builder: (context, state) {
-                if (state is PostEditStarting) {
+                if (state is PostFormEditStarting) {
                   final post = state.post as EventModel;
                 }
-                return ImageInputPiker(
-                  url: state is PostEditStarting
-                      ? (state.post as EventModel).image
-                      : null,
-                  onFileSelected: (file) {
-                    _imageController.text = file!.path;
-                  },
+                return SizedBox(
+                  height: 300,
+                  child: ImageInputPiker(
+                    url: state is PostFormEditStarting
+                        ? (state.post as EventModel).image
+                        : null,
+                    onFileSelected: (file) {
+                      _imageController.text = file!.path;
+                    },
+                  ),
                 );
               },
             ),
             const SizedBox(height: 12),
-
             CustomTextFormField(
               controller: _titleController,
               hintText: 'Nhập tiêu đề',
@@ -200,7 +195,6 @@ class _FormEventCreateState extends State<FormEventCreate> {
                 return null;
               },
             ),
-
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 8),
               child: Row(
@@ -235,7 +229,6 @@ class _FormEventCreateState extends State<FormEventCreate> {
                   const SizedBox(height: 12),
                 ],
               ),
-
             const SizedBox(height: 16),
             submitButton,
           ],

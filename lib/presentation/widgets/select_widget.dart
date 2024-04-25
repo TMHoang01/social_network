@@ -1,44 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:social_network/utils/constants.dart';
 
-class SelectWidget extends StatefulWidget {
+class SelectWidget extends StatelessWidget {
   final String text;
+  final String? subTitle;
   final Function? onChanged;
   final bool isSelect;
+  final double? fontSize;
+  final Color? color;
+  final TextAlign? textAlign;
   const SelectWidget(
-      {super.key, required this.text, this.onChanged, required this.isSelect});
+      {super.key,
+      required this.text,
+      this.subTitle,
+      this.onChanged,
+      required this.isSelect,
+      this.fontSize = 16,
+      this.color,
+      this.textAlign = TextAlign.center});
 
-  @override
-  State<SelectWidget> createState() => _SelectWidgetState();
-}
-
-class _SelectWidgetState extends State<SelectWidget> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     ThemeData theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
       child: InkWell(
         onTap: () {
-          widget.onChanged!();
+          onChanged!();
         },
         child: Container(
           width: size.width,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
-            color: widget.isSelect ? kSecondaryColor : Colors.white,
-            borderRadius: BorderRadius.circular(5),
+            color: isSelect ? kSecondaryColor.withOpacity(0.1) : Colors.white,
+            borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: widget.isSelect ? kSecondaryColor : Colors.grey,
+              color: isSelect ? kSecondaryColor : Colors.grey,
               width: 1,
             ),
           ),
-          child: Text(
-            widget.text,
-            style: theme.textTheme.titleMedium!.copyWith(
-              color: widget.isSelect ? Colors.white : Colors.black,
-            ),
+          child: Column(
+            children: [
+              Text(
+                text,
+                style: theme.textTheme.titleMedium!.copyWith(
+                  color: Colors.black,
+                  fontSize: fontSize,
+                ),
+                textAlign: textAlign,
+              ),
+              // show if subTitle
+              if (subTitle != null) Text(subTitle ?? '')
+            ],
           ),
         ),
       ),

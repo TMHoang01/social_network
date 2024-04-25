@@ -33,10 +33,10 @@ class PostInsertStarted extends PostsEvent {
   List<Object> get props => [post];
 }
 
-class PostUpdateStarted extends PostsEvent {
+class PostsUpdateStarted extends PostsEvent {
   final PostModel post;
 
-  const PostUpdateStarted({
+  const PostsUpdateStarted({
     required this.post,
   });
 

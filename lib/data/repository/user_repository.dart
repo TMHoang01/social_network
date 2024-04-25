@@ -27,4 +27,9 @@ class UserRepositoryIml implements UserRepository {
   Future<List<UserModel>> getUsersQuery(UsersQuery query) async {
     return _userRemote.getUsersQuery(query);
   }
+
+  @override
+  Future<List<UserModel>> getListNotInClude(List<String> ids) async {
+    return _userRemote.getListNotInIds(ids);
+  }
 }

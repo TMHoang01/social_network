@@ -24,3 +24,10 @@ class PostDetailModifyStarted extends PostDetailEvent {
   @override
   List<Object> get props => [post];
 }
+
+class PostDetailLoadStarted extends PostDetailEvent {
+  const PostDetailLoadStarted();
+
+  @override
+  List<Object> get props => [];
+}

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:social_network/utils/text_format.dart';
 
 enum PostType {
   event,
@@ -56,10 +57,8 @@ class PostModel extends Equatable {
       image: json['image'],
       createdBy: json['createdBy'],
       updatedBy: json['updatedBy'],
-      createdAt:
-          json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
-      updatedAt:
-          json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
+      createdAt: TextFormat.parseJson(json['createdAt']) ?? DateTime.now(),
+      updatedAt: TextFormat.parseJson(json['updatedAt']) ?? DateTime.now(),
       status: json['status'],
     );
   }
@@ -78,8 +77,8 @@ class PostModel extends Equatable {
       if (image != null) 'image': image,
       if (createdBy != null) 'createdBy': createdBy,
       if (updatedBy != null) 'updatedBy': updatedBy,
-      if (createdAt != null) 'createdAt': createdAt?.toIso8601String(),
-      if (updatedAt != null) 'updatedAt': updatedAt?.toIso8601String(),
+      if (createdAt != null) 'createdAt': createdAt,
+      if (updatedAt != null) 'updatedAt': updatedAt,
       if (status != null) 'status': status,
     };
   }

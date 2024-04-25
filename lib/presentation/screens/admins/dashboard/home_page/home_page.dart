@@ -49,91 +49,33 @@ class _AdminHomePageState extends State<AdminHomePage>
             ),
             const Divider(height: 3),
             const Divider(height: 1),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  margin: const EdgeInsets.all(10),
-                  width: size.width * 0.4,
-                  height: size.width * 0.4,
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(40),
-                    shape: BoxShape.rectangle,
-                    gradient: const LinearGradient(
-                      colors: [
-                        kPrimaryColor,
-                        kSecondaryColor,
-                      ],
-                      transform: GradientRotation(0.5 * 3.14),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 2,
-                        blurRadius: 4,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          navService.pushNamed(context, RouterAdmin.users);
-                        },
-                        // icon xét duyệt danh sách
-                        icon: const Icon(
-                          size: 50,
-                          Icons.checklist_outlined,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const Center(
-                          child: Text(
-                        'Danh sách xét duyệt',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      ))
-                    ],
-                  ),
+                ItemHomeCard(
+                  title: 'Danh sách phê duyệt',
+                  router: RouterAdmin.users,
+                  icon: Icons.checklist_outlined,
                 ),
-                Container(
-                  margin: const EdgeInsets.all(10),
-                  width: size.width * 0.4,
-                  height: size.width * 0.4,
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(40),
-                    shape: BoxShape.rectangle,
-                    gradient: const LinearGradient(
-                      colors: [
-                        kPrimaryColor,
-                        kSecondaryColor,
-                      ],
-                      transform: GradientRotation(0.5 * 3.14),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 2,
-                        blurRadius: 4,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.notifications_none_outlined,
-                      color: Colors.white,
-                    ),
-                  ),
+                ItemHomeCard(
+                  title: 'Bài đăng',
+                  router: RouterAdmin.post,
+                  icon: Icons.newspaper_rounded,
+                ),
+              ],
+            ),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ItemHomeCard(
+                  title: 'Dịch vụ',
+                  router: RouterAdmin.services,
+                  icon: Icons.post_add_rounded,
+                ),
+                ItemHomeCard(
+                  title: 'Sản phẩm',
+                  router: RouterAdmin.users,
+                  icon: Icons.post_add_rounded,
                 ),
               ],
             ),
@@ -145,10 +87,65 @@ class _AdminHomePageState extends State<AdminHomePage>
 }
 
 class ItemHomeCard extends StatelessWidget {
-  const ItemHomeCard({super.key});
+  final router;
+  final String title;
+  // icon
+  final IconData icon;
+  const ItemHomeCard(
+      {super.key, this.router, required this.title, required this.icon});
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    Size size = MediaQuery.of(context).size;
+    return Container(
+      margin: const EdgeInsets.all(10),
+      width: size.width * 0.4,
+      height: size.width * 0.4,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.blue,
+        borderRadius: BorderRadius.circular(40),
+        shape: BoxShape.rectangle,
+        gradient: const LinearGradient(
+          colors: [
+            kPrimaryColor,
+            kSecondaryColor,
+          ],
+          transform: GradientRotation(0.5 * 3.14),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 4,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          IconButton(
+            onPressed: () {
+              navService.pushNamed(context, router);
+            },
+            // icon xét duyệt danh sách
+            icon: Icon(
+              size: 50,
+              icon,
+              color: Colors.white,
+            ),
+          ),
+          Center(
+              child: Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+            ),
+          ))
+        ],
+      ),
+    );
   }
 }

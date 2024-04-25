@@ -37,10 +37,7 @@ class _ManageProductsScreenState extends State<ManageProductsScreen> {
                 suffix: const Icon(Icons.search),
               ),
             ),
-            FilledButton(
-              onPressed: () {},
-              child: const Text('Thêm sản phẩm'),
-            ),
+
             BlocBuilder<ManageProductBloc, ManageProductState>(
               builder: (context, state) {
                 if (state is ManageProductLoading ||
@@ -67,6 +64,7 @@ class _ManageProductsScreenState extends State<ManageProductsScreen> {
                         ProductModel product = products[index];
                         return InkWell(
                           onTap: () {
+                            logger.i(product);
                             navService.pushNamed(
                                 context, RouterAdmin.productDetail,
                                 args: product);

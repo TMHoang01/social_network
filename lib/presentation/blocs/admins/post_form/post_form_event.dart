@@ -1,23 +1,23 @@
-part of 'post_create_bloc.dart';
+part of 'post_form_bloc.dart';
 
-sealed class PostCreateEvent extends Equatable {
-  const PostCreateEvent();
+sealed class PostFormEvent extends Equatable {
+  const PostFormEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class PostCreateInitEvent extends PostCreateEvent {
+class PostFormCreateInit extends PostFormEvent {
   final PostType type;
 
-  const PostCreateInitEvent(this.type);
+  const PostFormCreateInit(this.type);
 }
 
-class PostCreateStartEvent extends PostCreateEvent {
+class PostFormCreateStart extends PostFormEvent {
   final PostModel post;
   final String image;
 
-  const PostCreateStartEvent({
+  const PostFormCreateStart({
     required this.post,
     required this.image,
   });
@@ -26,12 +26,12 @@ class PostCreateStartEvent extends PostCreateEvent {
   List<Object> get props => [post, image];
 }
 
-class PostCreateRetryStartEvent extends PostCreateEvent {
+class PostFormCreateRetryStart extends PostFormEvent {
   final String imagePath;
   final String title;
   final String content;
 
-  const PostCreateRetryStartEvent({
+  const PostFormCreateRetryStart({
     required this.imagePath,
     required this.title,
     required this.content,
@@ -41,17 +41,17 @@ class PostCreateRetryStartEvent extends PostCreateEvent {
   List<Object> get props => [title, content, imagePath];
 }
 
-class PostEditInitEvent extends PostCreateEvent {
+class PostFormEditInit extends PostFormEvent {
   final PostModel post;
 
-  const PostEditInitEvent(this.post);
+  const PostFormEditInit(this.post);
 }
 
-class PostEditStartEvent extends PostCreateEvent {
+class PostFormEditStart extends PostFormEvent {
   final PostModel post;
   final String image;
 
-  const PostEditStartEvent({
+  const PostFormEditStart({
     required this.post,
     required this.image,
   });

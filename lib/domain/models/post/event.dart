@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_network/domain/models/post/joiners.dart';
 import 'package:social_network/domain/models/post/post.dart';
+import 'package:social_network/utils/text_format.dart';
 
 enum EventType {
   public,
@@ -15,6 +16,7 @@ class EventModel extends PostModel {
   final DateTime? endDate;
   final bool? limitJoiners;
   final int? maxJoiners;
+  final List<String>? joinerIds;
   final List<JoinersModel>? joiners;
   final List<JoinersModel>? organizers;
   final bool? isPublic;
@@ -28,12 +30,13 @@ class EventModel extends PostModel {
     this.endDate,
     this.limitJoiners,
     this.maxJoiners,
+    this.joinerIds,
     this.joiners,
     String? id,
+    PostType? type,
     String? title,
     String? content,
     String? image,
-    PostType? type,
     DateTime? createdAt,
     String? createdBy,
     DateTime? updatedAt,
@@ -45,7 +48,7 @@ class EventModel extends PostModel {
     this.organizersOnlyCanInvite = false,
   }) : super(
             id: id,
-            type: type,
+            type: PostType.event,
             title: title,
             content: content,
             image: image,
@@ -62,22 +65,21 @@ class EventModel extends PostModel {
       title: json['title'] as String?,
       content: json['content'] as String?,
       image: json['image'] as String?,
-      type: PostType.values
-          .firstWhere((e) => e.toString() == 'PostType.${json['type']}'),
-      createdAt:
-          json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
+      type: json['type'] != null ? PostType.fromJson(json['type']) : null,
+      createdAt: TextFormat.parseJson(json['createdAt']),
       createdBy: json['createdBy'] as String?,
-      updatedAt:
-          json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
+      updatedAt: TextFormat.parseJson(json['updatedAt']),
       updatedBy: json['updatedBy'] as String?,
       status: json['status'] as String?,
       joinersCount: json['joinersCount'] as int?,
       location: json['location'] as String?,
-      beginDate:
-          json['beginDate'] != null ? DateTime.parse(json['beginDate']) : null,
-      endDate: json['endDate'] != null ? DateTime.parse(json['endDate']) : null,
+      beginDate: TextFormat.parseJson(json['beginDate']),
+      endDate: TextFormat.parseJson(json['endDate']),
       limitJoiners: json['limitJoiners'] as bool?,
       maxJoiners: json['maxJoiners'] as int?,
+      joinerIds: (json['joinerIds'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       joiners: (json['joiners'] as List<dynamic>?)
           ?.map((e) => JoinersModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -114,6 +116,7 @@ class EventModel extends PostModel {
     DateTime? endDate,
     bool? limitJoiners,
     int? maxJoiners,
+    List<String>? joinerIds,
     List<JoinersModel>? joiners,
     List<JoinersModel>? organizers,
     bool? isPublic,
@@ -137,6 +140,7 @@ class EventModel extends PostModel {
       endDate: endDate ?? this.endDate,
       limitJoiners: limitJoiners ?? this.limitJoiners,
       maxJoiners: maxJoiners ?? this.maxJoiners,
+      joinerIds: joinerIds ?? this.joinerIds,
       joiners: joiners ?? this.joiners,
       organizers: organizers ?? this.organizers,
       isPublic: isPublic ?? this.isPublic,
@@ -152,8 +156,8 @@ class EventModel extends PostModel {
       ...super.toJson(),
       if (joinersCount != null) 'joinersCount': joinersCount,
       if (location != null) 'location': location,
-      if (beginDate != null) 'beginDate': beginDate?.toIso8601String(),
-      if (endDate != null) 'endDate': endDate?.toIso8601String(),
+      if (beginDate != null) 'beginDate': beginDate,
+      if (endDate != null) 'endDate': endDate,
       if (limitJoiners != null) 'limitJoiners': limitJoiners,
       if (maxJoiners != null) 'maxJoiners': maxJoiners,
       if (joiners != null) 'joiners': joiners?.map((e) => e.toJson()).toList(),

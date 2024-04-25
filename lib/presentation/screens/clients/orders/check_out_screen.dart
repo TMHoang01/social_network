@@ -4,8 +4,7 @@ import 'package:social_network/presentation/blocs/clients/cart/cart_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/infor_contact/infor_contact_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/order/order_bloc.dart';
 import 'package:social_network/presentation/screens/clients/router_client.dart';
-import 'package:social_network/presentation/widgets/custom_button.dart';
-import 'package:social_network/presentation/widgets/custom_input.dart';
+import 'package:social_network/presentation/widgets/widgets.dart';
 import 'package:social_network/router.dart';
 import 'package:social_network/utils/utils.dart';
 
@@ -143,73 +142,7 @@ class CheckOutScreen extends StatelessWidget {
     return BlocBuilder<InforContactBloc, InforContactState>(
       builder: (context, state) {
         if (state is InforContactLoaded) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 8.0,
-            ),
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-              width: size.width,
-              decoration: _boxdecoration(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Thông tin liên hệ',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          logger.i('change adrres');
-                        },
-                        child: InkWell(
-                          onTap: () {
-                            navService.pushNamed(context, RouterClient.contact);
-                          },
-                          child: const Text(
-                            'Thay đổi',
-                            style: TextStyle(color: kSecondaryColor),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(width: 4),
-                  Row(
-                    children: [
-                      Text(
-                        '${state.inforContact.username}',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        '${state.inforContact.phone}',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: kGray,
-                            ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    '${state.inforContact.address}',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: kGray,
-                        ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-          );
+          return InforContactCard(infor: state.inforContact);
         } else if (state is InforContactLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is InforContactEmpty) {

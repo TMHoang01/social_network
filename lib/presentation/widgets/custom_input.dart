@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:social_network/utils/constants.dart';
 
-class CustomTextFormField extends StatelessWidget {
+class CustomTextFormField extends StatefulWidget {
   CustomTextFormField(
       {super.key,
       this.alignment,
@@ -11,6 +10,7 @@ class CustomTextFormField extends StatelessWidget {
       this.textInputAction = TextInputAction.next,
       this.textInputType = TextInputType.text,
       this.maxLines,
+      this.initialValue,
       this.hintText,
       this.prefix,
       this.prefixConstraints,
@@ -33,6 +33,7 @@ class CustomTextFormField extends StatelessWidget {
   TextInputAction? textInputAction;
   TextInputType? textInputType;
   int? maxLines;
+  String? initialValue;
   String? hintText;
   Widget? prefix;
   BoxConstraints? prefixConstraints;
@@ -45,10 +46,31 @@ class CustomTextFormField extends StatelessWidget {
   final FocusNode? nextFocusNode;
 
   @override
+  State<CustomTextFormField> createState() => _CustomTextFormFieldState();
+}
+
+class _CustomTextFormFieldState extends State<CustomTextFormField> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    _controller = widget.controller ?? TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (widget.controller == null) {
+      _controller.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return alignment != null
+    return widget.alignment != null
         ? Align(
-            alignment: alignment ?? Alignment.center,
+            alignment: widget.alignment ?? Alignment.center,
             child: _buildTextFormFieldWidget(),
           )
         : _buildTextFormFieldWidget();
@@ -56,45 +78,40 @@ class CustomTextFormField extends StatelessWidget {
 
   _buildTextFormFieldWidget() {
     return Container(
-      width: width ?? double.infinity,
-      margin: margin ?? const EdgeInsets.only(left: 20, right: 20, top: 4),
+      width: widget.width ?? double.infinity,
+      margin:
+          widget.margin ?? const EdgeInsets.only(left: 20, right: 20, top: 4),
       child: TextFormField(
-        controller: controller,
-        focusNode: focusNode,
-        onFieldSubmitted: (_) => onFieldSubmitted,
-        onChanged: (value) => onChanged!(value),
+        initialValue: widget.initialValue,
+        controller: widget.controller ?? null,
+        focusNode: widget.focusNode,
+        onFieldSubmitted: (_) => widget.onFieldSubmitted,
+        onChanged: (value) {
+          widget.onChanged!(value);
+        },
         style: const TextStyle(
           color: Colors.black,
           fontSize: 16,
           fontWeight: FontWeight.w400,
         ),
-        obscureText: isObscureText!,
-        textInputAction: textInputAction,
-        keyboardType: textInputType,
-        maxLines: maxLines ?? 1,
+        obscureText: widget.isObscureText!,
+        textInputAction: widget.textInputAction,
+        keyboardType: widget.textInputType,
+        maxLines: widget.maxLines ?? 1,
         decoration: _buildDecoration(),
-        validator: validator,
+        validator: widget.validator,
       ),
     );
   }
 
   _buildDecoration() {
     return InputDecoration(
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(
-          // color red when validate error
-          color: kOfWhite,
-          width: 1,
-        ),
-      ),
-      labelText: hintText ?? "",
-      prefixIcon: prefix,
-      prefixIconConstraints: prefixConstraints,
-      suffixIcon: suffix,
-      suffixIconConstraints: suffixConstraints,
-      contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
-      errorText: errorText,
+      labelText: widget.hintText ?? "",
+      prefixIcon: widget.prefix,
+      prefixIconConstraints: widget.prefixConstraints,
+      suffixIcon: widget.suffix,
+      suffixIconConstraints: widget.suffixConstraints,
+      errorText: widget.errorText,
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_network/domain/models/post/post.dart';
-import 'package:social_network/presentation/blocs/admins/post_create/post_create_bloc.dart';
+import 'package:social_network/presentation/blocs/admins/post_form/post_form_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/posts/posts_bloc.dart';
 import 'package:social_network/presentation/screens/admins/posts/widgets/post_card.dart';
 import 'package:social_network/presentation/screens/admins/router_admin.dart';
@@ -25,7 +25,7 @@ class _PostsScreenState extends State<PostsScreen>
   // @override
   // bool get wantKeepAlive => true;
 
-  final List<PostCreateBloc> _postCreateBlocs = [];
+  final List<PostFormBloc> _postCreateBlocs = [];
   _handleNewPostBtn(BuildContext context) {
     // show bottompopup
     showBottomSheetApp(
@@ -53,13 +53,13 @@ class _PostsScreenState extends State<PostsScreen>
   }
 
   void _navigateToPostCreateScreen(BuildContext context, PostType type) {
-    final bloc = sl.get<PostCreateBloc>()..add(PostCreateInitEvent(type));
+    final bloc = sl.get<PostFormBloc>()..add(PostFormCreateInit(type));
     setState(() {
       _postCreateBlocs.insert(0, bloc);
     });
     bloc.stream.listen(
       (state) {
-        if (state is PostCreateSuccess) {
+        if (state is PostFormCreateSuccess) {
           setState(() {
             _postCreateBlocs.remove(bloc);
           });
@@ -71,18 +71,18 @@ class _PostsScreenState extends State<PostsScreen>
     navService.pushNamed(context, RouterAdmin.postAdd, args: bloc);
   }
 
-  _handlePostReTry(PostCreateBloc bloc) {
-    final state = bloc.state as PostCreateFailure;
+  _handlePostReTry(PostFormBloc bloc) {
+    final state = bloc.state as PostFormFailure;
 
-    bloc.add(PostCreateRetryStartEvent(
+    bloc.add(PostFormCreateRetryStart(
       title: state.post.title ?? '',
       content: state.post.content ?? '',
       imagePath: state.post.image ?? '',
     ));
   }
 
-  Widget _buildFailurePost(PostCreateBloc bloc) {
-    final state = bloc.state as PostCreateFailure;
+  Widget _buildFailurePost(PostFormBloc bloc) {
+    final state = bloc.state as PostFormFailure;
     final theme = Theme.of(context);
 
     final pendingPost = Stack(
@@ -127,7 +127,7 @@ class _PostsScreenState extends State<PostsScreen>
     return pendingPost;
   }
 
-  Widget _buildPendingPost(PostCreateInProcess state) {
+  Widget _buildPendingPost(PostFormInProcess state) {
     final pendingPost = Stack(
       children: [
         PostCardWidget(
@@ -155,19 +155,19 @@ class _PostsScreenState extends State<PostsScreen>
       (bloc) {
         return BlocProvider.value(
           value: bloc,
-          child: BlocConsumer<PostCreateBloc, PostCreateState>(
+          child: BlocConsumer<PostFormBloc, PostFormState>(
             bloc: bloc,
             listener: (context, state) {
-              if (state is PostCreateSuccess) {
+              if (state is PostFormCreateSuccess) {
                 context
                     .read<PostsBloc>()
                     .add(PostInsertStarted(post: state.post));
               }
             },
             builder: (context, state) {
-              if (state is PostCreateInProcess) {
+              if (state is PostFormInProcess) {
                 return _buildPendingPost(state);
-              } else if (state is PostCreateFailure) {
+              } else if (state is PostFormFailure) {
                 return _buildFailurePost(bloc);
               }
               return const SizedBox();

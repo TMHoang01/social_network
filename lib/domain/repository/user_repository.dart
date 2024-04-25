@@ -6,4 +6,6 @@ abstract class UserRepository {
   Future<List<UserModel>> getAllUsers();
   Future<List<UserModel>> getUsersQuery(UsersQuery query);
   Future<void> updateStatus(String userId, String status);
+
+  Future<List<UserModel>> getListNotInClude(List<String> ids);
 }

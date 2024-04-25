@@ -25,6 +25,9 @@ class _DashBoardClientScreenState extends State<DashBoardClientScreen> {
 
   @override
   void initState() {
+    if (navService.canPop(context)) {
+      navService.pop(context);
+    }
     super.initState();
   }
 

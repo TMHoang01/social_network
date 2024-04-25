@@ -82,4 +82,13 @@ class UserRemote {
       throw Exception(e);
     }
   }
+
+  Future<List<UserModel>> getListNotInIds(List<String> ids) async {
+    try {
+      final users = await usersRef.where('id', whereNotIn: ids).get();
+      return users.docs.map((e) => UserModel.fromDocumentSnapshot(e)).toList();
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }

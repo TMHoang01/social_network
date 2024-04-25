@@ -6,8 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:social_network/presentation/widgets/widgets.dart';
 import 'package:social_network/utils/constants.dart';
 import 'package:social_network/utils/logger.dart';
-import 'package:social_network/presentation/widgets/custom_image_view.dart';
-import 'package:social_network/utils/logger.dart';
 
 class ImageInputPiker extends StatefulWidget {
   final String? url;

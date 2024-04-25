@@ -3,7 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:social_network/data/datasources/auth_remote.dart';
+import 'package:social_network/data/datasources/ecom/category_repository.dart';
 import 'package:social_network/domain/models/user_model.dart';
+import 'package:social_network/domain/repository/ecom/order_repository.dart';
+import 'package:social_network/domain/repository/ecom/product_repository.dart';
+import 'package:social_network/domain/repository/file_repository.dart';
+import 'package:social_network/domain/repository/service/service_repository.dart';
+import 'package:social_network/domain/repository/user_repository.dart';
 import 'package:social_network/firebase_options.dart';
 import 'package:social_network/presentation/blocs/auth/auth_bloc.dart';
 import 'package:social_network/presentation/screens/admins/app_admin.dart';
@@ -49,8 +55,16 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-      create: (context) => sl<AuthFirebase>(),
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider(create: (_) => sl<AuthFirebase>()),
+        RepositoryProvider(create: (_) => sl<OrderRepository>()),
+        RepositoryProvider(create: (_) => sl<ProductRepository>()),
+        RepositoryProvider(create: (_) => sl<CategoryRemote>()),
+        RepositoryProvider(create: (_) => sl<UserRepository>()),
+        RepositoryProvider(create: (_) => sl<FileRepository>()),
+        RepositoryProvider(create: (_) => sl<ServiceRepository>()),
+      ],
       child: BlocProvider(
         create: (context) => sl<AuthBloc>()..add(CheckAuthRequested()),
         child: BlocBuilder<AuthBloc, AuthState>(
@@ -106,6 +120,24 @@ class MyMaterialApp extends StatelessWidget {
         ),
         textTheme: GoogleFonts.robotoTextTheme(
           Theme.of(context).textTheme,
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(
+              color: kOfWhite,
+              width: 1,
+            ),
+          ),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
+        ),
+        dialogTheme: DialogTheme(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(0),
+          ),
+          backgroundColor: Colors.white,
+          actionsPadding: const EdgeInsets.symmetric(horizontal: 8),
         ),
       ),
       initialRoute: initialRoute,

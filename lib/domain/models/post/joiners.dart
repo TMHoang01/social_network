@@ -3,13 +3,13 @@ import 'package:equatable/equatable.dart';
 class JoinersModel extends Equatable {
   final String id;
   final String name;
-  final String email;
+  final String? email;
   final String avatar;
 
   const JoinersModel({
     required this.id,
     required this.name,
-    required this.email,
+    this.email,
     required this.avatar,
   });
 

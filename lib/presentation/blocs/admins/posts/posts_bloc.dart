@@ -12,7 +12,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     on<PostsEvent>((event, emit) {});
     on<PostsStarted>(_onPostsStarted);
     on<PostInsertStarted>(_onPostInsertStarted);
-    on<PostUpdateStarted>(_onPostUpdateStarted);
+    on<PostsUpdateStarted>(_onPostUpdateStarted);
     on<PostDeleteStarted>(_onPostDeleteStarted);
   }
 
@@ -43,7 +43,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
   }
 
   void _onPostUpdateStarted(
-      PostUpdateStarted event, Emitter<PostsState> emit) async {
+      PostsUpdateStarted event, Emitter<PostsState> emit) async {
     final post = event.post;
     try {
       final posts = (state as PostsLoadSuccess).posts;

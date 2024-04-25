@@ -3,10 +3,11 @@ import 'dart:io';
 
 import 'package:social_network/domain/repository/file_repository.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:social_network/sl.dart';
 import 'package:social_network/utils/logger.dart';
 
 class FileStoreIml extends FileRepository {
-  final storageRef = FirebaseStorage.instance.ref();
+  final storageRef = sl.call<FirebaseStorage>().ref();
 
   @override
   Future<void> deleteFile({required String path}) async {

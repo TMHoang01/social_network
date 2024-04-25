@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_network/domain/models/post/post.dart';
+import 'package:social_network/utils/text_format.dart';
 
 class NewsModel extends PostModel {
   NewsModel({
     String? id,
+    PostType? type,
     String? title,
     String? content,
     String? image,
@@ -14,6 +16,7 @@ class NewsModel extends PostModel {
     String? status,
   }) : super(
             id: id,
+            type: PostType.news,
             title: title,
             content: content,
             image: image,
@@ -32,10 +35,8 @@ class NewsModel extends PostModel {
       image: json['image'],
       createdBy: json['createdBy'],
       updatedBy: json['updatedBy'],
-      createdAt:
-          json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
-      updatedAt:
-          json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
+      createdAt: TextFormat.parseJson(json['createdAt']),
+      updatedAt: TextFormat.parseJson(json['updatedAt']),
       status: json['status'],
     );
   }

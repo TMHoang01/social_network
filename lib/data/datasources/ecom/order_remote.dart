@@ -1,4 +1,5 @@
 import 'package:social_network/domain/models/ecom/order_model.dart';
+import 'package:social_network/domain/models/service/booking_service.dart';
 import 'package:social_network/utils/utils.dart';
 
 class OrderRemote {
@@ -6,6 +7,16 @@ class OrderRemote {
     try {
       final doc = await orderRef.add(oderModel.toJson());
       return doc.id;
+    } catch (e) {
+      logger.e(e);
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<BookingService> addService({required BookingService oderModel}) async {
+    try {
+      final doc = await orderRef.add(oderModel.toJson());
+      return oderModel.copyWith(id: doc.id);
     } catch (e) {
       logger.e(e);
       throw Exception(e.toString());

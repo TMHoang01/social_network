@@ -7,46 +7,46 @@ import 'package:social_network/domain/repository/file_repository.dart';
 import 'package:social_network/domain/repository/post/post_repository.dart';
 import 'package:social_network/utils/utils.dart';
 
-part 'post_create_event.dart';
-part 'post_create_state.dart';
+part 'post_form_event.dart';
+part 'post_form_state.dart';
 
-class PostCreateBloc extends Bloc<PostCreateEvent, PostCreateState> {
+class PostFormBloc extends Bloc<PostFormEvent, PostFormState> {
   final PostRepository _postRepository;
   final FileRepository _fileRepository;
 
-  PostCreateBloc(
+  PostFormBloc(
       {required PostRepository postRepository,
       required FileRepository fileRepository})
       : _fileRepository = fileRepository,
         _postRepository = postRepository,
         super(PostCreateInitial()) {
-    on<PostCreateEvent>((event, emit) {});
-    on<PostCreateInitEvent>(_onPostCreateInitType);
-    on<PostCreateStartEvent>(_onPostCreateStarted);
-    on<PostCreateRetryStartEvent>(_onPostCreateRetryStarted);
+    on<PostFormEvent>((event, emit) {});
+    on<PostFormCreateInit>(_onPostCreateInitType);
+    on<PostFormCreateStart>(_onPostCreateStarted);
+    on<PostFormCreateRetryStart>(_onPostCreateRetryStarted);
 
-    on<PostEditInitEvent>(_onPostEditInit);
-    on<PostEditStartEvent>(_onPostEditStarted);
+    on<PostFormEditInit>(_onPostEditInit);
+    on<PostFormEditStart>(_onPostEditStarted);
   }
 
   void _onPostCreateInitType(
-      PostCreateInitEvent event, Emitter<PostCreateState> emit) {
-    emit(PostCreateStarting(type: event.type));
+      PostFormCreateInit event, Emitter<PostFormState> emit) {
+    emit(PostFormCreateStarting(type: event.type));
   }
 
-  void _onPostEditInit(PostEditInitEvent event, Emitter<PostCreateState> emit) {
-    emit(PostEditStarting(post: event.post));
+  void _onPostEditInit(PostFormEditInit event, Emitter<PostFormState> emit) {
+    emit(PostFormEditStarting(post: event.post));
   }
 
   void _onPostCreateStarted(
-      PostCreateStartEvent event, Emitter<PostCreateState> emit) async {
+      PostFormCreateStart event, Emitter<PostFormState> emit) async {
     final post = (event.post.copyWith(
       createdAt: DateTime.now(),
       createdBy: firebaseAuth.currentUser!.uid,
     ));
     try {
       emit(
-        PostCreateInProcess(post: post),
+        PostFormInProcess(post: post),
       );
       final imageUrl = await _uploadFile(
         imagePath: event.image,
@@ -54,9 +54,9 @@ class PostCreateBloc extends Bloc<PostCreateEvent, PostCreateState> {
 
       final postSuccess =
           await _postRepository.add(post: post.copyWith(image: imageUrl));
-      emit(PostCreateSuccess(post: postSuccess));
+      emit(PostFormCreateSuccess(post: postSuccess));
     } catch (e) {
-      emit(PostCreateFailure(
+      emit(PostFormFailure(
         post: post,
         error: e.toString(),
       ));
@@ -64,14 +64,14 @@ class PostCreateBloc extends Bloc<PostCreateEvent, PostCreateState> {
   }
 
   void _onPostEditStarted(
-      PostEditStartEvent event, Emitter<PostCreateState> emit) async {
+      PostFormEditStart event, Emitter<PostFormState> emit) async {
     final post = (event.post.copyWith(
       updatedAt: DateTime.now(),
       updatedBy: firebaseAuth.currentUser!.uid,
     ));
     try {
       emit(
-        PostCreateInProcess(post: post),
+        PostFormInProcess(post: post),
       );
       final imageUrl = await _uploadFile(
         imagePath: event.image,
@@ -80,9 +80,9 @@ class PostCreateBloc extends Bloc<PostCreateEvent, PostCreateState> {
 
       await _postRepository.update(post: post.copyWith(image: imageUrl));
 
-      emit(PostCreateSuccess(post: post.copyWith(image: imageUrl)));
+      emit(PostFormEditSuccess(post: post.copyWith(image: imageUrl)));
     } catch (e) {
-      emit(PostCreateFailure(
+      emit(PostFormFailure(
         post: post,
         error: e.toString(),
       ));
@@ -90,7 +90,7 @@ class PostCreateBloc extends Bloc<PostCreateEvent, PostCreateState> {
   }
 
   void _onPostCreateRetryStarted(
-      PostCreateRetryStartEvent event, Emitter<PostCreateState> emit) async {
+      PostFormCreateRetryStart event, Emitter<PostFormState> emit) async {
     PostModel post = PostModel(
       title: event.title,
       content: event.content,
@@ -99,14 +99,14 @@ class PostCreateBloc extends Bloc<PostCreateEvent, PostCreateState> {
     );
     try {
       emit(
-        PostCreateInProcess(
+        PostFormInProcess(
           post: post,
         ),
       );
 
-      emit(PostCreateSuccess(post: post));
+      emit(PostFormCreateSuccess(post: post));
     } catch (e) {
-      emit(PostCreateFailure(
+      emit(PostFormFailure(
         post: post,
         error: e.toString(),
       ));
@@ -116,7 +116,7 @@ class PostCreateBloc extends Bloc<PostCreateEvent, PostCreateState> {
   Future<String?> _uploadFile(
       {required String imagePath, String? urlOld}) async {
     try {
-      if (imagePath.isEmpty) return null;
+      if (imagePath.isEmpty) return urlOld;
       File file = File(imagePath);
       String name = DateTime.now().millisecondsSinceEpoch.toString();
       name = '$name.${imagePath.split('.').last}';
@@ -130,7 +130,7 @@ class PostCreateBloc extends Bloc<PostCreateEvent, PostCreateState> {
       }
       return imageUrl;
     } catch (e) {
-      print(e);
+      logger.e(e);
       throw Exception(e.toString());
     }
   }

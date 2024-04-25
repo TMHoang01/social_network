@@ -64,6 +64,8 @@ class _SelectUserRoleTypeScreenState extends State<SelectUserRoleTypeScreen> {
           _pageController.animateToPage(1,
               duration: const Duration(milliseconds: 400),
               curve: Curves.easeInOut);
+        } else if (state is UserInforUpdateInforSuccess) {
+          navService.pushNamedAndRemoveUntil(context, AppRouter.home);
         }
       },
       child: PageView(
@@ -175,11 +177,11 @@ class _SelectUserRoleTypeScreenState extends State<SelectUserRoleTypeScreen> {
       child: BlocBuilder<UserInforBloc, UserInforState>(
         builder: (context, state) {
           if (state is UserInforProviderFormStarted) {
-            return ProviderFormWidget();
+            return const ProviderFormWidget();
           } else if (state is UserInforResidentFormStarted) {
-            return ResidentFormWidget();
-          }
-          return Text('data');
+            return const ResidentFormWidget();
+          } else
+            return const Text('data');
         },
       ),
     );

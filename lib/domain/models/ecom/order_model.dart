@@ -66,8 +66,8 @@ class OrderModel extends Equatable {
       'total': total,
       'status': status.toString().split('.').last,
       'note': note,
-      'createdAt': createdAt?.toIso8601String(),
-      'updatedAt': updatedAt?.toIso8601String(),
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
     };
   }
 

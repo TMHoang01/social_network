@@ -1,16 +1,33 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:social_network/domain/models/ecom/cart_item.dart';
 import 'package:social_network/domain/models/ecom/product_model.dart';
+import 'package:social_network/domain/models/post/post.dart';
 import 'package:social_network/presentation/blocs/clients/cart/cart_bloc.dart';
+import 'package:social_network/presentation/blocs/clients/posts/posts_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/products/product_bloc.dart';
 import 'package:social_network/presentation/screens/clients/cart/widget/change_num_btn.dart';
+import 'package:social_network/presentation/screens/clients/posts/widgets/post_home_card.dart';
 import 'package:social_network/presentation/screens/clients/router_client.dart';
 import 'package:social_network/presentation/widgets/custom_image_view.dart';
 import 'package:social_network/router.dart';
+import 'package:social_network/sl.dart';
 import 'package:social_network/utils/utils.dart';
+
+class ItemHomePage {
+  final String title;
+  final IconData icon;
+  final Color? color;
+  final Function onTap;
+  ItemHomePage({
+    required this.title,
+    required this.icon,
+    this.color,
+    required this.onTap,
+  });
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,21 +37,63 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage>
-    with AutomaticKeepAliveClientMixin<HomePage> {
-  @override
-  bool get wantKeepAlive => true;
+// with AutomaticKeepAliveClientMixin<HomePage>
+{
+  // @override
+  // bool get wantKeepAlive => true;
+  final List<ItemHomePage> listFunction = [
+    ItemHomePage(
+      title: 'Tin tức',
+      icon: Icons.post_add_outlined,
+      color: Colors.blue,
+      onTap: (BuildContext context) {
+        logger.d('Tin tức');
+        navService.pushNamed(context, RouterClient.posts);
+      },
+    ),
+    ItemHomePage(
+      title: 'Tin tức',
+      icon: Icons.list,
+      onTap: (BuildContext context) {
+        navService.pushNamed(context, RouterClient.posts);
+      },
+    ),
+    ItemHomePage(
+      title: 'Dịch vụ',
+      icon: Icons.medical_services_outlined,
+      onTap: (BuildContext context) {
+        navService.pushNamed(context, RouterClient.services);
+      },
+    ),
+    ItemHomePage(
+      title: 'Danh sách sản phẩm',
+      icon: Icons.people,
+      onTap: () {},
+    ),
+    ItemHomePage(
+      title: 'Dịch vụ',
+      icon: Icons.fire_extinguisher,
+      color: Colors.red,
+      onTap: () {},
+    ),
+    ItemHomePage(
+      title: 'Danh sách sản phẩm',
+      icon: Icons.precision_manufacturing,
+      onTap: () {},
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     ThemeData theme = Theme.of(context);
-    super.build(context);
+    // super.build(context);
     ProductBloc productBloc = BlocProvider.of<ProductBloc>(context)
       ..add(FetchProductsEvent());
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Trang chủ'),
+        // title: const Text('Trang chủ'),
         actions: [
           BlocBuilder<CartBloc, CartState>(
             builder: (context, state) {
@@ -58,6 +117,69 @@ class _HomePageState extends State<HomePage>
           // mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Container(
+              color: kPrimaryColor,
+              padding: const EdgeInsets.all(12),
+              // height: 300,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Hỗ trợ dịch vụ, tiện ích cho bạn',
+                    style: theme.textTheme.headlineMedium
+                        ?.copyWith(color: Colors.white),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Container(
+                        width: 18,
+                        height: 18,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(90),
+                          color: kSecondaryLightColor,
+                        ),
+                        child: const Icon(Icons.star,
+                            color: Colors.amber, size: 15),
+                      ),
+                      const SizedBox(width: 2),
+                      const Text(
+                        'Đánh giá:',
+                        style: TextStyle(
+                            fontSize: 16, color: kSecondaryLightColor),
+                      ),
+                      const SizedBox(width: 4),
+                      const Text(
+                        '100 người',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      RatingBar.builder(
+                        itemSize: 16,
+                        initialRating: 3,
+                        minRating: 0,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        itemPadding:
+                            const EdgeInsets.symmetric(horizontal: 2.0),
+                        itemBuilder: (context, _) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        onRatingUpdate: (rating) {
+                          print(rating);
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
             SizedBox(
               height: size.height * 0.24,
               child: Swiper(
@@ -76,73 +198,12 @@ class _HomePageState extends State<HomePage>
                     activeColor: kSecondaryColor,
                   ),
                 ),
-                // control: SwiperControl(),
               ),
             ),
             const Divider(height: 3),
-            // Container(
-            //   color: kPrimaryLightColor,
-            //   padding: const EdgeInsets.all(12),
-            //   // height: 300,
-            //   child: Column(
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     children: [
-            //       const Text(
-            //         'Của hàng bán ',
-            //         style: TextStyle(
-            //           fontSize: 30,
-            //           fontWeight: FontWeight.w400,
-            //         ),
-            //       ),
-            //       const SizedBox(height: 10),
-            //       Row(
-            //         children: [
-            //           Container(
-            //             width: 18,
-            //             height: 18,
-            //             decoration: BoxDecoration(
-            //               borderRadius: BorderRadius.circular(90),
-            //               color: Colors.purple,
-            //             ),
-            //             child: const Icon(Icons.star,
-            //                 color: Colors.amber, size: 15),
-            //           ),
-            //           const SizedBox(width: 2),
-            //           const Text(
-            //             'Đánh giá:',
-            //             style: TextStyle(fontSize: 16, color: Colors.purple),
-            //           ),
-            //           const SizedBox(width: 4),
-            //           const Text(
-            //             '100 người',
-            //             style: TextStyle(
-            //               fontSize: 16,
-            //               color: Colors.black,
-            //             ),
-            //           ),
-            //           const SizedBox(width: 6),
-            //           RatingBar.builder(
-            //             itemSize: 16,
-            //             initialRating: 3,
-            //             minRating: 0,
-            //             direction: Axis.horizontal,
-            //             allowHalfRating: true,
-            //             itemCount: 5,
-            //             itemPadding:
-            //                 const EdgeInsets.symmetric(horizontal: 2.0),
-            //             itemBuilder: (context, _) => const Icon(
-            //               Icons.star,
-            //               color: Colors.amber,
-            //             ),
-            //             onRatingUpdate: (rating) {
-            //               print(rating);
-            //             },
-            //           ),
-            //         ],
-            //       ),
-            //     ],
-            //   ),
-            // ),
+
+            _buildFuntionItem(context, listFunction.sublist(0, 4)),
+            // _buildFuntionItem(context, listFunction.sublist(1, 5)),
 
             Container(
               padding: const EdgeInsets.all(8),
@@ -177,8 +238,8 @@ class _HomePageState extends State<HomePage>
                             child: const Center(
                               child: Icon(
                                 Icons.online_prediction_rounded,
-                                color: Colors.white, // Màu của biểu tượng
-                                size: 50, // Kích thước của biểu tượng
+                                color: Colors.white,
+                                size: 50,
                               ),
                             ),
                           ),
@@ -190,13 +251,81 @@ class _HomePageState extends State<HomePage>
                 },
               ),
             ),
+
             const Divider(height: 1),
             // const LineChartSample1(),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child:
-                  Text("Gợi ý cho bạn", style: theme.textTheme.headlineSmall),
+              padding: const EdgeInsets.only(top: 8.0, left: 12.0, right: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Tin tức", style: theme.textTheme.headlineSmall),
+                  InkWell(
+                    onTap: () {
+                      navService.pushNamed(context, RouterClient.posts);
+                    },
+                    child: Text(
+                      "Xem thêm",
+                      style: theme.textTheme.headlineSmall?.copyWith(
+                        color: kSecondaryColor,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
+            _buildPostsHome(
+                context,
+                sl.get<PostsClientBloc>()
+                  ..add(PostsLoadmoreEvent(type: PostType.news.toJson()))),
+
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0, left: 12.0, right: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Sự kiện", style: theme.textTheme.headlineSmall),
+                  InkWell(
+                    onTap: () {
+                      navService.pushNamed(context, RouterClient.posts);
+                    },
+                    child: Text(
+                      "Xem thêm",
+                      style: theme.textTheme.headlineSmall?.copyWith(
+                        color: kSecondaryColor,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            _buildPostsHome(
+                context,
+                sl.get<PostsClientBloc>()
+                  ..add(PostsLoadmoreEvent(type: PostType.event.toJson()))),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0, left: 12.0, right: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Mua sắm", style: theme.textTheme.headlineSmall),
+                  InkWell(
+                    onTap: () {},
+                    child: Text(
+                      "Xem thêm",
+                      style: theme.textTheme.headlineSmall?.copyWith(
+                        color: kSecondaryColor,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
             const SizedBox(height: 10),
             BlocBuilder<ProductBloc, ProductState>(
               bloc: productBloc,
@@ -210,10 +339,10 @@ class _HomePageState extends State<HomePage>
                     height: size.width * 0.4,
                     child: ListView.separated(
                       itemCount: products.length,
+                      scrollDirection: Axis.horizontal,
                       separatorBuilder: (context, index) {
                         return const Divider();
                       },
-                      scrollDirection: Axis.horizontal,
                       itemBuilder: (conxtext, index) {
                         return Expanded(
                           child: PreviewProductWidget(product: products[index]),
@@ -230,23 +359,98 @@ class _HomePageState extends State<HomePage>
             ),
 
             const SizedBox(height: 10),
-            // BlocBuilder<ProductBloc, ProductState>(
-            //   bloc: productBloc,
-            //   builder: (context, state) {
-            //     if (state is ProductLoading) {
-            //       return const CircularProgressIndicator();
-            //     }
-            //     if (state is ProductError) {
-            //       return const Text("Load product failure");
-            //     }
-            //     if (state is ProductSuccess) {
-            //       return ListProductsWidget(products: state.products);
-            //     }
-            //     return const Text("State not found");
-            //   },
-            // ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildPostsHome(BuildContext context, PostsClientBloc bloc) {
+    Size size = MediaQuery.of(context).size;
+    return BlocBuilder<PostsClientBloc, PostsClientState>(
+      bloc: bloc,
+      builder: (context, state) {
+        return (state is PostsClientsLoadInProgress)
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : (state is PostsLoadSuccess)
+                ? SizedBox(
+                    height: 260,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      // shrinkWrap: true,
+                      itemCount: state.posts.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
+                            width: size.width * 0.86,
+                            child: PostHomeCard(post: state.posts[index]));
+                      },
+                    ),
+                  )
+                : const Text("State not found");
+      },
+    );
+  }
+
+  SizedBox _buildFuntionItem(
+    BuildContext context,
+    List<ItemHomePage> listItems,
+  ) {
+    Size size = MediaQuery.of(context).size;
+    ThemeData theme = Theme.of(context);
+    return SizedBox(
+      width: size.width,
+      height: 128,
+      child: Row(
+        children: listItems.map((item) {
+          return Expanded(
+            child: Container(
+              width: size.width * 0.2,
+              margin: const EdgeInsets.all(8),
+              child: Column(
+                children: [
+                  Container(
+                    width: size.width * 0.2,
+                    height: size.width * 0.2,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: kOfWhite,
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(
+                        color: kOfWhite,
+                        width: 1,
+                      ),
+                      gradient: const LinearGradient(
+                        colors: [kPrimaryLightColor, kSecondaryLightColor],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        item.onTap(context);
+                      },
+                      child: SizedBox.fromSize(
+                        size: const Size.fromRadius(200),
+                        child: FittedBox(
+                          child: Icon(
+                            item.icon,
+                            color: item.color,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Center(
+                      child:
+                          Text(item.title, style: theme.textTheme.bodyMedium)),
+                ],
+              ),
+            ),
+          );
+        }).toList(),
       ),
     );
   }
@@ -272,73 +476,78 @@ class PreviewProductWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(8),
       width: size.width * 0.8,
-      decoration: BoxDecoration(
-        color: kOfWhite,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            children: [
-              CustomImageView(
-                borderRadius: BorderRadius.circular(10),
-                url: product.imageUrl,
-                width: size.width * 0.3,
-                height: size.width * 0.6,
-              ),
-            ],
-          ),
-          const SizedBox(width: 10),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("${product.name}",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.titleMedium),
-                FittedBox(
-                  child: Text(
-                    "${TextFormat.formatMoney(product.price ?? 0)} đ",
-                    style: theme.textTheme.bodyLarge
-                        ?.copyWith(color: kSecondaryColor),
+      color: Colors.white,
+      child: Card(
+        surfaceTintColor: Colors.white,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Stack(
+                children: [
+                  CustomImageView(
+                    borderRadius: BorderRadius.circular(10),
+                    url: product.imageUrl,
+                    width: size.width * 0.3,
+                    height: size.width * 0.6,
                   ),
-                ),
-                Row(
-                  children: [
-                    // IconButton(
-                    //   onPressed: () {},
-                    //   icon: const Icon(Icons.favorite),
-                    // ),
-                    isExist == false
-                        ? IconButton.filled(
-                            iconSize: 18,
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(kPrimaryColor),
-                            ),
-                            onPressed: () {
-                              context.read<CartBloc>().add(
-                                    AddItemCart(item: product),
-                                  );
-                              // _showBottomSheetAddCart(context, product);
-                            },
-                            icon: const Icon(
-                              Icons.add_shopping_cart,
-                              color: Colors.white,
-                            ),
-                          )
-                        : ButtonAddCart(
-                            item: items.firstWhere(
-                                (element) => element.productId == product.id),
-                          ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+            const SizedBox(width: 10),
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text("${product.name}",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.titleMedium),
+                  FittedBox(
+                    child: Text(
+                      "${TextFormat.formatMoney(product.price ?? 0)} đ",
+                      style: theme.textTheme.bodyLarge
+                          ?.copyWith(color: kSecondaryColor),
+                    ),
+                  ),
+                  Expanded(child: Container()),
+                  Row(
+                    children: [
+                      // IconButton(
+                      //   onPressed: () {},
+                      //   icon: const Icon(Icons.favorite),
+                      // ),
+                      isExist == false
+                          ? IconButton.filled(
+                              iconSize: 18,
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(kPrimaryColor),
+                              ),
+                              onPressed: () {
+                                context.read<CartBloc>().add(
+                                      AddItemCart(item: product),
+                                    );
+                                // _showBottomSheetAddCart(context, product);
+                              },
+                              icon: const Icon(
+                                Icons.add_shopping_cart,
+                                color: Colors.white,
+                              ),
+                            )
+                          : ButtonAddCart(
+                              item: items.firstWhere(
+                                  (element) => element.productId == product.id),
+                            ),
+                    ],
+                  ),
+                  const Spacer(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
