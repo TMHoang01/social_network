@@ -47,7 +47,7 @@ class _PostBottomSheetState extends State<PostBottomSheet> {
       children: [
         ListTile(
           leading: const Icon(Icons.edit),
-          title: Text('Chỉnh sửa '),
+          title: const Text('Chỉnh sửa '),
           onTap: () {
             navService.pop(context);
             widget.onEditPressed!();
@@ -64,25 +64,25 @@ class _PostBottomSheetState extends State<PostBottomSheet> {
         // phần có thể thêm vào
         //. ...
 
-        Column(
-          children: [
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.person_add),
-              title: const Text('Mời bạn bè'),
-              onTap: () {
-                navService.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.share),
-              title: const Text('Chia sẻ'),
-              onTap: () {
-                navService.pop(context);
-              },
-            ),
-          ],
-        ),
+        // Column(
+        //   children: [
+        //     const Divider(),
+        //     ListTile(
+        //       leading: const Icon(Icons.person_add),
+        //       title: const Text('Mời bạn bè'),
+        //       onTap: () {
+        //         navService.pop(context);
+        //       },
+        //     ),
+        //     ListTile(
+        //       leading: const Icon(Icons.share),
+        //       title: const Text('Chia sẻ'),
+        //       onTap: () {
+        //         navService.pop(context);
+        //       },
+        //     ),
+        //   ],
+        // ),
       ],
     );
   }

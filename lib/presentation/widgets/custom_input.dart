@@ -18,6 +18,7 @@ class CustomTextFormField extends StatefulWidget {
       this.suffixConstraints,
       this.validator,
       this.errorText,
+      this.readOnly = false,
       this.onChanged,
       this.controller,
       this.onFieldSubmitted,
@@ -28,6 +29,7 @@ class CustomTextFormField extends StatefulWidget {
   double? width;
   EdgeInsetsGeometry? margin;
   Function(String)? onFieldSubmitted;
+  bool? readOnly;
   Function(String)? onChanged;
   bool? isObscureText;
   TextInputAction? textInputAction;
@@ -82,12 +84,15 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       margin:
           widget.margin ?? const EdgeInsets.only(left: 20, right: 20, top: 4),
       child: TextFormField(
+        readOnly: widget.readOnly ?? false,
         initialValue: widget.initialValue,
         controller: widget.controller ?? null,
         focusNode: widget.focusNode,
         onFieldSubmitted: (_) => widget.onFieldSubmitted,
         onChanged: (value) {
-          widget.onChanged!(value);
+          if (widget.onChanged != null) {
+            widget.onChanged!(value);
+          }
         },
         style: const TextStyle(
           color: Colors.black,

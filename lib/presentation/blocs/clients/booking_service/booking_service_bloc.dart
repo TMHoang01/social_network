@@ -14,8 +14,8 @@ class BookingServiceBloc
     on<BookingServiceStared>((event, emit) async {
       emit(BookingServiceLoading());
       try {
-        final bookingService = await bookingRepository.getSchedule(
-          event.date,
+        final bookingService = await bookingRepository.getScheduleInDay(
+          event.day,
         );
         emit(BookingServiceSuccess(bookingService));
       } catch (e) {

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:social_network/domain/models/ecom/infor_contact.dart';
 import 'package:social_network/domain/models/service/schedule_booking.dart';
+import 'package:social_network/utils/utils.dart';
 
 import './enum_service.dart';
 
@@ -11,7 +12,7 @@ class BookingService extends Equatable {
   final String? userName;
   final String typeOrder = 'service';
   final InforContactModel? inforContact;
-  final ServiceType? type;
+  final ServiceType? serviceType;
   final String? serviceId;
   final String? serviceName;
   final String? serviceImage;
@@ -32,7 +33,7 @@ class BookingService extends Equatable {
     this.userId,
     this.userName,
     this.inforContact,
-    this.type,
+    this.serviceType,
     this.serviceId,
     this.serviceName,
     this.serviceImage,
@@ -57,7 +58,9 @@ class BookingService extends Equatable {
       inforContact: json['inforContact'] != null
           ? InforContactModel.fromJson(json['inforContact'])
           : null,
-      type: json['type'] != null ? ServiceType.fromJson(json['type']) : null,
+      serviceType: json['serviceType'] != null
+          ? ServiceType.fromJson(json['serviceType'])
+          : null,
       serviceId: json['serviceId'],
       serviceName: json['serviceName'],
       serviceImage: json['serviceImage'],
@@ -71,9 +74,9 @@ class BookingService extends Equatable {
           ? ScheduleBooking.fromJson(json['scheduleBooking'])
           : null,
       note: json['note'],
-      createdAt: json['createdAt'],
+      createdAt: TextFormat.parseJson(json['createdAt']),
       createdBy: json['createdBy'],
-      updatedAt: json['updatedAt'],
+      updatedAt: TextFormat.parseJson(json['updatedAt']),
       updatedBy: json['updatedBy'],
       workDate: json['workDate'],
     );
@@ -87,12 +90,12 @@ class BookingService extends Equatable {
 
   Map<String, dynamic> toJson() {
     return {
+      'typeOrder': 'service', // 'service
       if (id != null) 'id': id,
       if (userId != null) 'userId': userId,
       if (userName != null) 'userName': userName,
-      'type': typeOrder, // 'service'
       if (inforContact != null) 'inforContact': inforContact?.toJson(),
-      if (type != null) 'type': type?.toJson(),
+      if (serviceType != null) 'serviceType': serviceType?.toJson(),
       if (serviceId != null) 'serviceId': serviceId,
       if (serviceName != null) 'serviceName': serviceName,
       if (serviceImage != null) 'serviceImage': serviceImage,
@@ -135,7 +138,7 @@ class BookingService extends Equatable {
       userId: userId ?? this.userId,
       userName: userName ?? this.userName,
       inforContact: inforContact ?? this.inforContact,
-      type: type ?? this.type,
+      serviceType: type ?? this.serviceType,
       serviceId: serviceId ?? this.serviceId,
       serviceName: serviceName ?? this.serviceName,
       serviceImage: serviceImage ?? this.serviceImage,

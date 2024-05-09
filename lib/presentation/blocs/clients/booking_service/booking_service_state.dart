@@ -12,7 +12,7 @@ final class BookingServiceInitial extends BookingServiceState {}
 final class BookingServiceLoading extends BookingServiceState {}
 
 final class BookingServiceSuccess extends BookingServiceState {
-  final BookingService bookingService;
+  final List<BookingService> bookingService;
 
   BookingServiceSuccess(this.bookingService);
 
@@ -28,4 +28,3 @@ final class BookingServiceFailure extends BookingServiceState {
   @override
   List<Object> get props => [message];
 }
-

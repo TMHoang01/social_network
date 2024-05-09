@@ -44,29 +44,46 @@ class _UsersScreenState extends State<UsersScreen> {
       ),
       body: BlocBuilder<UsersBloc, UsersState>(
         builder: (context, state) {
+          if (state is UsersLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (state is UsersLoaded && state.users.isEmpty) {
+            return const Center(
+              child: Text('Không có người dùng cần duyệt'),
+            );
+          }
+          if (state is UsersError) {
+            return Center(
+              child: Text(state.message),
+            );
+          }
+
           return SingleChildScrollView(
             child: Column(
               children: [
-                Text('data'),
-                if (state is UsersLoading)
-                  const Center(
-                    child: CircularProgressIndicator(),
-                  ),
                 if (state is UsersLoaded)
-                  ListView.builder(
-                    shrinkWrap: true,
-                    controller: scrollController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: state.users.length,
-                    itemBuilder: (context, index) {
-                      if (index == state.users.length) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      final user = state.users[index];
-                      return UserItem(user: user);
-                    },
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        ListView.builder(
+                          shrinkWrap: true,
+                          controller: scrollController,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: state.users.length,
+                          itemBuilder: (context, index) {
+                            if (index == state.users.length) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            final user = state.users[index];
+                            return UserItem(user: user);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
               ],
             ),
@@ -133,7 +150,7 @@ class UserItem extends StatelessWidget {
                       .add(UsersAcceptUser(user.id ?? '', StatusUser.rejected));
                 },
                 title: 'Từ chối',
-                backgroundColor: Colors.white,
+                backgroundColor: kSecondaryColor,
                 height: size.width * 0.1,
                 width: size.width * 0.4,
               ),

@@ -8,6 +8,8 @@ abstract class BookingServiceRemoteDataSource {
   Future<void> delete({required String id});
 
   Stream<List<BookingService>> getAll();
+
+  Future<List<BookingService>> getScheduleInDay(String date);
 }
 
 class BookingServiceRemoteDataSourceImpl
@@ -16,7 +18,10 @@ class BookingServiceRemoteDataSourceImpl
   @override
   Future<BookingService?> add({required BookingService booking}) async {
     try {
-      final response = await colection.add(booking.toJson());
+      final createAt = FieldValue.serverTimestamp();
+      final json = booking.toJson();
+      json['createdAt'] = createAt;
+      final response = await colection.add(json);
       return booking.copyWith(id: response.id);
     } on FirebaseException catch (e) {
       throw Exception(e.toString());
@@ -25,13 +30,11 @@ class BookingServiceRemoteDataSourceImpl
 
   @override
   Future<void> delete({required String id}) {
-    // TODO: implement delete
     throw UnimplementedError();
   }
 
   @override
   Stream<List<BookingService>> getAll() {
-    // TODO: implement getAll
     throw UnimplementedError();
   }
 
@@ -39,5 +42,24 @@ class BookingServiceRemoteDataSourceImpl
   Future<void> update({required BookingService booking}) {
     // TODO: implement update
     throw UnimplementedError();
+  }
+
+  @override
+  Future<List<BookingService>> getScheduleInDay(String date) async {
+    // flitter array scheduleDates date >= date && date < nextDay
+    try {
+      final firestore = FirebaseFirestore.instance;
+      final response = await firestore
+          .collection("orders")
+          .where("scheduleBooking.scheduleDates", arrayContains: date)
+          .get();
+      final list = response.docs
+          .map((e) => BookingService.fromJson(e.data() as Map<String, dynamic>))
+          .toList();
+
+      return list;
+    } on FirebaseException catch (e) {
+      throw Exception(e.toString());
+    }
   }
 }

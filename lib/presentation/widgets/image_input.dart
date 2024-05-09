@@ -41,8 +41,8 @@ class _ImageInputPikerState extends State<ImageInputPiker> {
         if (File(pickedFile.path).lengthSync() > widget.limitSize) {
           showSnackBar(
             context,
-            "Vui lòng chọn ảnh có dung lượng nhỏ hơn ${widget.limitSize}MB",
-            Colors.yellow,
+            "Vui lòng chọn ảnh có dung lượng nhỏ hơn 2MB",
+            Colors.red,
           );
           return;
         }

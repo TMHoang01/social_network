@@ -17,6 +17,7 @@ import 'package:social_network/presentation/screens/clients/app_client.dart';
 import 'package:social_network/router.dart';
 import 'package:social_network/sl.dart';
 import 'package:social_network/utils/constants.dart';
+import 'package:social_network/utils/firebase.dart';
 import 'package:social_network/utils/logger.dart';
 
 class SimpleBlocDelegate extends BlocObserver {
@@ -47,6 +48,8 @@ Future<void> main() async {
   Bloc.observer = SimpleBlocDelegate();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await setupLocator();
+
+  await geFireBaseMessaging();
 
   runApp(const MyApp());
 }

@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:social_network/domain/models/post/post.dart';
 import 'package:social_network/domain/repository/post/post_repository.dart';
+import 'package:social_network/utils/logger.dart';
 
 part 'posts_event.dart';
 part 'posts_state.dart';
@@ -82,6 +83,7 @@ class PostsClientBloc extends Bloc<PostsClientEvent, PostsClientState> {
       }
       emit(PostsLoadSuccess(posts: [...currentPosts, ...posts]));
     } catch (e) {
+      logger.e(e);
       emit(PostsLoadFailure(error: e.toString()));
     }
   }

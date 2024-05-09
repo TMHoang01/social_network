@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:social_network/domain/models/user_model.dart';
 import 'package:social_network/sl.dart';
+import 'package:social_network/utils/exception/customer_exception.dart';
 import 'package:social_network/utils/firebase.dart';
 import 'package:social_network/utils/logger.dart';
 
@@ -42,22 +43,7 @@ class AuthFirebase {
           .signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
       logger.e(e);
-      switch (e.code) {
-        case 'user-not-found':
-          throw Exception('Không tìm thấy tài khoản.');
-        case 'wrong-password':
-          throw Exception('Sai mật khẩu.');
-        case 'invalid-email':
-          throw Exception('Email không hợp lệ.');
-        case 'user-disabled':
-          throw Exception('Tài khoản đã bị vô hiệu hóa.');
-        case 'too-many-requests':
-          throw Exception('Quá nhiều yêu cầu.');
-        case 'operation-not-allowed':
-          throw Exception('Không thể thực hiện thao tác này.');
-        default:
-          throw Exception('Đã xảy ra lỗi.');
-      }
+      handleFirebaseAuthException(e);
     } catch (e) {
       logger.e(e);
       throw Exception(e.toString());

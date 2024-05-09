@@ -31,7 +31,7 @@ class _BookingDateWidgetState extends State<BookingDateWidget> {
     return Column(
       children: [
         TableCalendar(
-          firstDay: kToday,
+          firstDay: kFirstDay,
           lastDay: kLastDay,
           focusedDay: _focusedDay,
           currentDay: _selectedDay,

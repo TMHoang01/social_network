@@ -6,6 +6,7 @@ class CustomButton extends StatelessWidget {
   CustomButton(
       {super.key,
       this.margin,
+      this.isDisable = false,
       this.onPressed,
       this.width,
       this.height,
@@ -14,9 +15,9 @@ class CustomButton extends StatelessWidget {
       this.prefixWidget,
       this.suffixWidget});
 
-  Alignment? alignment;
-
   EdgeInsetsGeometry? margin;
+
+  bool? isDisable;
 
   VoidCallback? onPressed;
 
@@ -41,7 +42,7 @@ class CustomButton extends StatelessWidget {
         width: width ?? double.infinity,
         height: height ?? 48,
         child: ElevatedButton(
-          onPressed: onPressed,
+          onPressed: isDisable == true ? null : onPressed,
           style: ElevatedButton.styleFrom(
             backgroundColor: backgroundColor ?? kPrimaryColor.withOpacity(0.8),
             shape: RoundedRectangleBorder(

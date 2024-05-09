@@ -15,6 +15,8 @@ import 'package:social_network/presentation/blocs/clients/booking_service/bookin
 import 'package:social_network/presentation/blocs/clients/booking_service_create/booking_service_create_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/cart/cart_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/infor_contact/infor_contact_bloc.dart';
+import 'package:social_network/presentation/blocs/clients/my_feed_back/my_feed_back_bloc.dart';
+import 'package:social_network/presentation/blocs/clients/my_feed_back_create/my_feed_back_create_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/order/order_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/posts/posts_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/products/product_bloc.dart';
@@ -44,6 +46,7 @@ class ClientApp extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: [
+          // ecoms
           BlocProvider(
             create: (context) => CategoryBloc(
                 categoryRepository: context.read<CategoryRepository>()),
@@ -56,14 +59,18 @@ class ClientApp extends StatelessWidget {
           BlocProvider(create: (context) => sl<InforContactBloc>()),
           BlocProvider(create: (context) => sl<OrderBloc>()),
 
-          //
+          // posts
           BlocProvider(
             create: (context) => sl.get<PostsClientBloc>()..add(PostsStarted()),
           ),
+          // services
           BlocProvider(
               create: (_) => sl<ServicesBloc>()..add(ServicesStarted())),
           BlocProvider(create: (_) => sl<BookingServiceBloc>()),
           BlocProvider(create: (_) => sl<BookingServiceCreateBloc>()),
+          // feedback
+          BlocProvider(create: (_) => sl<MyFeedBackBloc>()),
+          BlocProvider(create: (_) => sl<MyFeedBackCreateBloc>()),
         ],
         child: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {

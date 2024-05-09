@@ -21,11 +21,35 @@ class BookingFormChildCare extends StatefulWidget {
 
 class _BookingFormChildCareState extends State<BookingFormChildCare> {
   late BookingServiceChildCare booking;
+  final TextEditingController _noteController =
+      TextEditingController(text: 'Đặt cho bé 1 tuổi');
   // late InforContactModel inforContact;
   @override
   void initState() {
     booking = widget.booking;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _noteController.dispose();
+    super.dispose();
+  }
+
+  void handleBooking() {
+    if (_noteController.text.isEmpty) {
+      showSnackBar(context, 'Nhập ghi chú', Colors.red);
+      return;
+    }
+    logger.d(booking.toJson());
+    final bookingService = booking.copyWith(
+      note: _noteController.text,
+      // workDate: _workDate,
+    );
+    context
+        .read<BookingServiceCreateBloc>()
+        .add(BookingServiceCreateStared(bookingService));
+    navService.pushNamed(context, RouterClient.servicBookingFormSchedule);
   }
 
   @override
@@ -59,13 +83,7 @@ class _BookingFormChildCareState extends State<BookingFormChildCare> {
               ),
               body: Container(child: _builderFormChildCare(context)),
               bottomNavigationBar: CustomButton(
-                onPressed: () {
-                  context
-                      .read<BookingServiceCreateBloc>()
-                      .add(BookingServiceCreateStared(booking));
-                  navService.pushNamed(
-                      context, RouterClient.servicBookingFormSchedule);
-                },
+                onPressed: handleBooking,
                 title: 'Đặt lịch',
               ),
             ),
@@ -203,6 +221,37 @@ class _BookingFormChildCareState extends State<BookingFormChildCare> {
                       _buildTimeShift(6),
                       _buildTimeShift(8),
                     ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+            Container(
+              decoration: _boxdecoration(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 16.0, top: 8.0),
+                    child: Text(
+                      'Ghi chú',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: _noteController,
+                      maxLines: 3,
+                      decoration: const InputDecoration(
+                        hintText: 'Nhập ghi chú',
+                        border: InputBorder.none,
+                      ),
+                    ),
                   ),
                 ],
               ),

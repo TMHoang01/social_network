@@ -11,46 +11,28 @@ class BookingServiceChildCare extends BookingService {
 
   @override
   const BookingServiceChildCare({
-    String? id,
-    InforContactModel? inforContact,
-    ServiceType? type,
-    String? serviceId,
-    String? serviceName,
-    String? serviceImage,
-    double? servicePrice,
-    String? providerId,
-    String? providerName,
-    BookingStatus? status,
-    ScheduleBooking? scheduleBooking,
-    String? note,
-    DateTime? createdAt,
-    String? createdBy,
-    DateTime? updatedAt,
-    String? updatedBy,
-    DateTime? workDate,
+    super.id,
+    super.inforContact,
+    super.serviceType,
+    super.serviceId,
+    super.serviceName,
+    super.serviceImage,
+    super.servicePrice,
+    super.providerId,
+    super.providerName,
+    super.status,
+    super.scheduleBooking,
+    super.note,
+    super.createdAt,
+    super.createdBy,
+    super.updatedAt,
+    super.updatedBy,
+    super.workDate,
     this.childNumber,
     this.childAge,
     this.childGender,
     this.timeShift,
-  }) : super(
-          id: id,
-          inforContact: inforContact,
-          type: type,
-          serviceId: serviceId,
-          serviceName: serviceName,
-          serviceImage: serviceImage,
-          servicePrice: servicePrice,
-          providerId: providerId,
-          providerName: providerName,
-          status: status,
-          scheduleBooking: scheduleBooking,
-          note: note,
-          createdAt: createdAt,
-          createdBy: createdBy,
-          updatedAt: updatedAt,
-          updatedBy: updatedBy,
-          workDate: workDate,
-        );
+  });
 
   @override
   factory BookingServiceChildCare.fromJson(Map<String, dynamic> json) {
@@ -59,7 +41,8 @@ class BookingServiceChildCare extends BookingService {
       inforContact: json['inforContact'] != null
           ? InforContactModel.fromJson(json['inforContact'])
           : null,
-      type: json['type'] != null ? ServiceType.fromJson(json['type']) : null,
+      serviceType:
+          json['type'] != null ? ServiceType.fromJson(json['type']) : null,
       serviceId: json['serviceId'],
       serviceName: json['serviceName'],
       serviceImage: json['serviceImage'],
@@ -92,7 +75,7 @@ class BookingServiceChildCare extends BookingService {
     return BookingServiceChildCare(
       id: bookingService.id,
       inforContact: bookingService.inforContact,
-      type: bookingService.type,
+      serviceType: bookingService.serviceType,
       serviceId: bookingService.serviceId,
       serviceName: bookingService.serviceName,
       serviceImage: bookingService.serviceImage,
@@ -112,30 +95,12 @@ class BookingServiceChildCare extends BookingService {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'userId': userId,
-      'userName': userName,
-      'inforContact': inforContact?.toJson(),
-      'type': type?.toJson(),
-      'serviceId': serviceId,
-      'serviceName': serviceName,
-      'serviceImage': serviceImage,
-      'servicePrice': servicePrice,
-      'providerId': providerId,
-      'providerName': providerName,
-      'status': status?.toJson(),
-      'scheduleBooking': scheduleBooking?.toJson(),
-      'note': note,
-      'createdAt': createdAt,
-      'createdBy': createdBy,
-      'updatedAt': updatedAt,
-      'updatedBy': updatedBy,
-      'workDate': workDate,
+      ...super.toJson(),
       // child care
-      'childNumber': childNumber,
-      'childAge': childAge,
-      'childGender': childGender,
-      'timeShift': timeShift,
+      if (childNumber != null) 'childNumber': childNumber,
+      if (childAge != null) 'childAge': childAge,
+      if (childGender != null) 'childGender': childGender,
+      if (timeShift != null) 'timeShift': timeShift,
     };
   }
 
@@ -169,7 +134,7 @@ class BookingServiceChildCare extends BookingService {
     return BookingServiceChildCare(
       id: id ?? this.id,
       inforContact: inforContact ?? this.inforContact,
-      type: type ?? this.type,
+      serviceType: type ?? this.serviceType,
       serviceId: serviceId ?? this.serviceId,
       serviceName: serviceName ?? this.serviceName,
       serviceImage: serviceImage ?? this.serviceImage,

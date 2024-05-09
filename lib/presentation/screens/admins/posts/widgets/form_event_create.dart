@@ -83,8 +83,8 @@ class _FormEventCreateState extends State<FormEventCreate> {
         content: _contentController.text,
         type: _typePost,
         location: _localtionController.text,
-        beginDate: TextFormat.parseDate(_beginDateController.text),
-        endDate: TextFormat.parseDate(_endDateController.text),
+        beginDate: TextFormat.parseJsonFormat(_beginDateController.text),
+        endDate: TextFormat.parseJsonFormat(_endDateController.text),
         limitJoiners: _showLimitInput,
         maxJoiners:
             _showLimitInput ? int.parse(_maxJoinersController.text) : null,

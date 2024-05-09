@@ -15,11 +15,18 @@ class UserRemote {
     }
   }
 
-  Future<List<UserModel>> getAllUsers() async {
+  Future<List<UserModel>> getUserPending() async {
     try {
-      final roles = Role.values.map((e) => e.name).toList();
+      final roles = [
+        Role.provider.toJson(),
+        Role.resident.toJson(),
+        Role.user.toJson()
+      ];
       // roles not null or have field roles
-      final users = await usersRef.where('roles', whereIn: roles).get();
+      final users = await usersRef
+          .where('roles', whereIn: roles)
+          .where('status', isEqualTo: StatusUser.pending.toJson())
+          .get();
       return users.docs.map((e) => UserModel.fromDocumentSnapshot(e)).toList();
     } catch (e) {
       throw Exception(e);

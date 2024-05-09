@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -10,8 +11,10 @@ import 'package:social_network/data/datasources/ecom/infor_contact_remote.dart';
 import 'package:social_network/data/datasources/ecom/order_remote.dart';
 import 'package:social_network/data/datasources/ecom/post_remote.dart';
 import 'package:social_network/data/datasources/ecom/product_repository.dart';
+import 'package:social_network/data/datasources/feed_back/feed_back_remote.dart';
 import 'package:social_network/data/datasources/file_store.dart';
-import 'package:social_network/data/datasources/service/booking_service.dart';
+import 'package:social_network/data/datasources/manage/employee_remote.dart';
+import 'package:social_network/data/datasources/service/booking_service_remote.dart';
 import 'package:social_network/data/datasources/service/service_remote.dart';
 import 'package:social_network/data/datasources/user_remote.dart';
 import 'package:social_network/data/repository/auth_repository.dart';
@@ -28,12 +31,18 @@ import 'package:social_network/domain/repository/ecom/category_repository.dart';
 import 'package:social_network/domain/repository/ecom/infor_contact_repository.dart';
 import 'package:social_network/domain/repository/ecom/order_repository.dart';
 import 'package:social_network/domain/repository/ecom/product_repository.dart';
+import 'package:social_network/domain/repository/feed_back/feed_back_repository.dart';
 import 'package:social_network/domain/repository/file_repository.dart';
+import 'package:social_network/domain/repository/manage/employee_repository.dart';
 import 'package:social_network/domain/repository/post/post_repository.dart';
 import 'package:social_network/domain/repository/service/booking_repository.dart';
 import 'package:social_network/domain/repository/service/service_repository.dart';
 import 'package:social_network/domain/repository/user_repository.dart';
 import 'package:social_network/presentation/blocs/admins/category/category_bloc.dart';
+import 'package:social_network/presentation/blocs/admins/employee_form/employee_form_bloc.dart';
+import 'package:social_network/presentation/blocs/admins/employees/employees_bloc.dart';
+import 'package:social_network/presentation/blocs/admins/feed_back_detail/feed_back_detail_bloc.dart';
+import 'package:social_network/presentation/blocs/admins/feed_backs/feed_backs_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/post_detail/post_detail_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/post_form/post_form_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/posts/posts_bloc.dart';
@@ -46,6 +55,8 @@ import 'package:social_network/presentation/blocs/clients/booking_service_create
 import 'package:social_network/presentation/blocs/clients/booking_service/booking_service_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/cart/cart_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/infor_contact/infor_contact_bloc.dart';
+import 'package:social_network/presentation/blocs/clients/my_feed_back/my_feed_back_bloc.dart';
+import 'package:social_network/presentation/blocs/clients/my_feed_back_create/my_feed_back_create_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/order/order_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/post_detail/post_detail_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/posts/posts_bloc.dart';
@@ -59,6 +70,7 @@ Future<void> setupLocator() async {
   sl.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
   sl.registerSingleton<FirebaseFirestore>(FirebaseFirestore.instance);
   sl.registerSingleton<FirebaseStorage>(FirebaseStorage.instance);
+  sl.registerSingleton<FirebaseMessaging>(FirebaseMessaging.instance);
 
   sl.registerLazySingleton<GoogleSignIn>(() => GoogleSignIn());
 
@@ -94,10 +106,16 @@ Future<void> setupLocator() async {
       () => ServiceFormBloc(sl.call(), sl.call()));
 
   // service
+  sl.registerLazySingleton<BookingServiceRemoteDataSource>(
+      () => BookingServiceRemoteDataSourceImpl());
   sl.registerLazySingleton<BookingRepository>(
       () => BookingRepositoryIml(sl.call()));
-  sl.registerFactory<BookingServiceRemoteDataSource>(
-      () => BookingServiceRemoteDataSourceImpl());
+
+  // feed back
+  sl.registerLazySingleton<FeedBackRemoteDataSource>(
+      () => FeedBackRemoteDataSourceImpl());
+  sl.registerLazySingleton<FeedBackRepository>(
+      () => FeedBackRepositoryImpl(sl.call()));
 
   _initAuth();
   _initClient();
@@ -116,6 +134,19 @@ void _initAdmin() {
   sl.registerFactory<PostDetailBloc>(
     () => PostDetailBloc(sl.call(), sl.call()),
   );
+  // feed back
+  sl.registerFactory<FeedBacksBloc>(() => FeedBacksBloc(sl.call()));
+  sl.registerFactory<FeedBackDetailBloc>(
+    () => FeedBackDetailBloc(sl.call()),
+  );
+
+  // manage user
+  sl.registerFactory<EmployeeRemoteDataSource>(
+      () => EmployeeRemoteDataSourceImpl());
+  sl.registerFactory<EmployeeRepository>(
+      () => EmployeeRepositoryImpl(sl.call()));
+  sl.registerFactory<EmployeesBloc>(() => EmployeesBloc(sl.call()));
+  sl.registerFactory<EmployeeFormBloc>(() => EmployeeFormBloc(sl.call()));
 }
 
 void _initClient() {
@@ -138,6 +169,12 @@ void _initClient() {
   sl.registerFactory<BookingServiceBloc>(() => BookingServiceBloc(sl.call()));
   sl.registerFactory<BookingServiceCreateBloc>(
       () => BookingServiceCreateBloc(sl.call()));
+
+  // my feed back
+  sl.registerFactory<MyFeedBackBloc>(
+      () => MyFeedBackBloc(sl.call(), sl.call()));
+  sl.registerFactory<MyFeedBackCreateBloc>(
+      () => MyFeedBackCreateBloc(sl.call(), sl.call()));
 }
 
 void _initAuth() {

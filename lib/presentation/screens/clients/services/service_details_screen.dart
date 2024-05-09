@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_network/domain/models/service/booking_service.dart';
+import 'package:social_network/domain/models/service/booking_service_child_care.dart';
 import 'package:social_network/domain/models/service/price_list.dart';
 import 'package:social_network/domain/models/service/service.dart';
 import 'package:social_network/presentation/blocs/clients/booking_service_create/booking_service_create_bloc.dart';
@@ -60,14 +60,14 @@ class ServiceDetailScreen extends StatelessWidget {
           final providerId =
               service.providerId ?? service.createdBy ?? service.updatedBy;
           final providerName = service.providerName ?? providerId;
-          context
-              .read<BookingServiceCreateBloc>()
-              .add(BookingServiceCreateStared(BookingService(
-                serviceId: service.id,
-                serviceName: service.title,
-                providerId: providerId,
-                providerName: providerName,
-              )));
+          context.read<BookingServiceCreateBloc>().add(
+                BookingServiceCreateStared(BookingServiceChildCare(
+                  serviceId: service.id,
+                  serviceName: service.title,
+                  providerId: providerId,
+                  providerName: providerName,
+                )),
+              );
           navService.pushNamed(context, RouterClient.servicBookingFormFill,
               args: service);
         },

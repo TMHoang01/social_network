@@ -20,8 +20,6 @@ class BookingCheckoutScreen extends StatefulWidget {
 class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
   DateTime? _workDate;
   final TextEditingController _scheduleDateController = TextEditingController();
-  final TextEditingController _noteController =
-      TextEditingController(text: 'Đặt cho bé 1 tuổi');
 
   @override
   void dispose() {
@@ -37,7 +35,7 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
         if (state is BookingServiceCreateSuccess) {
           navService.pushNamedAndRemoveUntil(context, RouterClient.complete);
         } else if (state is BookingServiceCreateFailure) {
-          showSnackBar(context, state.message, Colors.red);
+          showSnackBarError(context, state.message);
         }
       },
       builder: (context, state) {
@@ -162,6 +160,7 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
 
                 const SizedBox(height: 8),
                 Container(
+                  width: size.width,
                   decoration: _boxdecoration(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,16 +177,10 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                       ),
                       const SizedBox(height: 4),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextField(
-                          controller: _noteController,
-                          maxLines: 3,
-                          decoration: const InputDecoration(
-                            hintText: 'Nhập ghi chú',
-                            border: InputBorder.none,
-                          ),
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(widget.booking.note ?? ''),
                       ),
+                      const SizedBox(height: 8),
                     ],
                   ),
                 ),
@@ -210,21 +203,9 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
   }
 
   void _handleBooking(BuildContext context) {
-    // if (_workDate == null) {
-    //   showSnackBar(context, 'Chọn ngày hẹn', Colors.red);
-    //   return;
-    // }
-    if (_noteController.text.isEmpty) {
-      showSnackBar(context, 'Nhập ghi chú', Colors.red);
-      return;
-    }
-    final bookingService = widget.booking.copyWith(
-      note: _noteController.text,
-      // workDate: _workDate,
-    );
     context
         .read<BookingServiceCreateBloc>()
-        .add(BookingServiceCreateSubmit(bookingService));
+        .add(BookingServiceCreateSubmit(widget.booking));
     // navService.pushNamed(context, RouterClient.checkOut);
   }
 

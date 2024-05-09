@@ -14,8 +14,8 @@ class UserRepositoryIml implements UserRepository {
   }
 
   @override
-  Future<List<UserModel>> getAllUsers() async {
-    return _userRemote.getAllUsers();
+  Future<List<UserModel>> getUserPending() async {
+    return _userRemote.getUserPending();
   }
 
   @override

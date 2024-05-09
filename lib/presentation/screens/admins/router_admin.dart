@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:social_network/domain/models/ecom/product_model.dart';
+import 'package:social_network/domain/models/feed_back/feed_back.dart';
+import 'package:social_network/domain/models/manage/employee.dart';
 import 'package:social_network/domain/models/post/post.dart';
 import 'package:social_network/domain/models/service/service.dart';
 import 'package:social_network/domain/models/user_model.dart';
+import 'package:social_network/presentation/blocs/admins/employee_form/employee_form_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/post_form/post_form_bloc.dart';
 import 'package:social_network/presentation/screens/admins/dashboard/dash_board.dart';
 import 'package:social_network/presentation/screens/admins/dashboard/post/posts_screen.dart';
+import 'package:social_network/presentation/screens/admins/employee/employee_create_account_screen.dart';
+import 'package:social_network/presentation/screens/admins/employee/employee_detail_screen.dart';
+import 'package:social_network/presentation/screens/admins/employee/employee_list_screen.dart';
 import 'package:social_network/presentation/screens/admins/posts/post_create_screen.dart';
 import 'package:social_network/presentation/screens/admins/posts/post_detail_screen.dart';
 import 'package:social_network/presentation/screens/admins/products/form/product_detail_form.dart';
@@ -14,8 +20,11 @@ import 'package:social_network/presentation/screens/admins/products/products_scr
 import 'package:social_network/presentation/screens/admins/services/service_details_screen.dart';
 import 'package:social_network/presentation/screens/admins/services/service_form_screen.dart';
 import 'package:social_network/presentation/screens/admins/services/service_screen.dart';
+import 'package:social_network/presentation/screens/admins/employee/employee_select_screen.dart';
 import 'package:social_network/presentation/screens/admins/users/user_details_screen.dart';
 import 'package:social_network/presentation/screens/admins/users/users_screen.dart';
+import 'package:social_network/presentation/screens/admins/feed_back/feed_back_list_screen.dart';
+import 'package:social_network/presentation/screens/admins/feed_back/feed_back_detail_screen.dart';
 import 'package:social_network/router.dart';
 
 class RouterAdmin extends AppRouter {
@@ -35,11 +44,22 @@ class RouterAdmin extends AppRouter {
 
   static const String users = '/admin/user/list';
   static const String userDetail = '/admin/user/detail';
-
+  // services
   static const String services = '/admin/service';
   static const String serviceDetail = '/service/detail';
   static const String serviceEdit = '/admin/service/edit';
   static const String serviceAdd = '/admin/service/add';
+  // feedback
+  static const String feedback = '/admin/feedback';
+  static const String feedbackDetail = '/admin/feedback/detail';
+  // employ select user
+  static const String employSelect = '/admin/employ/select_user';
+  static const String employDetail = '/admin/employ/detail';
+  static const String employEdit = '/admin/employ/edit';
+  static const String employAdd = '/admin/employ/add';
+  static const String employList = '/admin/employ/list';
+
+  // settings
   static const String settings = '/settings';
 
   static Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
@@ -51,6 +71,9 @@ class RouterAdmin extends AppRouter {
     post: (context) => const PostsScreen(),
     users: (context) => const UsersScreen(),
     services: (context) => const ServicesScreen(),
+    feedback: (context) => const FeedBackListScreen(),
+    employList: (context) => const EmployeeListScreen(),
+    employAdd: (context) => const EmployeeCreateAccountScreen(),
   };
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -66,7 +89,7 @@ class RouterAdmin extends AppRouter {
           builder: (context) =>
               ProductFormDetail(product: args as ProductModel),
         );
-
+      // post
       case postAdd:
         return MaterialPageRoute(
           builder: (context) => PostCreateScreen(bloc: args as PostFormBloc),
@@ -80,7 +103,7 @@ class RouterAdmin extends AppRouter {
         return MaterialPageRoute(
           builder: (context) => UserDetailScreen(user: args as UserModel),
         );
-
+      // services
       case serviceAdd:
         return MaterialPageRoute(
           builder: (context) => const ServiceFormScreen(),
@@ -94,6 +117,26 @@ class RouterAdmin extends AppRouter {
         return MaterialPageRoute(
           builder: (context) =>
               ServiceDetailScreen(service: args as ServiceModel),
+        );
+      // feedback
+      case feedbackDetail:
+        return MaterialPageRoute(
+          builder: (context) =>
+              FeedBackDetailScreen(feedBack: args as FeedBackModel),
+        );
+
+      // manage employee
+      case employSelect:
+        return MaterialPageRoute(
+          builder: (context) => EmployeeSelectScreen(
+            employees: args as List<Employee>,
+          ),
+        );
+      case employDetail:
+        return MaterialPageRoute(
+          builder: (context) => EmployeeDetailScreen(
+            employee: args as Employee,
+          ),
         );
 
       default:

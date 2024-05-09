@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:social_network/domain/models/post/event.dart';
 import 'package:social_network/domain/models/post/post.dart';
+import 'package:social_network/presentation/screens/clients/router_client.dart';
 import 'package:social_network/presentation/widgets/widgets.dart';
+import 'package:social_network/router.dart';
 import 'package:social_network/utils/utils.dart';
 
 class PostHomeCard extends StatelessWidget {
@@ -11,8 +13,8 @@ class PostHomeCard extends StatelessWidget {
   void onTapPost(BuildContext context) {
     if (post is EventModel) {
       logger.d('EventModel $post');
-      // navService.pushNamed(context, RouterClient.postDetail, args: post);
     }
+    navService.pushNamed(context, RouterClient.postDetail, args: post);
   }
 
   @override

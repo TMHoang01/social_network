@@ -2,6 +2,7 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:social_network/domain/models/ecom/cart_item.dart';
 import 'package:social_network/domain/models/ecom/product_model.dart';
 import 'package:social_network/domain/models/post/post.dart';
@@ -43,32 +44,36 @@ class _HomePageState extends State<HomePage>
   // bool get wantKeepAlive => true;
   final List<ItemHomePage> listFunction = [
     ItemHomePage(
-      title: 'Tin tức',
-      icon: Icons.post_add_outlined,
+      title: 'Khiếu nại',
+      icon: Icons.feedback,
       color: Colors.blue,
       onTap: (BuildContext context) {
-        logger.d('Tin tức');
-        navService.pushNamed(context, RouterClient.posts);
+        navService.pushNamed(context, RouterClient.feedback);
       },
     ),
     ItemHomePage(
       title: 'Tin tức',
       icon: Icons.list,
+      color: Colors.green,
       onTap: (BuildContext context) {
         navService.pushNamed(context, RouterClient.posts);
       },
     ),
     ItemHomePage(
       title: 'Dịch vụ',
-      icon: Icons.medical_services_outlined,
+      color: Colors.red,
+      icon: FontAwesomeIcons.personWalkingLuggage,
       onTap: (BuildContext context) {
         navService.pushNamed(context, RouterClient.services);
       },
     ),
     ItemHomePage(
-      title: 'Danh sách sản phẩm',
+      title: 'Đặt lịch',
+      color: Colors.orange,
       icon: Icons.people,
-      onTap: () {},
+      onTap: (BuildContext context) {
+        navService.pushNamed(context, RouterClient.mySchedule);
+      },
     ),
     ItemHomePage(
       title: 'Dịch vụ',
@@ -104,7 +109,7 @@ class _HomePageState extends State<HomePage>
                     onPressed: () {
                       navService.pushNamed(context, RouterClient.cart);
                     },
-                    icon: const Icon(Icons.shopping_cart),
+                    icon: const Icon(Icons.notifications),
                   ),
                 ],
               );
@@ -117,68 +122,68 @@ class _HomePageState extends State<HomePage>
           // mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              color: kPrimaryColor,
-              padding: const EdgeInsets.all(12),
-              // height: 300,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Hỗ trợ dịch vụ, tiện ích cho bạn',
-                    style: theme.textTheme.headlineMedium
-                        ?.copyWith(color: Colors.white),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Container(
-                        width: 18,
-                        height: 18,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(90),
-                          color: kSecondaryLightColor,
-                        ),
-                        child: const Icon(Icons.star,
-                            color: Colors.amber, size: 15),
-                      ),
-                      const SizedBox(width: 2),
-                      const Text(
-                        'Đánh giá:',
-                        style: TextStyle(
-                            fontSize: 16, color: kSecondaryLightColor),
-                      ),
-                      const SizedBox(width: 4),
-                      const Text(
-                        '100 người',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      RatingBar.builder(
-                        itemSize: 16,
-                        initialRating: 3,
-                        minRating: 0,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemCount: 5,
-                        itemPadding:
-                            const EdgeInsets.symmetric(horizontal: 2.0),
-                        itemBuilder: (context, _) => const Icon(
-                          Icons.star,
-                          color: Colors.amber,
-                        ),
-                        onRatingUpdate: (rating) {
-                          print(rating);
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+            // Container(
+            //   color: kPrimaryColor,
+            //   padding: const EdgeInsets.all(12),
+            //   // height: 300,
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       Text(
+            //         'Hỗ trợ dịch vụ, tiện ích cho bạn',
+            //         style: theme.textTheme.headlineMedium
+            //             ?.copyWith(color: Colors.white),
+            //       ),
+            //       const SizedBox(height: 10),
+            //       Row(
+            //         children: [
+            //           Container(
+            //             width: 18,
+            //             height: 18,
+            //             decoration: BoxDecoration(
+            //               borderRadius: BorderRadius.circular(90),
+            //               color: kSecondaryLightColor,
+            //             ),
+            //             child: const Icon(Icons.star,
+            //                 color: Colors.amber, size: 15),
+            //           ),
+            //           const SizedBox(width: 2),
+            //           const Text(
+            //             'Đánh giá:',
+            //             style: TextStyle(
+            //                 fontSize: 16, color: kSecondaryLightColor),
+            //           ),
+            //           const SizedBox(width: 4),
+            //           const Text(
+            //             '100 người',
+            //             style: TextStyle(
+            //               fontSize: 16,
+            //               color: Colors.black,
+            //             ),
+            //           ),
+            //           const SizedBox(width: 6),
+            //           RatingBar.builder(
+            //             itemSize: 16,
+            //             initialRating: 3,
+            //             minRating: 0,
+            //             direction: Axis.horizontal,
+            //             allowHalfRating: true,
+            //             itemCount: 5,
+            //             itemPadding:
+            //                 const EdgeInsets.symmetric(horizontal: 2.0),
+            //             itemBuilder: (context, _) => const Icon(
+            //               Icons.star,
+            //               color: Colors.amber,
+            //             ),
+            //             onRatingUpdate: (rating) {
+            //               print(rating);
+            //             },
+            //           ),
+            //         ],
+            //       ),
+            //     ],
+            //   ),
+            // ),
 
             SizedBox(
               height: size.height * 0.24,
@@ -201,10 +206,7 @@ class _HomePageState extends State<HomePage>
               ),
             ),
             const Divider(height: 3),
-
             _buildFuntionItem(context, listFunction.sublist(0, 4)),
-            // _buildFuntionItem(context, listFunction.sublist(1, 5)),
-
             Container(
               padding: const EdgeInsets.all(8),
               height: 10,
@@ -251,9 +253,7 @@ class _HomePageState extends State<HomePage>
                 },
               ),
             ),
-
             const Divider(height: 1),
-            // const LineChartSample1(),
             Padding(
               padding: const EdgeInsets.only(top: 8.0, left: 12.0, right: 12),
               child: Row(
@@ -279,7 +279,6 @@ class _HomePageState extends State<HomePage>
                 context,
                 sl.get<PostsClientBloc>()
                   ..add(PostsLoadmoreEvent(type: PostType.news.toJson()))),
-
             Padding(
               padding: const EdgeInsets.only(top: 8.0, left: 12.0, right: 12),
               child: Row(
@@ -301,7 +300,6 @@ class _HomePageState extends State<HomePage>
                 ],
               ),
             ),
-
             _buildPostsHome(
                 context,
                 sl.get<PostsClientBloc>()
@@ -313,7 +311,9 @@ class _HomePageState extends State<HomePage>
                 children: [
                   Text("Mua sắm", style: theme.textTheme.headlineSmall),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      navService.pushNamed(context, RouterClient.products);
+                    },
                     child: Text(
                       "Xem thêm",
                       style: theme.textTheme.headlineSmall?.copyWith(
@@ -325,7 +325,6 @@ class _HomePageState extends State<HomePage>
                 ],
               ),
             ),
-
             const SizedBox(height: 10),
             BlocBuilder<ProductBloc, ProductState>(
               bloc: productBloc,
@@ -357,7 +356,6 @@ class _HomePageState extends State<HomePage>
                 return const Text("State not found");
               },
             ),
-
             const SizedBox(height: 10),
           ],
         ),
@@ -444,8 +442,8 @@ class _HomePageState extends State<HomePage>
                     ),
                   ),
                   Center(
-                      child:
-                          Text(item.title, style: theme.textTheme.bodyMedium)),
+                    child: Text(item.title, style: theme.textTheme.bodyMedium),
+                  ),
                 ],
               ),
             ),
@@ -542,7 +540,6 @@ class PreviewProductWidget extends StatelessWidget {
                             ),
                     ],
                   ),
-                  const Spacer(),
                 ],
               ),
             ),

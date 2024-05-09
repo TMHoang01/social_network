@@ -19,10 +19,10 @@ class _DashBoarAdmindScreenState extends State<DashBoarAdmindScreen> {
     // const SettingScreen(),
     // const ProfileScreen(),
     const PostsScreen(),
-    const ManageProductsScreen(),
+    const Text('data'),
     const SettingScreen(),
     const Text('data'),
-    const Text('data'),
+    const ManageProductsScreen(),
     const Text('data'),
   ];
   final PageController _pageController = PageController();
@@ -69,8 +69,8 @@ class _DashBoarAdmindScreenState extends State<DashBoarAdmindScreen> {
             label: 'Tin tức',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.post_add_rounded),
-            label: 'Sản phẩm',
+            icon: Icon(Icons.notifications),
+            label: 'Thông báo',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

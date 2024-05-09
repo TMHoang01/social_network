@@ -53,47 +53,48 @@ class _ManageProductsScreenState extends State<ManageProductsScreen> {
                   logger.i(products.length);
                   int length = products.length;
                   return Container(
-                    color: kOfWhite,
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
-                    child: ListView.builder(
-                      shrinkWrap: true,
+                    child: SingleChildScrollView(
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: length,
-                      itemBuilder: (ctt, index) {
-                        ProductModel product = products[index];
-                        return InkWell(
-                          onTap: () {
-                            logger.i(product);
-                            navService.pushNamed(
-                                context, RouterAdmin.productDetail,
-                                args: product);
-                          },
-                          child: ListTile(
-                            leading: CustomImageView(
-                              url: product.imageUrl,
-                              width: 54,
-                              height: 54,
-                              boxFit: BoxFit.cover,
-                            ),
-                            title: Text(
-                              '${product.name}',
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            subtitle: Text(
-                              '${TextFormat.formatMoney(product.price ?? 0)}đ',
-                              style: const TextStyle(
-                                color: kSecondaryColor,
-                                fontWeight: FontWeight.bold,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: length,
+                        itemBuilder: (ctt, index) {
+                          ProductModel product = products[index];
+                          return InkWell(
+                            onTap: () {
+                              logger.d(product);
+                              navService.pushNamed(
+                                  context, RouterAdmin.productEdit,
+                                  args: product);
+                            },
+                            child: ListTile(
+                              leading: CustomImageView(
+                                url: product.imageUrl,
+                                width: 54,
+                                height: 54,
+                                boxFit: BoxFit.cover,
                               ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
+                              title: Text(
+                                '${product.name}',
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              subtitle: Text(
+                                '${TextFormat.formatMoney(product.price ?? 0)}đ',
+                                style: const TextStyle(
+                                  color: kSecondaryColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                            onTap: () {},
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
                   );
                 }

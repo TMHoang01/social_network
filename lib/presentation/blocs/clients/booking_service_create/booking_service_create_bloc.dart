@@ -5,6 +5,7 @@ import 'package:social_network/domain/models/service/booking_service_child_care.
 import 'package:social_network/domain/models/service/enum_service.dart';
 import 'package:social_network/domain/repository/service/booking_repository.dart';
 import 'package:social_network/utils/firebase.dart';
+import 'package:social_network/utils/logger.dart';
 
 part 'booking_service_create_event.dart';
 part 'booking_service_create_state.dart';
@@ -25,20 +26,27 @@ class BookingServiceCreateBloc
   void _onBookingServiceCreateStared(BookingServiceCreateStared event,
       Emitter<BookingServiceCreateState> emit) {
     try {
-      if (state is BookingServiceCreateChilCaredInitial) {
+      logger.i(event.booking);
+      final booking = event.booking;
+
+      if (booking is BookingServiceChildCare) {
         emit(BookingServiceCreateInitial());
-        emit(BookingServiceCreateChilCaredInitial(
-            booking: event.booking as BookingServiceChildCare));
-      } else {
-        emit(
-          BookingServiceCreateChilCaredInitial(
-            booking: BookingServiceChildCare.fromBookingService(event.booking)
-                .copyWith(
-              type: ServiceType.childCare,
-            ),
-          ),
-        );
+        emit(BookingServiceCreateChilCaredInitial(booking: booking));
       }
+      // if (state is BookingServiceCreateChilCaredInitial) {
+      //   emit(BookingServiceCreateInitial());
+      //   emit(BookingServiceCreateChilCaredInitial(
+      //       booking: event.booking as BookingServiceChildCare));
+      // } else {
+      //   emit(
+      //     BookingServiceCreateChilCaredInitial(
+      //       booking: BookingServiceChildCare.fromBookingService(event.booking)
+      //           .copyWith(
+      //         type: ServiceType.childCare,
+      //       ),
+      //     ),
+      //   );
+      // }
     } catch (e) {
       emit(BookingServiceCreateFailure(e.toString()));
     }

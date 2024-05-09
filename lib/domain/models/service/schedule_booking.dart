@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:social_network/utils/utils.dart';
 
 import './enum_service.dart';
 
@@ -26,14 +27,14 @@ class ScheduleBooking extends Equatable {
 
   factory ScheduleBooking.fromJson(Map<String, dynamic> json) {
     return ScheduleBooking(
-      startDate: json['startDate'],
+      startDate: TextFormat.parseJson(json['startDate']),
       startTime: json['startTime'] != null
           ? TimeOfDay(
               hour: int.parse(json['startTime'].split(':')[0]),
               minute: int.parse(json['startTime'].split(':')[1]),
             )
           : null,
-      endDate: json['endDate'],
+      endDate: TextFormat.parseJson(json['endDate']),
       repeatCount: json['repeatCount'],
       isReapeat: json['isReapeat'],
       repeatType: json['repeatType'] != null
@@ -41,8 +42,10 @@ class ScheduleBooking extends Equatable {
           : null,
       dayRepeat:
           json['dayRepeat'] != null ? List<int>.from(json['dayRepeat']) : [],
+      // List<string> to DateTime
       scheduleDates: json['scheduleDates'] != null
-          ? List<DateTime>.from(json['scheduleDates'])
+          ? List<DateTime>.from(json['scheduleDates']
+              .map((date) => TextFormat.parseJsonFormat(date)))
           : [],
     );
   }
@@ -57,7 +60,10 @@ class ScheduleBooking extends Equatable {
       if (isReapeat != null) 'isReapeat': isReapeat,
       if (repeatType != null) 'repeatType': repeatType?.toJson(),
       if (dayRepeat != null) 'dayRepeat': dayRepeat,
-      if (scheduleDates != null) 'scheduleDates': scheduleDates,
+      if (scheduleDates != null)
+        'scheduleDates': scheduleDates
+            ?.map((dateTime) => TextFormat.formatDate(dateTime))
+            .toList(),
     };
   }
 
@@ -84,6 +90,11 @@ class ScheduleBooking extends Equatable {
   }
 
   void setScheduleDates() {
+    if (isReapeat == false) {
+      scheduleDates = [startDate!];
+      repeatCount = 1;
+      return;
+    }
     if (startDate == null ||
         endDate == null ||
         repeatType == null ||

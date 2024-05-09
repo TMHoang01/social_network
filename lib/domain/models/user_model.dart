@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:social_network/utils/utils.dart';
 
 enum Role {
   admin,
+  employee,
   user,
   provider,
   resident;
@@ -58,9 +60,7 @@ class UserModel {
       email: json['email'],
       phone: json['phone'],
       address: json['address'],
-      createdAt: json["create_at"] != null
-          ? (json["create_at"] as Timestamp).toDate()
-          : DateTime.now(),
+      createdAt: TextFormat.parseJson(json['created_at']),
       roles: json['roles'] != null ? Role.fromJson(json['roles']) : null,
       description: json['bio'],
       avatar: json['avatar'],
@@ -69,9 +69,7 @@ class UserModel {
 
       // Role.resident
       job: json['job'],
-      birthDay: json['birth_day'] != null
-          ? (json['birth_day'] as Timestamp).toDate()
-          : null,
+      birthDay: TextFormat.parseJson(json['birthDay']),
       // Role.provider
     );
   }
@@ -90,7 +88,7 @@ class UserModel {
 
       // Role.resident
       if (job != null) 'job': job,
-      if (birthDay != null) 'birth_day': birthDay,
+      if (birthDay != null) 'birthDay': birthDay,
       // Role.provider
       if (description != null) 'bio': description,
     };

@@ -61,3 +61,6 @@ class ImageConstant {
     'assets/images/banner/banner4.jpg',
   ];
 }
+
+//const LIMT_PAGE = 10;
+const LIMIT_PAGE = 15;

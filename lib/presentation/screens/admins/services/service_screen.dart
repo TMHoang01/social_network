@@ -17,7 +17,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Services'),
+        title: const Text('Dịch vụ cung cấp'),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -45,7 +45,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Text('data'),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ListView.builder(

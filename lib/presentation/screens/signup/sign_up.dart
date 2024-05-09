@@ -30,8 +30,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
+    // final emailController = TextEditingController();
+    // final passwordController = TextEditingController();
     final authBloc = context.read<AuthBloc>();
 
     Widget signInWidget = BlocConsumer<SignupBloc, SignupState>(

@@ -23,7 +23,7 @@ class _SettingScreen2State extends State<SettingScreen2>
     super.build(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Setting"),
+        title: const Text("Cài đặt"),
       ),
       body: Column(
         children: [

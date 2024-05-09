@@ -20,11 +20,11 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
           serviceRepository.getAll(),
           onData: (List<ServiceModel> services) {
             if (services.isEmpty) {
-              return ServicesFailure('No services found');
+              return ServicesFailure('Danh sách dịch vụ trống');
             }
             return ServicesLoaded(services: services);
           },
-          // onError: (e) => ServicesFailure('e.toString()'),
+          onError: (e, stackTrace) => ServicesFailure(e.toString()),
         );
       } catch (e) {
         emit(ServicesFailure(e.toString()));

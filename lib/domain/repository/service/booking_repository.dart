@@ -1,6 +1,7 @@
-import 'package:social_network/data/datasources/service/booking_service.dart';
+import 'package:social_network/data/datasources/service/booking_service_remote.dart';
 import 'package:social_network/domain/models/service/booking_service.dart';
 import 'package:social_network/domain/models/service/enum_service.dart';
+import 'package:social_network/utils/utils.dart';
 
 abstract class BookingRepository {
   Future<BookingService?> add({required BookingService bookingService});
@@ -10,7 +11,7 @@ abstract class BookingRepository {
   Stream<List<BookingService>> getAllByUserId({required String userId});
   Stream<List<BookingService>> getAll();
 
-  Future<List<BookingService>> getSchedule(DateTime date) {}
+  Future<List<BookingService>> getScheduleInDay(DateTime date);
 }
 
 class BookingRepositoryIml implements BookingRepository {
@@ -46,5 +47,11 @@ class BookingRepositoryIml implements BookingRepository {
       {required String id, required BookingStatus status}) {
     // TODO: implement updateStatus
     throw UnimplementedError();
+  }
+
+  @override
+  Future<List<BookingService>> getScheduleInDay(DateTime date) async {
+    final string = TextFormat.formatDate(date);
+    return await remoteDate.getScheduleInDay(string);
   }
 }

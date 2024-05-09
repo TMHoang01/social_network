@@ -142,11 +142,13 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           post: post as NewsModel,
           isPinned: _isPinned,
           scrollController: _scrollController,
+          onBottomUpEditPressed: () => _navigateToPostEditScreen(context),
         ),
       _ => ContentNewsDetails(
           post: post,
           isPinned: _isPinned,
           scrollController: _scrollController,
+          onBottomUpEditPressed: () => _navigateToPostEditScreen(context),
         ),
     };
   }

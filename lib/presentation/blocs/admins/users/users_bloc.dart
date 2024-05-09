@@ -22,7 +22,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
   void _getAllUsers(UsersGetAllUsers event, Emitter<UsersState> emit) async {
     try {
       emit(UsersLoading());
-      final users = await _userRepository.getAllUsers();
+      final users = await _userRepository.getUserPending();
       emit(UsersLoaded(users));
     } catch (e) {
       emit(UsersError(e.toString()));

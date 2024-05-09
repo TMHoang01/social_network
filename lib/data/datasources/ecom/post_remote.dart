@@ -25,6 +25,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
       final response = await colection.add(post.toJson());
       return response.id;
     } on FirebaseException catch (e) {
+      logger.e(e.toString());
       throw Exception(e.toString());
     }
   }
@@ -73,7 +74,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
 
   @override
   Future<List<PostModel>> paginateQuey(
-      {int limit = 20,
+      {int limit = LIMIT_PAGE,
       String? query,
       String? type,
       DateTime? lastUpdate}) async {
@@ -85,10 +86,10 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
       if (type != null && type.isNotEmpty) {
         queryRef = queryRef.where('type', isEqualTo: type);
       }
+      queryRef = colection.orderBy('createdAt', descending: true);
       if (lastUpdate != null) {
         queryRef = queryRef.startAfter([lastUpdate]);
       }
-      queryRef = colection.orderBy('createdAt', descending: true);
       queryRef = queryRef.limit(limit);
       final response = await queryRef.get();
       return response.docs.map((e) {

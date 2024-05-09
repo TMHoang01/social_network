@@ -18,13 +18,24 @@ class TextFormat {
     return DateFormat(formatType).format(date);
   }
 
-  static DateTime parseDate(String date) {
-    return DateFormat('dd/MM/yyyy').parse(date);
+  static DateTime? parseJsonFormat(String? date,
+      {String formatType = 'dd/MM/yyyy'}) {
+    if (date == null || date.isEmpty) return null;
+    return DateFormat(formatType).parse(date);
   }
 
   static DateTime? parseJson(dynamic json) {
-    return json != null && json.toString().isNotEmpty
-        ? (json is Timestamp ? (json).toDate() : DateTime.parse(json))
-        : null;
+    if (json == null || json.toString().isEmpty) {
+      return null;
+    }
+    try {
+      if (json is Timestamp) {
+        return json.toDate();
+      }
+
+      return DateTime.parse(json.toString());
+    } catch (e) {
+      return null;
+    }
   }
 }

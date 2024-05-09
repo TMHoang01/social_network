@@ -82,12 +82,12 @@ class _ServiceFormScreenState extends State<ServiceFormScreen> {
       showSnackBar(context, 'Thêm dịch vụ thành công', Colors.green);
       Navigator.of(context).pop();
     } else if (state is ServiceFormAddFailure) {
-      showSnackBar(context, state.message, Colors.red);
+      showSnackBarError(context, state.message);
     } else if (state is ServiceFormEditSuccess) {
       showSnackBar(context, 'Sửa dịch vụ thành công', Colors.green);
       Navigator.of(context).pop();
     } else if (state is ServiceFormEditFailure) {
-      showSnackBar(context, state.message, Colors.red);
+      showSnackBarError(context, state.message);
     }
   }
 
@@ -361,15 +361,15 @@ class _ServiceFormScreenState extends State<ServiceFormScreen> {
               ],
             ),
           ),
-          CustomCheckBox(
-            title: 'Có thể thay đổi giá sau',
-            value: true,
-            onChanged: (value) {
-              // setState(() {
-              //   _showLimitInput = value!;
-              // });
-            },
-          ),
+          // CustomCheckBox(
+          //   title: 'Có thể thay đổi giá sau',
+          //   value: true,
+          //   onChanged: (value) {
+          //     // setState(() {
+          //     //   _showLimitInput = value!;
+          //     // });
+          //   },
+          // ),
           const SizedBox(height: 20),
           CustomButton(
             title: 'Xác nhận',

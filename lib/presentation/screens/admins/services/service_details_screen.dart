@@ -7,6 +7,13 @@ class ServiceDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Chi tiết dịch vụ'),
+      ),
+      body: Center(
+        child: Text('Chi tiết dịch vụ$service'),
+      ),
+    );
   }
 }

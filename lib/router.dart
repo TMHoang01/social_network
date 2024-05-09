@@ -52,12 +52,20 @@ class NavigationService {
     return Navigator.canPop(context);
   }
 
-  void pop(BuildContext context) {
-    Navigator.pop(context);
+  void pop<T extends Object?>(BuildContext context, [T? result]) {
+    Navigator.pop(context, result);
   }
 
-  void pushNamed(BuildContext context, String routeName, {Object? args}) {
-    Navigator.pushNamed(context, routeName, arguments: args);
+  Future<T?> pushNamed<T extends Object?>(
+      BuildContext context, String routeName,
+      {Object? args}) {
+    return Navigator.pushNamed(context, routeName, arguments: args);
+  }
+
+  Future<T?> popAndPushNamed<T extends Object?>(
+      BuildContext context, String routeName,
+      {Object? args}) {
+    return Navigator.popAndPushNamed(context, routeName, arguments: args);
   }
 
   void pushNamedAndRemoveUntil(BuildContext context, String routeName) {

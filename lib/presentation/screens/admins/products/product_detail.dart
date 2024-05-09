@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_network/domain/models/ecom/product_model.dart';
+import 'package:social_network/presentation/widgets/custom_button.dart';
 import 'package:social_network/presentation/widgets/custom_image_view.dart';
 import 'package:social_network/utils/app_styles.dart';
 import 'package:social_network/utils/constants.dart';
@@ -38,7 +39,6 @@ class AdminProductDetail extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Container(
-                  color: kOfWhite,
                   padding: const EdgeInsets.all(10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -95,18 +95,20 @@ class AdminProductDetail extends StatelessWidget {
           ),
           bottomNavigationBar: Row(
             children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text("Thêm vào giỏ hàng"),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text("Mua ngay"),
-                ),
-              ),
+              // Expanded(
+              //   child: CustomButton(
+              //     onPressed: () {
+
+              //     },
+              //     title: 'Thêm vào giỏ hàng',
+              //   ),
+              // ),
+              // Expanded(
+              //   child: CustomButton(
+              //     onPressed: () {},
+              //     title: 'Mua ngay',
+              //   ),
+              // ),
             ],
           ),
         ),

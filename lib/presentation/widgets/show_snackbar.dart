@@ -9,3 +9,15 @@ void showSnackBar(BuildContext context, String message, Color? color) {
     ),
   );
 }
+
+void showSnackBarError(BuildContext context, String message) {
+  showSnackBar(context, message, Colors.red);
+}
+
+void showSnackBarSuccess(BuildContext context, String message) {
+  showSnackBar(context, message, Colors.green);
+}
+
+void showSnackBarInfo(BuildContext context, String message) {
+  showSnackBar(context, message, Colors.blue);
+}

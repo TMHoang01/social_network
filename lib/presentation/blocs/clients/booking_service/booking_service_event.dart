@@ -8,10 +8,10 @@ sealed class BookingServiceEvent extends Equatable {
 }
 
 class BookingServiceStared extends BookingServiceEvent {
-  final DateTime date;
+  final DateTime day;
 
-  BookingServiceStared(this.date);
+  BookingServiceStared(this.day);
 
   @override
-  List<Object> get props => [date];
+  List<Object> get props => [day];
 }

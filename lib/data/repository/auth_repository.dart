@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:social_network/data/datasources/auth_remote.dart';
 import 'package:social_network/domain/models/user_model.dart';
 import 'package:social_network/domain/repository/auth_repository.dart';
+import 'package:social_network/utils/firebase.dart';
 
 class AuthRepositoryIml implements AuthRepository {
   final AuthFirebase _authService;
@@ -33,7 +34,8 @@ class AuthRepositoryIml implements AuthRepository {
 
   @override
   Future<UserModel?> getCurrentUser() async {
-    return _authService.getCurrentUser();
+    userCurrent = await _authService.getCurrentUser();
+    return userCurrent;
   }
 
   @override

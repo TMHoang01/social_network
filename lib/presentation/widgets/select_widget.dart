@@ -7,7 +7,7 @@ class SelectWidget extends StatelessWidget {
   final Function? onChanged;
   final bool isSelect;
   final double? fontSize;
-  final Color? color;
+  final Color color;
   final TextAlign? textAlign;
   const SelectWidget(
       {super.key,
@@ -16,7 +16,7 @@ class SelectWidget extends StatelessWidget {
       this.onChanged,
       required this.isSelect,
       this.fontSize = 16,
-      this.color,
+      this.color = kSecondaryColor,
       this.textAlign = TextAlign.center});
 
   @override
@@ -27,16 +27,18 @@ class SelectWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
       child: InkWell(
         onTap: () {
-          onChanged!();
+          if (onChanged != null) {
+            onChanged!();
+          }
         },
         child: Container(
           width: size.width,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
-            color: isSelect ? kSecondaryColor.withOpacity(0.1) : Colors.white,
+            color: isSelect ? color.withOpacity(0.3) : Colors.white,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: isSelect ? kSecondaryColor : Colors.grey,
+              color: isSelect ? color : Colors.grey,
               width: 1,
             ),
           ),

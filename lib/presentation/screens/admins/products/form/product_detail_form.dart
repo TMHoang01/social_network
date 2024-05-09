@@ -30,17 +30,25 @@ class _ProductFormDetailState extends State<ProductFormDetail> {
   FocusNode? _focusNode;
   final ManaganeProductDetailCubit formCubit = ManaganeProductDetailCubit();
 
+  late final ProductModel? product;
+
   @override
-  Widget build(BuildContext context) {
-    final productId = widget.product?.id;
+  void initState() {
     final ProductModel? product = widget.product;
 
     formCubit.initForm(
       name: product?.name ?? "",
       price: product?.price ?? 0,
-      id: productId ?? "",
+      id: product?.id ?? "",
       imageUrl: product?.imageUrl ?? "",
     );
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final productId = widget.product?.id;
 
     return BlocProvider(
       create: (context) => formCubit,
@@ -65,7 +73,35 @@ class _ProductFormDetailState extends State<ProductFormDetail> {
                 // item add prodcut
                 widget.product != null
                     ? IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          // show dialog
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text("Xác nhận"),
+                                content: const Text(
+                                    "Bạn có chắc chắn muốn xóa sản phẩm này không?"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      context.read<ManageProductBloc>().add(
+                                          DeleteManageProductEvent(productId!));
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("Xác nhận"),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("Hủy"),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
                         icon: const Icon(Icons.delete),
                       )
                     : const SizedBox(),
@@ -76,12 +112,7 @@ class _ProductFormDetailState extends State<ProductFormDetail> {
             ),
             body: SingleChildScrollView(
               child: widget.product != null
-                  ? const Center(
-                      child: Text(
-                        'Product Detail',
-                        style: TextStyle(fontSize: 24),
-                      ),
-                    )
+                  ? productForm(context)
                   : productForm(context),
             ),
           ),
@@ -104,13 +135,14 @@ class _ProductFormDetailState extends State<ProductFormDetail> {
                 width: 120,
                 padding: const EdgeInsets.all(8),
                 child: ImageInputPiker(
-                  url: null,
+                  url: state.imageUrl,
                   onFileSelected: (File? selectedFile) {
                     _formValidatorCubit.changeImageFile(selectedFile);
                   },
                 ),
               ),
               CustomTextFormField(
+                initialValue: state.name,
                 focusNode: _focusNode,
                 // nextFocusNode: ,
                 hintText: "Tên sản phẩm",
@@ -126,6 +158,7 @@ class _ProductFormDetailState extends State<ProductFormDetail> {
               ),
               const SizedBox(height: 16),
               CustomTextFormField(
+                initialValue: state.price.toString(),
                 hintText: "Giá sản phẩm",
                 textInputType: TextInputType.number,
                 onChanged: (value) {
@@ -226,7 +259,7 @@ class _ProductFormDetailState extends State<ProductFormDetail> {
                       ),
                     );
                   }
-                  return const Text("Error");
+                  return Text("$state");
                 },
               ),
               const SizedBox(height: 16),
