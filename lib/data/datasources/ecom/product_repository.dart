@@ -22,7 +22,7 @@ class ProductRemote {
         'price': price,
         'imageUrl': imageUrl,
         'ownerId': owner,
-        'created_at': Timestamp.now(),
+        'createdAt': Timestamp.now(),
       });
       return ProductModel(
         id: pos.id,

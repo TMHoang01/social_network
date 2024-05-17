@@ -180,48 +180,8 @@ class _FeedBackDetailScreenState extends State<FeedBackDetailScreen> {
                                       ),
                                   ],
                                 ),
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Đánh giá mức độ hài lòng',
-                                            style: theme.textTheme.titleMedium,
-                                          ),
-                                          const Text(
-                                              'Vui lòng đánh để nâng cao chất lượng dịch vụ của chúng tôi'),
-                                        ],
-                                      ),
-                                    ),
-                                    RatingBar.builder(
-                                      ignoreGestures: true,
-                                      initialRating: item.rating ?? 0,
-                                      minRating: 1,
-                                      direction: Axis.horizontal,
-                                      itemCount: 5,
-                                      itemPadding: const EdgeInsets.symmetric(
-                                          horizontal: 4.0),
-                                      itemBuilder: (context, _) => const Icon(
-                                        Icons.star,
-                                        color: kSecondaryColor,
-                                        size: 16,
-                                      ),
-                                      onRatingUpdate: (vaule) {},
-                                    ),
-                                    const SizedBox(height: 8),
-                                    CustomTextFormField(
-                                      readOnly: true,
-                                      hintText: 'Đánh giá',
-                                      maxLines: 4,
-                                    ),
-                                    const SizedBox(height: 16),
-                                  ],
-                                )
+                                sizebox1,
+                                sizebox1,
                               ],
                             );
                           },
@@ -246,7 +206,7 @@ class _FeedBackDetailScreenState extends State<FeedBackDetailScreen> {
                 },
                 builder: (context, state) {
                   final feedback = state.feedBack;
-                  if (feedback?.status != FeedBackStatus.completed) {
+                  if (feedback?.status != FeedBackStatus.reviewed) {
                     return const SizedBox();
                   }
                   return Card(
@@ -258,13 +218,41 @@ class _FeedBackDetailScreenState extends State<FeedBackDetailScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Đánh giá',
-                            style: theme.textTheme.titleMedium,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Đánh giá mức độ hài lòng',
+                                style: theme.textTheme.titleMedium,
+                              ),
+                              const Text(
+                                  'Vui lòng đánh để nâng cao chất lượng dịch vụ của chúng tôi'),
+                            ],
                           ),
-                          sizebox1,
-                          _builTitle('Điểm đánh giá:', '${feedback?.rating}'),
-                          _builTitle('Nhận xét:', feedback?.review ?? ''),
+                          RatingBar.builder(
+                            ignoreGestures: true,
+                            initialRating: item.rating ?? 0,
+                            minRating: 1,
+                            direction: Axis.horizontal,
+                            itemCount: 5,
+                            itemPadding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            itemBuilder: (context, _) => const Icon(
+                              Icons.star,
+                              color: kSecondaryColor,
+                              size: 16,
+                            ),
+                            onRatingUpdate: (vaule) {},
+                          ),
+                          const SizedBox(height: 8),
+                          CustomTextFormField(
+                            margin: const EdgeInsets.all(0),
+                            initialValue: item.review,
+                            readOnly: true,
+                            hintText: 'Đánh giá',
+                            maxLines: 4,
+                          ),
+                          const SizedBox(height: 16),
                         ],
                       ),
                     ),

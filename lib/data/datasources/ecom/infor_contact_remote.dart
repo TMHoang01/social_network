@@ -1,6 +1,4 @@
-import 'package:social_network/domain/models/ecom/category_model.dart';
 import 'package:social_network/domain/models/ecom/infor_contact.dart';
-import 'package:social_network/domain/repository/ecom/category_repository.dart';
 import 'package:social_network/utils/firebase.dart';
 import 'package:social_network/utils/logger.dart';
 

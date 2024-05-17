@@ -68,9 +68,9 @@ class _HomePageState extends State<HomePage>
       },
     ),
     ItemHomePage(
-      title: 'Đặt lịch',
+      title: 'Lịch hẹn',
       color: Colors.orange,
-      icon: Icons.people,
+      icon: FontAwesomeIcons.userClock,
       onTap: (BuildContext context) {
         navService.pushNamed(context, RouterClient.mySchedule);
       },
@@ -241,7 +241,7 @@ class _HomePageState extends State<HomePage>
                               child: Icon(
                                 Icons.online_prediction_rounded,
                                 color: Colors.white,
-                                size: 50,
+                                size: 30,
                               ),
                             ),
                           ),

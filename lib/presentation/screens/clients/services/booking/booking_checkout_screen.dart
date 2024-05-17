@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_network/domain/models/ecom/infor_contact.dart';
 import 'package:social_network/domain/models/service/booking_service.dart';
 import 'package:social_network/presentation/blocs/clients/booking_service_create/booking_service_create_bloc.dart';
-import 'package:social_network/presentation/blocs/clients/infor_contact/infor_contact_bloc.dart';
 import 'package:social_network/presentation/screens/clients/router_client.dart';
 import 'package:social_network/presentation/widgets/widgets.dart';
 import 'package:social_network/router.dart';
@@ -31,23 +30,24 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return BlocConsumer<BookingServiceCreateBloc, BookingServiceCreateState>(
+      listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
-        if (state is BookingServiceCreateSuccess) {
+        if (state.status == BookingServiceCreateStatus.success) {
           navService.pushNamedAndRemoveUntil(context, RouterClient.complete);
-        } else if (state is BookingServiceCreateFailure) {
-          showSnackBarError(context, state.message);
+        } else if (state.status == BookingServiceCreateStatus.failure) {
+          showSnackBarError(context, state.error ?? '');
         }
       },
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: Text('Đặt lịch'),
+            title: const Text('Đặt lịch'),
           ),
           body: SingleChildScrollView(
             child: Column(
               children: [
                 InforContactCard(
-                    infor: widget.booking.inforContact ??
+                    infor: state.booking?.inforContact ??
                         const InforContactModel()),
                 // infor service
                 Container(
@@ -80,13 +80,31 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Tên dịch vụ: ${widget.booking.serviceName}',
+                              'Tên dịch vụ: ${state.booking?.serviceName}',
                               style: const TextStyle(
                                 fontSize: 14.0,
                               ),
                             ),
                             Text(
-                              'Nhà chu cấp: ${widget.booking.providerId}',
+                              'Nhà chu cấp: ${state.booking?.providerId}',
+                              style: const TextStyle(
+                                fontSize: 14.0,
+                              ),
+                            ),
+                            Text(
+                              'Giá cơ bản: ${TextFormat.formatMoney(state.booking?.servicePriceBase ?? 0)}',
+                              style: const TextStyle(
+                                fontSize: 14.0,
+                              ),
+                            ),
+                            Text(
+                              'Gói đăng ký: ${state.booking?.servicePriceItem?.name}',
+                              style: const TextStyle(
+                                fontSize: 14.0,
+                              ),
+                            ),
+                            Text(
+                              'Giá dịch vụ: ${TextFormat.formatMoney(state.booking?.servicePriceItem?.price ?? 0)}',
                               style: const TextStyle(
                                 fontSize: 14.0,
                               ),
@@ -128,25 +146,25 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Thời gian bắt đầu: ${TextFormat.formatDate(widget.booking.scheduleBooking?.startDate)}',
+                              'Thời gian bắt đầu: ${TextFormat.formatDate(state.schedule?.startDate)}',
                               style: const TextStyle(
                                 fontSize: 14.0,
                               ),
                             ),
                             Text(
-                              'Thời gian kết thúc: ${TextFormat.formatDate(widget.booking.scheduleBooking?.endDate)}',
+                              'Thời gian kết thúc: ${TextFormat.formatDate(state.schedule?.endDate)}',
                               style: const TextStyle(
                                 fontSize: 14.0,
                               ),
                             ),
                             Text(
-                              'Đăng ký gói: ${widget.booking.scheduleBooking?.isReapeat}',
+                              'Lặp lại hàng tuần: ${state.schedule?.isReapeat == false ? 'Không' : 'Có'}',
                               style: const TextStyle(
                                 fontSize: 14.0,
                               ),
                             ),
                             Text(
-                              'Số buổi: ${widget.booking.scheduleBooking!.scheduleDates?.length}',
+                              'Số buổi: ${state.schedule?.scheduleCount}',
                               style: const TextStyle(
                                 fontSize: 14.0,
                               ),
@@ -157,7 +175,6 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 8),
                 Container(
                   width: size.width,
@@ -178,12 +195,42 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                       const SizedBox(height: 4),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(widget.booking.note ?? ''),
+                        child: Text(state.booking?.note ?? ''),
                       ),
                       const SizedBox(height: 8),
                     ],
                   ),
                 ),
+                const SizedBox(height: 8),
+
+                CustomContainer(
+                  child: Row(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(left: 16.0, top: 8.0),
+                        child: Text(
+                          'Tổng tiền',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: Text(
+                          '${TextFormat.formatMoney(state.booking?.total ?? 0)}',
+                          style: const TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 8),
               ],
             ),
           ),

@@ -9,7 +9,7 @@ class FileRepositoryIml extends FileRepository {
   final storageRef = FirebaseStorage.instance.ref();
 
   @override
-  Future<void> deleteFile({required String path}) {
+  Future<void> deleteFile({required String path}) async {
     return storageRef.child(path).delete();
   }
 
@@ -18,9 +18,13 @@ class FileRepositoryIml extends FileRepository {
     required File file,
     required String path,
     String contentType = 'image/jpeg',
+    String? urlOld,
     Function(int)? onProgress,
   }) async {
     try {
+      if (urlOld != null) {
+        await deleteFile(path: urlOld);
+      }
       final ref = storageRef.child(path);
       final uploadTask =
           ref.putFile(file, SettableMetadata(contentType: contentType));

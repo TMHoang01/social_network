@@ -5,6 +5,7 @@ class SelectWidget extends StatelessWidget {
   final String text;
   final String? subTitle;
   final Function? onChanged;
+  final bool warp;
   final bool isSelect;
   final double? fontSize;
   final Color color;
@@ -15,6 +16,7 @@ class SelectWidget extends StatelessWidget {
       this.subTitle,
       this.onChanged,
       required this.isSelect,
+      this.warp = false,
       this.fontSize = 16,
       this.color = kSecondaryColor,
       this.textAlign = TextAlign.center});
@@ -32,7 +34,7 @@ class SelectWidget extends StatelessWidget {
           }
         },
         child: Container(
-          width: size.width,
+          width: !warp ? size.width : null,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
             color: isSelect ? color.withOpacity(0.3) : Colors.white,

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:social_network/domain/models/ecom/infor_contact.dart';
+import 'package:social_network/domain/models/service/price_list.dart';
 import 'package:social_network/domain/models/service/schedule_booking.dart';
 import 'package:social_network/utils/utils.dart';
 
@@ -15,11 +16,12 @@ class BookingService extends Equatable {
   final ServiceType? serviceType;
   final String? serviceId;
   final String? serviceName;
-  final String? serviceImage;
-  final double? servicePrice;
+  final PriceType? servicePriceType;
+  final PriceListItem? servicePriceItem;
+  final num? servicePriceBase;
   final String? providerId;
   final String? providerName;
-  final ScheduleBooking? scheduleBooking;
+  final ScheduleBooking? schedule;
   final BookingStatus? status;
   final String? note;
   final DateTime? createdAt;
@@ -27,6 +29,19 @@ class BookingService extends Equatable {
   final DateTime? updatedAt;
   final String? updatedBy;
   final DateTime? workDate;
+
+  num get total {
+    if (serviceType == null) return 0;
+    num basecost = 0;
+    if (servicePriceType == PriceType.package ||
+        servicePriceType == PriceType.hourly) {
+      basecost = servicePriceItem?.price ?? 0;
+    } else {
+      basecost = servicePriceBase ?? 0;
+    }
+    basecost = basecost * (schedule?.scheduleCount ?? 1);
+    return basecost;
+  }
 
   const BookingService({
     this.id,
@@ -36,12 +51,13 @@ class BookingService extends Equatable {
     this.serviceType,
     this.serviceId,
     this.serviceName,
-    this.serviceImage,
-    this.servicePrice,
+    this.servicePriceType,
+    this.servicePriceItem,
+    this.servicePriceBase,
     this.providerId,
     this.providerName,
     this.status,
-    this.scheduleBooking,
+    this.schedule,
     this.note,
     this.createdAt,
     this.createdBy,
@@ -63,15 +79,20 @@ class BookingService extends Equatable {
           : null,
       serviceId: json['serviceId'],
       serviceName: json['serviceName'],
-      serviceImage: json['serviceImage'],
-      servicePrice: json['servicePrice'],
+      servicePriceType: json['servicePriceType'] != null
+          ? PriceType.fromJson(json['servicePriceType'])
+          : null,
+      servicePriceItem: json['servicePriceItem'] != null
+          ? PriceListItem.fromJson(json['servicePriceItem'])
+          : null,
+      servicePriceBase: json['c'],
       providerId: json['providerId'],
       providerName: json['providerName'],
       status: json['status'] != null
           ? BookingStatus.fromJson(json['status'])
           : BookingStatus.pending,
-      scheduleBooking: json['scheduleBooking'] != null
-          ? ScheduleBooking.fromJson(json['scheduleBooking'])
+      schedule: json['schedule'] != null
+          ? ScheduleBooking.fromJson(json['schedule'])
           : null,
       note: json['note'],
       createdAt: TextFormat.parseJson(json['createdAt']),
@@ -98,12 +119,15 @@ class BookingService extends Equatable {
       if (serviceType != null) 'serviceType': serviceType?.toJson(),
       if (serviceId != null) 'serviceId': serviceId,
       if (serviceName != null) 'serviceName': serviceName,
-      if (serviceImage != null) 'serviceImage': serviceImage,
-      if (servicePrice != null) 'servicePrice': servicePrice,
+      if (servicePriceType != null)
+        'servicePriceType': servicePriceType?.toJson(),
+      if (servicePriceItem != null)
+        'servicePriceItem': servicePriceItem?.toJson(),
+      if (servicePriceBase != null) 'servicePriceBase': servicePriceBase,
       if (providerId != null) 'providerId': providerId,
       if (providerName != null) 'providerName': providerName,
       if (status != null) 'status': status?.toJson(),
-      if (scheduleBooking != null) 'scheduleBooking': scheduleBooking?.toJson(),
+      if (schedule != null) 'schedule': schedule?.toJson(),
       if (note != null) 'note': note,
       if (createdAt != null) 'createdAt': createdAt,
       if (createdBy != null) 'createdBy': createdBy,
@@ -121,11 +145,13 @@ class BookingService extends Equatable {
     ServiceType? type,
     String? serviceId,
     String? serviceName,
-    String? serviceImage,
-    double? servicePrice,
+    PriceType? servicePriceType,
+    PriceListItem? servicePriceItem,
+    num? servicePriceBase,
     String? providerId,
     String? providerName,
     BookingStatus? status,
+    ScheduleBooking? schedule,
     String? note,
     DateTime? createdAt,
     String? createdBy,
@@ -141,11 +167,13 @@ class BookingService extends Equatable {
       serviceType: type ?? this.serviceType,
       serviceId: serviceId ?? this.serviceId,
       serviceName: serviceName ?? this.serviceName,
-      serviceImage: serviceImage ?? this.serviceImage,
-      servicePrice: servicePrice ?? this.servicePrice,
+      servicePriceType: servicePriceType ?? this.servicePriceType,
+      servicePriceItem: servicePriceItem ?? this.servicePriceItem,
+      servicePriceBase: servicePriceBase ?? this.servicePriceBase,
       providerId: providerId ?? this.providerId,
       providerName: providerName ?? this.providerName,
       status: status ?? this.status,
+      schedule: schedule ?? this.schedule,
       note: note ?? this.note,
       createdAt: createdAt ?? this.createdAt,
       createdBy: createdBy ?? this.createdBy,
@@ -162,10 +190,12 @@ class BookingService extends Equatable {
         inforContact,
         serviceId,
         serviceName,
-        serviceImage,
-        servicePrice,
+        servicePriceItem,
+        servicePriceBase,
         providerId,
         providerName,
         status,
+        schedule,
+        note,
       ];
 }

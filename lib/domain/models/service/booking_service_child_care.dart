@@ -1,6 +1,7 @@
 import 'package:social_network/domain/models/ecom/infor_contact.dart';
 import 'package:social_network/domain/models/service/booking_service.dart';
 import 'package:social_network/domain/models/service/enum_service.dart';
+import 'package:social_network/domain/models/service/price_list.dart';
 import 'package:social_network/domain/models/service/schedule_booking.dart';
 
 class BookingServiceChildCare extends BookingService {
@@ -16,12 +17,13 @@ class BookingServiceChildCare extends BookingService {
     super.serviceType,
     super.serviceId,
     super.serviceName,
-    super.serviceImage,
-    super.servicePrice,
+    super.servicePriceType,
+    super.servicePriceItem,
+    super.servicePriceBase,
     super.providerId,
     super.providerName,
     super.status,
-    super.scheduleBooking,
+    super.schedule,
     super.note,
     super.createdAt,
     super.createdBy,
@@ -45,15 +47,14 @@ class BookingServiceChildCare extends BookingService {
           json['type'] != null ? ServiceType.fromJson(json['type']) : null,
       serviceId: json['serviceId'],
       serviceName: json['serviceName'],
-      serviceImage: json['serviceImage'],
-      servicePrice: json['servicePrice'],
+      servicePriceBase: json['servicePriceBase'],
       providerId: json['providerId'],
       providerName: json['providerName'],
       status: json['status'] != null
           ? BookingStatus.fromJson(json['status'])
           : null,
-      scheduleBooking: json['scheduleBooking'] != null
-          ? ScheduleBooking.fromJson(json['scheduleBooking'])
+      schedule: json['schedule'] != null
+          ? ScheduleBooking.fromJson(json['schedule'])
           : null,
       note: json['note'],
       createdAt: json['createdAt'],
@@ -78,12 +79,13 @@ class BookingServiceChildCare extends BookingService {
       serviceType: bookingService.serviceType,
       serviceId: bookingService.serviceId,
       serviceName: bookingService.serviceName,
-      serviceImage: bookingService.serviceImage,
-      servicePrice: bookingService.servicePrice,
+      servicePriceType: bookingService.servicePriceType,
+      servicePriceItem: bookingService.servicePriceItem,
+      servicePriceBase: bookingService.servicePriceBase,
       providerId: bookingService.providerId,
       providerName: bookingService.providerName,
       status: bookingService.status,
-      scheduleBooking: bookingService.scheduleBooking,
+      schedule: bookingService.schedule,
       note: bookingService.note,
       createdAt: bookingService.createdAt,
       createdBy: bookingService.createdBy,
@@ -114,11 +116,13 @@ class BookingServiceChildCare extends BookingService {
     String? serviceId,
     String? serviceName,
     String? serviceImage,
-    double? servicePrice,
+    PriceType? servicePriceType,
+    PriceListItem? servicePriceItem,
+    num? servicePriceBase,
     String? providerId,
     String? providerName,
     BookingStatus? status,
-    ScheduleBooking? scheduleBooking,
+    ScheduleBooking? schedule,
     String? note,
     DateTime? createdAt,
     String? createdBy,
@@ -137,12 +141,13 @@ class BookingServiceChildCare extends BookingService {
       serviceType: type ?? this.serviceType,
       serviceId: serviceId ?? this.serviceId,
       serviceName: serviceName ?? this.serviceName,
-      serviceImage: serviceImage ?? this.serviceImage,
-      servicePrice: servicePrice ?? this.servicePrice,
+      servicePriceType: servicePriceType ?? this.servicePriceType,
+      servicePriceItem: servicePriceItem ?? this.servicePriceItem,
+      servicePriceBase: servicePriceBase ?? this.servicePriceBase,
       providerId: providerId ?? this.providerId,
       providerName: providerName ?? this.providerName,
       status: status ?? this.status,
-      scheduleBooking: scheduleBooking ?? this.scheduleBooking,
+      schedule: schedule ?? this.schedule,
       note: note ?? this.note,
       createdAt: createdAt ?? this.createdAt,
       createdBy: createdBy ?? this.createdBy,

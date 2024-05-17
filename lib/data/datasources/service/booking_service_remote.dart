@@ -1,15 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_network/domain/models/service/booking_service.dart';
+import 'package:social_network/domain/models/service/enum_service.dart';
 import 'package:social_network/utils/firebase.dart';
+import 'package:social_network/utils/utils.dart';
 
 abstract class BookingServiceRemoteDataSource {
   Future<BookingService?> add({required BookingService booking});
   Future<void> update({required BookingService booking});
   Future<void> delete({required String id});
 
-  Stream<List<BookingService>> getAll();
+  Future<List<BookingService>> getAll();
 
   Future<List<BookingService>> getScheduleInDay(String date);
+
+  Future<void> updateStatus(
+      {required String id, required BookingStatus status});
+
+  Future<List<BookingService>> getAllByUserId({required String userId});
 }
 
 class BookingServiceRemoteDataSourceImpl
@@ -34,8 +41,18 @@ class BookingServiceRemoteDataSourceImpl
   }
 
   @override
-  Stream<List<BookingService>> getAll() {
-    throw UnimplementedError();
+  Future<List<BookingService>> getAll() async {
+    try {
+      final response =
+          await colection.orderBy('createdAt', descending: true).get();
+      final list = response.docs
+          .map((e) => BookingService.fromDocumentSnapshot(e))
+          .toList();
+      return list;
+    } on FirebaseException catch (e) {
+      logger.e(e.toString());
+      throw Exception(e.toString());
+    }
   }
 
   @override
@@ -51,7 +68,11 @@ class BookingServiceRemoteDataSourceImpl
       final firestore = FirebaseFirestore.instance;
       final response = await firestore
           .collection("orders")
-          .where("scheduleBooking.scheduleDates", arrayContains: date)
+          .where("schedule.scheduleDates", arrayContains: date)
+          //     .where("status", whereIn: [
+          //   BookingStatus.accepted.toJson(),
+          //   BookingStatus.completed.toJson()
+          // ])
           .get();
       final list = response.docs
           .map((e) => BookingService.fromJson(e.data() as Map<String, dynamic>))
@@ -59,6 +80,37 @@ class BookingServiceRemoteDataSourceImpl
 
       return list;
     } on FirebaseException catch (e) {
+      logger.e(e.toString());
+      throw Exception(e.toString());
+    }
+  }
+
+  @override
+  Future<void> updateStatus(
+      {required String id, required BookingStatus status}) async {
+    try {
+      await colection.doc(id).set({
+        'status': status.toJson(),
+      }, SetOptions(merge: true));
+    } on FirebaseException catch (e) {
+      logger.e(e.toString());
+      throw Exception(e.toString());
+    }
+  }
+
+  @override
+  Future<List<BookingService>> getAllByUserId({required String userId}) async {
+    try {
+      final response = await colection
+          .where('createdBy', isEqualTo: userId)
+          .orderBy('createdAt', descending: true)
+          .get();
+      final list = response.docs
+          .map((e) => BookingService.fromDocumentSnapshot(e))
+          .toList();
+      return list;
+    } on FirebaseException catch (e) {
+      logger.e(e.toString());
       throw Exception(e.toString());
     }
   }

@@ -32,7 +32,11 @@ class _ServicesScreenState extends State<ServicesScreen> {
           // TODO: implement listener
         },
         builder: (context, state) {
-          return _handleSate(state);
+          return RefreshIndicator(
+              onRefresh: () => Future.delayed(const Duration(seconds: 1), () {
+                    context.read<ServicesBloc>().add(ServicesStarted());
+                  }),
+              child: _handleSate(state));
         },
       ),
     );
@@ -47,10 +51,12 @@ class _ServicesScreenState extends State<ServicesScreen> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: ListView.builder(
+                  child: ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: services.length,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 16),
                     itemBuilder: (context, index) {
                       final service = services[index];
                       return ServiceCardWidget(service: service);

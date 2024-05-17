@@ -1,40 +1,30 @@
 part of 'service_form_bloc.dart';
 
-sealed class ServiceFormState extends Equatable {
-  const ServiceFormState();
+enum ServiceFormStatus { initial, loading, success, failure }
 
-  @override
-  List<Object> get props => [];
-}
-
-final class ServiceFormInitial extends ServiceFormState {}
-
-final class ServiceFormAddInitial extends ServiceFormState {}
-
-final class ServiceFormAddInProgress extends ServiceFormState {}
-
-final class ServiceFormAddSuccess extends ServiceFormState {}
-
-final class ServiceFormAddFailure extends ServiceFormState {
+final class ServiceFormState extends Equatable {
+  const ServiceFormState({
+    this.service,
+    this.status = ServiceFormStatus.initial,
+    this.message = '',
+  });
+  final ServiceFormStatus status;
+  final ServiceModel? service;
+  get isAddForm => service == null || service!.id == null;
   final String message;
 
-  const ServiceFormAddFailure(this.message);
+  ServiceFormState copyWith({
+    ServiceModel? service,
+    ServiceFormStatus? status,
+    String? message,
+  }) {
+    return ServiceFormState(
+      service: service ?? this.service,
+      status: status ?? this.status,
+      message: message ?? this.message,
+    );
+  }
 
   @override
-  List<Object> get props => [message];
-}
-
-final class ServiceFormEditInitial extends ServiceFormState {}
-
-final class ServiceFormEditInProgress extends ServiceFormState {}
-
-final class ServiceFormEditSuccess extends ServiceFormState {}
-
-final class ServiceFormEditFailure extends ServiceFormState {
-  final String message;
-
-  const ServiceFormEditFailure(this.message);
-
-  @override
-  List<Object> get props => [message];
+  List<Object?> get props => [status, service, message];
 }

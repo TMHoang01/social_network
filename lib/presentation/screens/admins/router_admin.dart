@@ -3,28 +3,30 @@ import 'package:social_network/domain/models/ecom/product_model.dart';
 import 'package:social_network/domain/models/feed_back/feed_back.dart';
 import 'package:social_network/domain/models/manage/employee.dart';
 import 'package:social_network/domain/models/post/post.dart';
+import 'package:social_network/domain/models/service/booking_service.dart';
 import 'package:social_network/domain/models/service/service.dart';
 import 'package:social_network/domain/models/user_model.dart';
-import 'package:social_network/presentation/blocs/admins/employee_form/employee_form_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/post_form/post_form_bloc.dart';
 import 'package:social_network/presentation/screens/admins/dashboard/dash_board.dart';
 import 'package:social_network/presentation/screens/admins/dashboard/post/posts_screen.dart';
 import 'package:social_network/presentation/screens/admins/employee/employee_create_account_screen.dart';
 import 'package:social_network/presentation/screens/admins/employee/employee_detail_screen.dart';
 import 'package:social_network/presentation/screens/admins/employee/employee_list_screen.dart';
+import 'package:social_network/presentation/screens/admins/employee/employee_select_screen.dart';
+import 'package:social_network/presentation/screens/admins/feed_back/feed_back_detail_screen.dart';
+import 'package:social_network/presentation/screens/admins/feed_back/feed_back_list_screen.dart';
 import 'package:social_network/presentation/screens/admins/posts/post_create_screen.dart';
 import 'package:social_network/presentation/screens/admins/posts/post_detail_screen.dart';
 import 'package:social_network/presentation/screens/admins/products/form/product_detail_form.dart';
 import 'package:social_network/presentation/screens/admins/products/product_detail.dart';
 import 'package:social_network/presentation/screens/admins/products/products_screen.dart';
+import 'package:social_network/presentation/screens/admins/service_booking/service_booking_detail_screen.dart';
+import 'package:social_network/presentation/screens/admins/service_booking/service_booking_list_screen.dart';
 import 'package:social_network/presentation/screens/admins/services/service_details_screen.dart';
 import 'package:social_network/presentation/screens/admins/services/service_form_screen.dart';
 import 'package:social_network/presentation/screens/admins/services/service_screen.dart';
-import 'package:social_network/presentation/screens/admins/employee/employee_select_screen.dart';
 import 'package:social_network/presentation/screens/admins/users/user_details_screen.dart';
 import 'package:social_network/presentation/screens/admins/users/users_screen.dart';
-import 'package:social_network/presentation/screens/admins/feed_back/feed_back_list_screen.dart';
-import 'package:social_network/presentation/screens/admins/feed_back/feed_back_detail_screen.dart';
 import 'package:social_network/router.dart';
 
 class RouterAdmin extends AppRouter {
@@ -49,6 +51,10 @@ class RouterAdmin extends AppRouter {
   static const String serviceDetail = '/service/detail';
   static const String serviceEdit = '/admin/service/edit';
   static const String serviceAdd = '/admin/service/add';
+  //booking
+  static const String bookings = '/admin/booking/list';
+  static const String bookingDetail = '/admin/booking/detail';
+
   // feedback
   static const String feedback = '/admin/feedback';
   static const String feedbackDetail = '/admin/feedback/detail';
@@ -71,6 +77,7 @@ class RouterAdmin extends AppRouter {
     post: (context) => const PostsScreen(),
     users: (context) => const UsersScreen(),
     services: (context) => const ServicesScreen(),
+    bookings: (context) => const ServiceBookingListScreen(),
     feedback: (context) => const FeedBackListScreen(),
     employList: (context) => const EmployeeListScreen(),
     employAdd: (context) => const EmployeeCreateAccountScreen(),
@@ -117,6 +124,12 @@ class RouterAdmin extends AppRouter {
         return MaterialPageRoute(
           builder: (context) =>
               ServiceDetailScreen(service: args as ServiceModel),
+        );
+      // booking
+      case bookingDetail:
+        return MaterialPageRoute(
+          builder: (context) =>
+              ServiceBookingDetailScreen(booking: args as BookingService),
         );
       // feedback
       case feedbackDetail:

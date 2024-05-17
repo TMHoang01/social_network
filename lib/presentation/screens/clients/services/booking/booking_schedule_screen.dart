@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_network/domain/models/service/booking_service_child_care.dart';
 import 'package:social_network/domain/models/service/enum_service.dart';
 import 'package:social_network/domain/models/service/schedule_booking.dart';
 import 'package:social_network/presentation/blocs/clients/booking_service_create/booking_service_create_bloc.dart';
@@ -10,6 +9,7 @@ import 'package:social_network/presentation/widgets/widgets.dart';
 import 'package:social_network/router.dart';
 import 'package:social_network/utils/constants.dart';
 import 'package:social_network/utils/logger.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class BookingScheduleScreen extends StatefulWidget {
   const BookingScheduleScreen({super.key});
@@ -19,6 +19,8 @@ class BookingScheduleScreen extends StatefulWidget {
 }
 
 class _BookingScheduleScreenState extends State<BookingScheduleScreen> {
+  late final schedule =
+      context.select((BookingServiceCreateBloc bloc) => bloc.state.schedule);
   TimeOfDay selectTime = TimeOfDay.now();
   DateTime? beginDate = DateTime.now();
   DateTime? endDate = DateTime.now();
@@ -36,11 +38,11 @@ class _BookingScheduleScreenState extends State<BookingScheduleScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              CustomeContanier(
+              CustomContainer(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _textTile('Ngày làm việc  '),
+                    _textTile('Ngày bắt đầu  '),
                     BookingDateWidget(onDateSelected: (date) {
                       setState(() {
                         beginDate = date;
@@ -54,7 +56,7 @@ class _BookingScheduleScreenState extends State<BookingScheduleScreen> {
                 ),
               ),
               const SizedBox(height: 12),
-              CustomeContanier(
+              CustomContainer(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -98,24 +100,67 @@ class _BookingScheduleScreenState extends State<BookingScheduleScreen> {
                 ),
               ),
               const SizedBox(height: 12),
-              CustomeContanier(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              CustomContainer(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _textTile('Lặp lại hàng tuần'),
-                    Switch(
-                        value: isReapeat,
-                        onChanged: (value) {
-                          setState(() {
-                            isReapeat = value;
-                          });
-                        }),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _textTile('Đăng ký định kỳ:'),
+                        Transform.scale(
+                          scale: 0.6,
+                          child: Switch(
+                              value: isReapeat,
+                              onChanged: (value) {
+                                context.read<BookingServiceCreateBloc>().add(
+                                    BookingServiceCreateChangeRepeatType(
+                                        BookingRepeatType.weekly));
+                                setState(() {
+                                  isReapeat = value;
+                                  if (value == true) {
+                                    endDate = DateTime(
+                                        beginDate!.year,
+                                        beginDate!.month + selectPackageReapeat,
+                                        beginDate!.day);
+                                  } else {
+                                    endDate = beginDate;
+                                  }
+                                });
+                              }),
+                        ),
+                      ],
+                    ),
+                    Visibility(
+                      visible: false,
+                      child:
+                          bookingServiceCreateBlocSelector<BookingRepeatType?>(
+                        selector: (state) => state.schedule?.repeatType,
+                        builder: (context, repeatType) {
+                          return Column(
+                            children: [
+                              ...BookingRepeatType.values
+                                  .map((e) => SelectWidget(
+                                        text: e.toName(),
+                                        isSelect: repeatType == e,
+                                        onChanged: () {
+                                          context
+                                              .read<BookingServiceCreateBloc>()
+                                              .add(
+                                                  BookingServiceCreateChangeRepeatType(
+                                                      e));
+                                        },
+                                      ))
+                            ],
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
               // const SizedBox(height: 12),
-              CustomeContanier(
+              CustomContainer(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -131,43 +176,59 @@ class _BookingScheduleScreenState extends State<BookingScheduleScreen> {
                           // ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [0, 1, 2, 3, 4, 5, 6].map((e) {
-                            final List<String> dayWeeks = [
-                              'T2',
-                              'T3',
-                              'T4',
-                              'T5',
-                              'T6',
-                              'T7',
-                              'CN'
-                            ];
-                            return InkWell(
-                              onTap: () {
-                                setState(() {
-                                  if (dayRepeat.contains(e)) {
-                                    dayRepeat.remove(e);
-                                  } else {
-                                    dayRepeat.add(e);
-                                  }
-                                });
-                              },
-                              child: CircleAvatar(
-                                backgroundColor: dayRepeat.contains(e)
-                                    ? kSecondaryColor
-                                    : Colors.white,
-                                child: Text(
-                                  ' ${dayWeeks[e]} ',
-                                  style: TextStyle(
-                                    color: dayRepeat.contains(e)
-                                        ? Colors.white
-                                        : kSecondaryColor,
+                        child: bookingServiceCreateBlocSelector<
+                            BookingRepeatType?>(
+                          selector: (state) => state.schedule?.repeatType,
+                          builder: (context, repeatType) {
+                            return Column(
+                              children: [
+                                if (repeatType == BookingRepeatType.weekly)
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [0, 1, 2, 3, 4, 5, 6].map((e) {
+                                      final List<String> dayWeeks = [
+                                        'T2',
+                                        'T3',
+                                        'T4',
+                                        'T5',
+                                        'T6',
+                                        'T7',
+                                        'CN'
+                                      ];
+                                      return InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            if (dayRepeat.contains(e)) {
+                                              dayRepeat.remove(e);
+                                            } else {
+                                              dayRepeat.add(e);
+                                            }
+                                          });
+                                        },
+                                        child: CircleAvatar(
+                                          backgroundColor: dayRepeat.contains(e)
+                                              ? kSecondaryColor
+                                              : Colors.white,
+                                          child: Text(
+                                            ' ${dayWeeks[e]} ',
+                                            style: TextStyle(
+                                              color: dayRepeat.contains(e)
+                                                  ? Colors.white
+                                                  : kSecondaryColor,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
                                   ),
-                                ),
-                              ),
+                                if (repeatType == BookingRepeatType.monthly)
+                                  const BookingDateWidget(
+                                    calendarFormat: CalendarFormat.month,
+                                  ),
+                              ],
                             );
-                          }).toList(),
+                          },
                         ),
                       ),
                     ),
@@ -175,15 +236,14 @@ class _BookingScheduleScreenState extends State<BookingScheduleScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 12),
-
-              CustomeContanier(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Visibility(
-                      visible: isReapeat,
-                      child: Column(
+              const SizedBox(height: 8),
+              Visibility(
+                visible: isReapeat,
+                child: CustomContainer(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _textTile('Chọn gói tháng'),
@@ -203,18 +263,21 @@ class _BookingScheduleScreenState extends State<BookingScheduleScreen> {
                           const SizedBox(height: 6),
                         ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 12),
-              const SizedBox(height: 1000.0),
             ],
           ),
         ),
       ),
       bottomNavigationBar: CustomButton(
         onPressed: () {
+          if (isReapeat && dayRepeat.isEmpty) {
+            showSnackBarError(context, 'Vui lòng chọn ngày lặp lại');
+            return;
+          }
           final schedule = ScheduleBooking(
             startDate: beginDate,
             endDate: endDate,
@@ -225,14 +288,19 @@ class _BookingScheduleScreenState extends State<BookingScheduleScreen> {
           );
 
           schedule.setScheduleDates();
+
+          context
+              .read<BookingServiceCreateBloc>()
+              .add(BookingServiceCreateChangeSchedule(schedule));
+
           final state = context.read<BookingServiceCreateBloc>().state;
-          if (state is BookingServiceCreateChilCaredInitial) {
-            final BookingServiceChildCare bookingSchedule =
-                state.booking.copyWith(scheduleBooking: schedule);
-            logger.i(bookingSchedule.toJson());
-            navService.pushNamed(context, RouterClient.servicBookingCheckout,
-                args: bookingSchedule);
-          }
+          // if (state is BookingServiceCreateChilCaredInitial) {
+          //   final BookingServiceChildCare bookingSchedule =
+          //       state.booking.copyWith(schedule: schedule);
+          //   logger.i(bookingSchedule.toJson());
+          navService.pushNamed(context, RouterClient.servicBookingCheckout,
+              args: state.booking);
+          // }
         },
         title: 'Đặt lịch',
       ),
@@ -271,57 +339,12 @@ class _BookingScheduleScreenState extends State<BookingScheduleScreen> {
     );
   }
 
-  BoxDecoration _boxdecoration() {
-    return BoxDecoration(
-      color: Colors.white,
-      boxShadow: [
-        BoxShadow(
-          color: kGrayLight.withOpacity(0.3),
-          blurRadius: 8,
-          offset: const Offset(0.0, 8),
-        )
-      ],
-    );
-  }
-}
-
-class CustomeContanier extends StatelessWidget {
-  final Widget child;
-  const CustomeContanier({super.key, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: _boxdecoration(),
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: child,
-    );
-  }
-
-  Widget _textTile(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 8.0),
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 16.0,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-
-  BoxDecoration _boxdecoration() {
-    return BoxDecoration(
-      color: Colors.white,
-      boxShadow: [
-        BoxShadow(
-          color: kGrayLight.withOpacity(0.3),
-          blurRadius: 8,
-          offset: const Offset(0.0, 8),
-        )
-      ],
-    );
-  }
+  bookingServiceCreateBlocSelector<T>({
+    required T Function(BookingServiceCreateState) selector,
+    required Widget Function(BuildContext, T) builder,
+  }) =>
+      BlocSelector<BookingServiceCreateBloc, BookingServiceCreateState, T>(
+        selector: selector,
+        builder: builder,
+      );
 }

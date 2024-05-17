@@ -12,6 +12,8 @@ import 'package:social_network/presentation/screens/admins/employee/employee_sel
 import 'package:social_network/presentation/screens/clients/feed_back/feed_back_detail_screen.dart';
 import 'package:social_network/presentation/screens/clients/feed_back/feed_back_form_screen.dart';
 import 'package:social_network/presentation/screens/clients/feed_back/feed_back_list_screen.dart';
+import 'package:social_network/presentation/screens/clients/services/booking/booking_detail_screen.dart';
+import 'package:social_network/presentation/screens/clients/services/booking/booking_list_screen.dart';
 import 'package:social_network/presentation/screens/clients/services/booking/booking_schedule_screen.dart';
 import 'package:social_network/presentation/screens/clients/services/booking/booking_checkout_screen.dart';
 import 'package:social_network/presentation/screens/clients/services/booking_form_fill.dart';
@@ -55,6 +57,8 @@ class RouterClient extends AppRouter {
   static const String servicBookingFormFill = '/service/booking/fill';
   static const String servicBookingFormSchedule = '/service/booking/schedule';
   static const String servicBookingCheckout = '/service/booking/checkout';
+  static const String bookingList = '/booking/list';
+  static const String bookingDetail = '/booking/detail';
 
   // Schedule
   static const String mySchedule = '/my-schedule';
@@ -89,7 +93,6 @@ class RouterClient extends AppRouter {
       posts: (context) => const PostsScreen(),
       // service
       services: (context) => const ServicesScreen(),
-      servicBookingFormFill: (context) => const BookingFormFillScreen(),
       servicBookingFormSchedule: (context) => const BookingScheduleScreen(),
 
       // schedule
@@ -124,6 +127,22 @@ class RouterClient extends AppRouter {
         return MaterialPageRoute(
           builder: (context) =>
               BookingCheckoutScreen(booking: args as BookingService),
+        );
+      case servicBookingFormFill:
+        return MaterialPageRoute(
+          builder: (context) =>
+              BookingFormFillScreen(service: args as ServiceModel),
+        );
+      // booking
+      case bookingList:
+        return MaterialPageRoute(
+          builder: (context) => const MyServiceBookingListScreen(),
+        );
+
+      case bookingDetail:
+        return MaterialPageRoute(
+          builder: (context) =>
+              BookingCheckDetailScreen(booking: args as BookingService),
         );
 
       case feedbackDetail:

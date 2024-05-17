@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:social_network/utils/utils.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class BookingDateWidget extends StatefulWidget {
   final Function(DateTime? selectedDate)? onDateSelected;
-
-  const BookingDateWidget({super.key, this.onDateSelected});
+  final CalendarFormat calendarFormat;
+  final bool? isBefore;
+  const BookingDateWidget(
+      {super.key,
+      this.onDateSelected,
+      this.isBefore = false,
+      this.calendarFormat = CalendarFormat.week});
 
   @override
   State<BookingDateWidget> createState() => _BookingDateWidgetState();
@@ -12,8 +18,8 @@ class BookingDateWidget extends StatefulWidget {
 
 class _BookingDateWidgetState extends State<BookingDateWidget> {
   DateTime? _selectedDay;
-  CalendarFormat _calendarFormat = CalendarFormat.week;
   DateTime _focusedDay = DateTime.now();
+  late final CalendarFormat calendarFormat;
   List<DateTime> _getAvailableDates() {
     DateTime today = DateTime.now();
     List<DateTime> availableDates = [];
@@ -27,15 +33,22 @@ class _BookingDateWidgetState extends State<BookingDateWidget> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    logger.d('BookingDateWidget initState ${widget.isBefore}');
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         TableCalendar(
-          firstDay: kFirstDay,
+          firstDay: widget.isBefore! ? kFirstDay : kToday,
           lastDay: kLastDay,
           focusedDay: _focusedDay,
           currentDay: _selectedDay,
-          calendarFormat: _calendarFormat,
+          calendarFormat: widget.calendarFormat,
           selectedDayPredicate: (day) {
             return isSameDay(_selectedDay, day);
           },

@@ -13,6 +13,7 @@ class ScheduleBooking extends Equatable {
   final BookingRepeatType? repeatType; //  ngày, tuần, tháng
   final List<int>? dayRepeat; // 1,2,3,4,5,6,7
   List<DateTime>? scheduleDates;
+  int get scheduleCount => scheduleDates?.length ?? 0;
 
   ScheduleBooking({
     this.startDate,

@@ -3,6 +3,7 @@ import 'package:social_network/presentation/screens/admins/dashboard/home_page/h
 import 'package:social_network/presentation/screens/admins/dashboard/post/posts_screen.dart';
 import 'package:social_network/presentation/screens/admins/dashboard/settings/setting_screen.dart';
 import 'package:social_network/presentation/screens/admins/products/products_screen.dart';
+import 'package:social_network/presentation/screens/admins/service_booking/service_booking_list_screen.dart';
 import 'package:social_network/router.dart';
 import 'package:social_network/utils/constants.dart';
 
@@ -18,7 +19,7 @@ class _DashBoarAdmindScreenState extends State<DashBoarAdmindScreen> {
     const AdminHomePage(),
     // const SettingScreen(),
     // const ProfileScreen(),
-    const PostsScreen(),
+    const ServiceBookingListScreen(),
     const Text('data'),
     const SettingScreen(),
     const Text('data'),

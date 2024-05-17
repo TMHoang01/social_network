@@ -5,6 +5,7 @@ abstract class FileRepository {
       {required File file,
       required String path,
       String contentType = 'image/jpeg',
+      String? urlOld,
       Function(int)? onProgress});
   Future<void> deleteFile({required String path});
 }

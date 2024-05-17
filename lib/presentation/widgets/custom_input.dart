@@ -94,6 +94,9 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             widget.onChanged!(value);
           }
         },
+        onTapOutside: (PointerDownEvent event) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
         style: const TextStyle(
           color: Colors.black,
           fontSize: 16,

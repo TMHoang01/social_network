@@ -7,6 +7,7 @@ import 'package:social_network/presentation/blocs/admins/employees/employees_blo
 import 'package:social_network/presentation/blocs/admins/feed_backs/feed_backs_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/posts/posts_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/products/product_bloc.dart';
+import 'package:social_network/presentation/blocs/admins/service_booking/service_booking_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/services/services_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/users/users_bloc.dart';
 import 'package:social_network/presentation/blocs/auth/auth_bloc.dart';
@@ -35,6 +36,7 @@ class AdminApp extends StatelessWidget {
           create: (_) => sl<EmployeeFormBloc>(),
         ),
         BlocProvider(create: (_) => sl<EmployeesBloc>()),
+        BlocProvider(create: (_) => sl<ServiceBookingBloc>()),
       ],
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {

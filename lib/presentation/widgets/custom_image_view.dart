@@ -96,22 +96,18 @@ class CustomImageView extends StatelessWidget {
         child: _buildImageView(),
       );
     } else {
-      return _buildImageView();
+      return SizedBox(height: height, width: width, child: _buildImageView());
     }
   }
 
   Widget _buildImageView() {
     if (svgPath != null && svgPath!.isNotEmpty) {
-      return SizedBox(
+      return SvgPicture.asset(
+        svgPath!,
         height: height,
         width: width,
-        child: SvgPicture.asset(
-          svgPath!,
-          height: height,
-          width: width,
-          fit: boxFit ?? BoxFit.cover,
-          color: color,
-        ),
+        fit: boxFit ?? BoxFit.cover,
+        color: color,
       );
     } else if (file != null && file!.path.isNotEmpty) {
       return Image.file(

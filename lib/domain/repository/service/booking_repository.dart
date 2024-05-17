@@ -8,8 +8,8 @@ abstract class BookingRepository {
   Future<void> updateStatus(
       {required String id, required BookingStatus status});
   Future<void> delete({required String id});
-  Stream<List<BookingService>> getAllByUserId({required String userId});
-  Stream<List<BookingService>> getAll();
+  Future<List<BookingService>> getAllByUserId({required String userId});
+  Future<List<BookingService>> getAll();
 
   Future<List<BookingService>> getScheduleInDay(DateTime date);
 }
@@ -20,33 +20,30 @@ class BookingRepositoryIml implements BookingRepository {
   BookingRepositoryIml(this.remoteDate);
 
   @override
-  Future<BookingService?> add({required BookingService bookingService}) {
+  Future<BookingService?> add({required BookingService bookingService}) async {
     return remoteDate.add(booking: bookingService);
   }
 
   @override
-  Future<void> delete({required String id}) {
+  Future<void> delete({required String id}) async {
     // TODO: implement delete
     throw UnimplementedError();
   }
 
   @override
-  Stream<List<BookingService>> getAll() {
-    // TODO: implement getAll
-    throw UnimplementedError();
+  Future<List<BookingService>> getAll() async {
+    return await remoteDate.getAll();
   }
 
   @override
-  Stream<List<BookingService>> getAllByUserId({required String userId}) {
-    // TODO: implement getAllByUserId
-    throw UnimplementedError();
+  Future<List<BookingService>> getAllByUserId({required String userId}) async {
+    return await remoteDate.getAllByUserId(userId: userId);
   }
 
   @override
   Future<void> updateStatus(
-      {required String id, required BookingStatus status}) {
-    // TODO: implement updateStatus
-    throw UnimplementedError();
+      {required String id, required BookingStatus status}) async {
+    return await remoteDate.updateStatus(id: id, status: status);
   }
 
   @override

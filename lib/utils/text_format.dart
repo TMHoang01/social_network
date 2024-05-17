@@ -9,6 +9,10 @@ class TextFormat {
     return NumberFormat("#,###").format(number);
   }
 
+  static num parseMoney(String money) {
+    return NumberFormat("#,###.##").parse(money);
+  }
+
   static String formatMoneyWithSymbol(double number) {
     return '${NumberFormat("#,###", "vi_VN").format(number)}đ';
   }

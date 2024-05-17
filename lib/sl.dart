@@ -47,6 +47,7 @@ import 'package:social_network/presentation/blocs/admins/post_detail/post_detail
 import 'package:social_network/presentation/blocs/admins/post_form/post_form_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/posts/posts_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/products/product_bloc.dart';
+import 'package:social_network/presentation/blocs/admins/service_booking/service_booking_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/service_form/service_form_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/services/services_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/users/users_bloc.dart';
@@ -147,6 +148,9 @@ void _initAdmin() {
       () => EmployeeRepositoryImpl(sl.call()));
   sl.registerFactory<EmployeesBloc>(() => EmployeesBloc(sl.call()));
   sl.registerFactory<EmployeeFormBloc>(() => EmployeeFormBloc(sl.call()));
+
+  // booking service
+  sl.registerFactory<ServiceBookingBloc>(() => ServiceBookingBloc(sl.call()));
 }
 
 void _initClient() {

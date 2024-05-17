@@ -1,21 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
-class PriceList extends Equatable {
+class PriceListItem extends Equatable {
   final String? id;
   final String? name;
   final num? price;
   final String? note;
 
-  PriceList({
+  PriceListItem({
     this.id,
     this.name,
     this.price,
     this.note,
   });
 
-  factory PriceList.fromJson(Map<String, dynamic> json) {
-    return PriceList(
+  factory PriceListItem.fromJson(Map<String, dynamic> json) {
+    return PriceListItem(
       id: json['id'],
       name: json['name'],
       price: json['price'],
@@ -23,8 +23,8 @@ class PriceList extends Equatable {
     );
   }
 
-  factory PriceList.fromDocumentSnapshot(DocumentSnapshot doc) {
-    return PriceList.fromJson(doc.data() as Map<String, dynamic>).copyWith(
+  factory PriceListItem.fromDocumentSnapshot(DocumentSnapshot doc) {
+    return PriceListItem.fromJson(doc.data() as Map<String, dynamic>).copyWith(
       id: doc.id,
     );
   }
@@ -38,13 +38,13 @@ class PriceList extends Equatable {
     };
   }
 
-  PriceList copyWith({
+  PriceListItem copyWith({
     String? id,
     String? name,
     num? price,
     String? note,
   }) {
-    return PriceList(
+    return PriceListItem(
       id: id ?? this.id,
       name: name ?? this.name,
       price: price ?? this.price,

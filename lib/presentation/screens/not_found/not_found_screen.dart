@@ -7,6 +7,7 @@ class NotFoundScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Center(
         child: TextButton(
           onPressed: () {
@@ -16,7 +17,7 @@ class NotFoundScreen extends StatelessWidget {
               navService.pushNamedAndRemoveUntil(context, '/');
             }
           },
-          child: const Text('Not Found'),
+          child: const Text('Không tìm thấy trang'),
         ),
       ),
     );

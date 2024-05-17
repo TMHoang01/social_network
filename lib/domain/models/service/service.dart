@@ -14,7 +14,9 @@ class ServiceModel extends Equatable {
   final String? title;
   final String? image;
   final String? description;
-  final List<PriceList>? priceList;
+  final num? priceBase;
+  final PriceType? priceType;
+  final List<PriceListItem>? priceList;
   final double? rating;
   final int? bookingCount;
   final DateTime? createdAt;
@@ -31,6 +33,8 @@ class ServiceModel extends Equatable {
     this.providerName,
     this.title,
     this.description,
+    this.priceBase,
+    this.priceType,
     this.priceList,
     this.rating = 0.0,
     this.bookingCount = 0,
@@ -52,9 +56,13 @@ class ServiceModel extends Equatable {
       providerName: json['providerName'],
       title: json['title'],
       description: json['description'],
+      priceBase: json['priceBase'],
+      priceType: json['priceType'] != null
+          ? PriceType.fromJson(json['priceType'])
+          : null,
       priceList: json['priceList'] != null
-          ? List<PriceList>.from(
-              json['priceList'].map((x) => PriceList.fromJson(x)))
+          ? List<PriceListItem>.from(
+              json['priceList'].map((x) => PriceListItem.fromJson(x)))
           : [],
       rating: json['rating'] ?? 0.0,
       bookingCount: json['bookingCount'] ?? 0,
@@ -80,6 +88,8 @@ class ServiceModel extends Equatable {
       if (providerName != null) 'providerName': providerName,
       if (title != null) 'title': title,
       if (description != null) 'description': description,
+      if (priceBase != null) 'priceBase': priceBase,
+      if (priceType != null) 'priceType': priceType?.toJson(),
       if (priceList != null)
         'priceList': priceList?.map((x) => x.toJson()).toList(),
       if (rating != null) 'rating': rating,
@@ -100,7 +110,9 @@ class ServiceModel extends Equatable {
     String? providerName,
     String? title,
     String? description,
-    List<PriceList>? priceList,
+    num? priceBase,
+    PriceType? priceType,
+    List<PriceListItem>? priceList,
     double? rating,
     int? bookingCount,
     DateTime? createdAt,
@@ -116,6 +128,8 @@ class ServiceModel extends Equatable {
       providerId: providerId ?? this.providerId,
       title: title ?? this.title,
       description: description ?? this.description,
+      priceBase: priceBase ?? this.priceBase,
+      priceType: priceType ?? this.priceType,
       priceList: priceList ?? this.priceList,
       rating: rating ?? this.rating,
       bookingCount: bookingCount ?? this.bookingCount,
@@ -135,6 +149,8 @@ class ServiceModel extends Equatable {
         providerId,
         title,
         description,
+        priceBase,
+        priceType,
         priceList,
         rating,
         bookingCount,

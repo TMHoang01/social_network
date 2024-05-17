@@ -4,6 +4,7 @@ import 'package:social_network/presentation/blocs/auth/auth_bloc.dart';
 import 'package:social_network/presentation/screens/clients/cart/cart_screen.dart';
 import 'package:social_network/presentation/screens/clients/dashboard/home_page/home_page.dart';
 import 'package:social_network/presentation/screens/clients/dashboard/settings/setting_screen.dart';
+import 'package:social_network/presentation/screens/clients/services/booking/booking_list_screen.dart';
 import 'package:social_network/router.dart';
 import 'package:social_network/utils/constants.dart';
 
@@ -17,7 +18,7 @@ class DashBoardClientScreen extends StatefulWidget {
 class _DashBoardClientScreenState extends State<DashBoardClientScreen> {
   final List<Widget> _pages = [
     const HomePage(),
-    const CartScreen(),
+    const MyServiceBookingListScreen(),
     const SettingScreen(),
   ];
   final PageController _pageController = PageController();
@@ -70,7 +71,7 @@ class _DashBoardClientScreenState extends State<DashBoardClientScreen> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.shopping_cart),
-              label: 'Giỏ hàng',
+              label: 'Đơn đặt',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),

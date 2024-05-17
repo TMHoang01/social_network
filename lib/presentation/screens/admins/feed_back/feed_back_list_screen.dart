@@ -116,8 +116,7 @@ class _FeedBackListScreenState extends State<FeedBackListScreen> {
                 itemCount: oldPosts.length + 1,
                 itemBuilder: (context, index) {
                   if (index < oldPosts.length) {
-                    final feedBack = oldPosts[index].copyWith(
-                        content: '$index - ${oldPosts[index].content}');
+                    final feedBack = oldPosts[index];
                     return ItemFeedBack(feedBack);
                   } else {
                     return const Padding(

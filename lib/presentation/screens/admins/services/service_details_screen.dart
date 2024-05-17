@@ -11,8 +11,10 @@ class ServiceDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Chi tiết dịch vụ'),
       ),
-      body: Center(
-        child: Text('Chi tiết dịch vụ$service'),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Text('Chi tiết dịch vụ$service'),
+        ),
       ),
     );
   }

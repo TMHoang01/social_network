@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:social_network/domain/models/service/booking_service.dart';
+import 'package:social_network/domain/models/service/enum_service.dart';
 import 'package:social_network/domain/repository/service/booking_repository.dart';
 
 part 'booking_service_event.dart';

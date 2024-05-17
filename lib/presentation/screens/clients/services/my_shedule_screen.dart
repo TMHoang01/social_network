@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/booking_service/booking_service_bloc.dart';
+import 'package:social_network/presentation/screens/clients/router_client.dart';
 import 'package:social_network/presentation/screens/clients/services/booking/booking_date.dart';
+import 'package:social_network/router.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class MyScheduleScreen extends StatefulWidget {
   const MyScheduleScreen({super.key});
@@ -12,6 +15,13 @@ class MyScheduleScreen extends StatefulWidget {
 
 class _MyScheduleScreenState extends State<MyScheduleScreen> {
   final DateTime _selectedDate = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<BookingServiceBloc>(context)
+        .add(BookingServiceStared(_selectedDate));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +38,8 @@ class _MyScheduleScreenState extends State<MyScheduleScreen> {
             child: Column(
               children: [
                 BookingDateWidget(
+                  isBefore: true,
+                  calendarFormat: CalendarFormat.month,
                   onDateSelected: (date) {
                     BlocProvider.of<BookingServiceBloc>(context)
                         .add(BookingServiceStared(date ?? _selectedDate));
@@ -53,11 +65,19 @@ class _MyScheduleScreenState extends State<MyScheduleScreen> {
         itemCount: state.bookingService.length,
         itemBuilder: (context, index) {
           final booking = state.bookingService[index];
-          return ListTile(
-            title: Text(booking.serviceName ?? ''),
-            subtitle: Text('${booking.scheduleBooking?.startTime?.hour}'
-                ':${booking.scheduleBooking!.startTime?.minute}'),
-            trailing: Text('${booking.providerName} '),
+          return Card(
+            child: ListTile(
+              title: Text(booking.serviceName ?? ''),
+              subtitle: Text('${booking.schedule?.startTime?.hour}'
+                  ':${booking.schedule!.startTime?.minute}'),
+              trailing: IconButton(
+                icon: const Icon(Icons.arrow_forward_rounded),
+                onPressed: () {
+                  navService.pushNamed(context, RouterClient.bookingDetail,
+                      args: booking);
+                },
+              ),
+            ),
           );
         },
       );

@@ -1,41 +1,37 @@
 part of 'booking_service_create_bloc.dart';
 
-sealed class BookingServiceCreateState extends Equatable {
-  const BookingServiceCreateState();
+enum BookingServiceCreateStatus { initial, loading, success, failure }
+
+class BookingServiceCreateState extends Equatable {
+  const BookingServiceCreateState(
+      {this.status = BookingServiceCreateStatus.initial,
+      this.service,
+      this.booking,
+      this.error,
+      this.schedule});
+
+  final BookingServiceCreateStatus status;
+  final ServiceModel? service;
+  final BookingService? booking;
+  final ScheduleBooking? schedule;
+  final String? error;
+
+  BookingServiceCreateState copyWith({
+    BookingServiceCreateStatus? status,
+    ServiceModel? service,
+    BookingService? booking,
+    ScheduleBooking? schedule,
+    String? error,
+  }) {
+    return BookingServiceCreateState(
+      status: status ?? this.status,
+      service: service ?? this.service,
+      booking: booking ?? this.booking,
+      schedule: schedule ?? this.schedule,
+      error: error ?? this.error,
+    );
+  }
 
   @override
-  List<Object> get props => [];
-}
-
-final class BookingServiceCreateInitial extends BookingServiceCreateState {}
-
-final class BookingServiceCreateChilCaredInitial
-    extends BookingServiceCreateState {
-  final BookingServiceChildCare booking;
-
-  BookingServiceCreateChilCaredInitial({required this.booking});
-
-  @override
-  List<Object> get props => [booking];
-}
-
-// submitform
-final class BookingServiceLoading extends BookingServiceCreateState {}
-
-final class BookingServiceCreateSuccess extends BookingServiceCreateState {
-  final BookingService bookingService;
-
-  BookingServiceCreateSuccess(this.bookingService);
-
-  @override
-  List<Object> get props => [bookingService];
-}
-
-final class BookingServiceCreateFailure extends BookingServiceCreateState {
-  final String message;
-
-  BookingServiceCreateFailure(this.message);
-
-  @override
-  List<Object> get props => [message];
+  List<Object?> get props => [status, service, booking, schedule, error];
 }

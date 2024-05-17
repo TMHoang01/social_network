@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_network/domain/models/service/booking_service_child_care.dart';
+import 'package:social_network/domain/models/service/enum_service.dart';
 import 'package:social_network/domain/models/service/price_list.dart';
 import 'package:social_network/domain/models/service/service.dart';
 import 'package:social_network/presentation/blocs/clients/booking_service_create/booking_service_create_bloc.dart';
 import 'package:social_network/presentation/screens/clients/router_client.dart';
-import 'package:social_network/presentation/widgets/custom_button.dart';
-import 'package:social_network/presentation/widgets/custom_image_view.dart';
+import 'package:social_network/presentation/widgets/widgets.dart';
 import 'package:social_network/router.dart';
 import 'package:social_network/utils/utils.dart';
 
@@ -22,10 +21,12 @@ class ServiceDetailScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomImageView(
               url: service.image,
               width: double.infinity,
+              boxFit: BoxFit.contain,
               height: 200.0,
             ),
             Padding(
@@ -40,33 +41,39 @@ class ServiceDetailScreen extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                '${service.description}',
-                style: const TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
+              child: _buildPrice(service.priceList ?? []),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: _buildPrice(service.priceList ?? []),
+              child: CustomContainer(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Mô tả dịch vụ',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      '${service.description}',
+                      style: const TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
       ),
       bottomNavigationBar: CustomButton(
         onPressed: () {
-          final providerId =
-              service.providerId ?? service.createdBy ?? service.updatedBy;
-          final providerName = service.providerName ?? providerId;
           context.read<BookingServiceCreateBloc>().add(
-                BookingServiceCreateStared(BookingServiceChildCare(
-                  serviceId: service.id,
-                  serviceName: service.title,
-                  providerId: providerId,
-                  providerName: providerName,
-                )),
+                BookingServiceCreateStared(service),
               );
           navService.pushNamed(context, RouterClient.servicBookingFormFill,
               args: service);
@@ -76,43 +83,63 @@ class ServiceDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPrice(List<PriceList> priceList) {
-    return Column(
-      children: [
-        const Text(
-          'Bảng giá thanh khảo',
-          style: TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
+  Widget _buildPrice(List<PriceListItem> priceList) {
+    if (service.priceType == PriceType.package ||
+        service.priceType == PriceType.other) {
+      return Column(
+        children: [
+          const Text(
+            'Bảng giá thanh khảo',
+            style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        DataTable(
-          columns: const <DataColumn>[
-            DataColumn(
-              label: Text(
-                'Loại dịch vụ',
-                style: TextStyle(fontStyle: FontStyle.italic),
-              ),
-            ),
-            DataColumn(
-              label: Text(
-                'Giá',
-                style: TextStyle(fontStyle: FontStyle.italic),
-              ),
-            ),
-          ],
-          rows: priceList
-              .map(
-                (e) => DataRow(
-                  cells: <DataCell>[
-                    DataCell(Text('${e.name}')),
-                    DataCell(Text('${TextFormat.formatMoney(e.price ?? 0)} đ')),
-                  ],
+          DataTable(
+            columns: const <DataColumn>[
+              DataColumn(
+                label: Text(
+                  'Loại dịch vụ',
+                  style: TextStyle(fontStyle: FontStyle.italic),
                 ),
-              )
-              .toList(),
-        ),
-      ],
-    );
+              ),
+              DataColumn(
+                label: Text(
+                  'Giá',
+                  style: TextStyle(fontStyle: FontStyle.italic),
+                ),
+              ),
+            ],
+            rows: priceList
+                .map(
+                  (e) => DataRow(
+                    cells: <DataCell>[
+                      DataCell(Text('${e.name}')),
+                      DataCell(
+                          Text('${TextFormat.formatMoney(e.price ?? 0)} đ')),
+                    ],
+                  ),
+                )
+                .toList(),
+          ),
+        ],
+      );
+    } else {
+      String text = 'Giá: ${TextFormat.formatMoney(service.priceBase ?? 0)} đ';
+      if (service.priceType == PriceType.hourly) {
+        text = 'Giá: ${TextFormat.formatMoney(service.priceBase ?? 0)} đ/giờ';
+      }
+      return Column(
+        children: [
+          Text(
+            text,
+            style: const TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      );
+    }
   }
 }

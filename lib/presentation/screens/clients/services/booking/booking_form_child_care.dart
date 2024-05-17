@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_network/domain/models/ecom/infor_contact.dart';
 import 'package:social_network/domain/models/service/booking_service_child_care.dart';
 import 'package:social_network/presentation/blocs/clients/booking_service/booking_service_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/booking_service_create/booking_service_create_bloc.dart';
@@ -46,9 +45,9 @@ class _BookingFormChildCareState extends State<BookingFormChildCare> {
       note: _noteController.text,
       // workDate: _workDate,
     );
-    context
-        .read<BookingServiceCreateBloc>()
-        .add(BookingServiceCreateStared(bookingService));
+    // context
+    //     .read<BookingServiceCreateBloc>()
+    //     .add(BookingServiceCreateStared(bookingService));
     navService.pushNamed(context, RouterClient.servicBookingFormSchedule);
   }
 
@@ -57,21 +56,16 @@ class _BookingFormChildCareState extends State<BookingFormChildCare> {
     return BlocConsumer<BookingServiceCreateBloc, BookingServiceCreateState>(
       listener: (context, state) {
         // TODO: implement listener
-        if (state is BookingServiceSuccess) {
+        if (state.status == BookingServiceCreateStatus.success) {
           // BlocProvider.of<CartBloc>(context).add(ClearCart());
           // navService.pushNamed(context, RouterClient.complete);
-        } else if (state is BookingServiceCreateFailure) {
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   SnackBar(
-          //     content: Text(state.message),
-          //     backgroundColor: Colors.red,
-          //   ),
-          // );
+        } else if (state == BookingServiceCreateStatus.failure) {
+          showSnackBarError(context, '${state.error}');
         }
       },
       builder: (context, state) {
-        return switch (state) {
-          BookingServiceCreateChilCaredInitial() => Scaffold(
+        return switch (state.status) {
+          BookingServiceCreateStatus.initial => Scaffold(
               appBar: AppBar(
                 title: const Text('Trông trẻ'),
                 // leading: IconButton(

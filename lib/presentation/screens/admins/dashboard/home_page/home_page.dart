@@ -100,19 +100,19 @@ class _AdminHomePageState extends State<AdminHomePage>
       },
     ),
     ItemHomePage(
-      title: 'Dịch vụ',
-      icon: FontAwesomeIcons.box,
+      title: 'Hàng hóa',
+      icon: FontAwesomeIcons.productHunt,
       color: Colors.green,
       onTap: (BuildContext context) {
-        navService.pushNamed(context, RouterAdmin.services);
+        navService.pushNamed(context, RouterAdmin.products);
       },
     ),
     ItemHomePage(
       title: 'Dịch vụ',
-      icon: FontAwesomeIcons.box,
+      icon: FontAwesomeIcons.servicestack,
       color: Colors.green,
       onTap: (BuildContext context) {
-        navService.pushNamed(context, RouterAdmin.products);
+        navService.pushNamed(context, RouterAdmin.services);
       },
     ),
   ];
@@ -188,7 +188,7 @@ class _AdminHomePageState extends State<AdminHomePage>
                 boxFit: BoxFit.fitWidth,
               ),
             ),
-
+            const SizedBox(height: 4),
             // List type user
             Text('  Quản lý người dùng', style: theme.textTheme.titleMedium),
             const SizedBox(height: 4),

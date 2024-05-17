@@ -9,6 +9,7 @@ import 'package:social_network/domain/repository/ecom/product_repository.dart';
 import 'package:social_network/firebase_options.dart';
 import 'package:social_network/main.dart';
 import 'package:social_network/presentation/blocs/admins/category/category_bloc.dart';
+import 'package:social_network/presentation/blocs/admins/service_booking/service_booking_bloc.dart';
 import 'package:social_network/presentation/blocs/admins/services/services_bloc.dart';
 import 'package:social_network/presentation/blocs/auth/auth_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/booking_service/booking_service_bloc.dart';
@@ -68,6 +69,9 @@ class ClientApp extends StatelessWidget {
               create: (_) => sl<ServicesBloc>()..add(ServicesStarted())),
           BlocProvider(create: (_) => sl<BookingServiceBloc>()),
           BlocProvider(create: (_) => sl<BookingServiceCreateBloc>()),
+          // booking
+          BlocProvider(create: (_) => sl<ServiceBookingBloc>()),
+
           // feedback
           BlocProvider(create: (_) => sl<MyFeedBackBloc>()),
           BlocProvider(create: (_) => sl<MyFeedBackCreateBloc>()),
