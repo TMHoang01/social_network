@@ -21,6 +21,7 @@ import 'package:social_network/presentation/blocs/clients/my_feed_back_create/my
 import 'package:social_network/presentation/blocs/clients/order/order_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/posts/posts_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/products/product_bloc.dart';
+import 'package:social_network/presentation/blocs/clients/service_detail/service_detail_bloc.dart';
 import 'package:social_network/presentation/screens/clients/router_client.dart';
 import 'package:social_network/sl.dart';
 
@@ -67,6 +68,7 @@ class ClientApp extends StatelessWidget {
           // services
           BlocProvider(
               create: (_) => sl<ServicesBloc>()..add(ServicesStarted())),
+          BlocProvider(create: (_) => sl<ServiceDetailBloc>()),
           BlocProvider(create: (_) => sl<BookingServiceBloc>()),
           BlocProvider(create: (_) => sl<BookingServiceCreateBloc>()),
           // booking

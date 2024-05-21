@@ -8,26 +8,26 @@ import 'package:social_network/domain/models/service/service.dart';
 import 'package:social_network/presentation/blocs/admins/products/product_bloc.dart';
 import 'package:social_network/presentation/screens/admins/products/product_detail.dart';
 import 'package:social_network/presentation/screens/admins/products/products_screen.dart';
-import 'package:social_network/presentation/screens/admins/employee/employee_select_screen.dart';
-import 'package:social_network/presentation/screens/clients/feed_back/feed_back_detail_screen.dart';
-import 'package:social_network/presentation/screens/clients/feed_back/feed_back_form_screen.dart';
-import 'package:social_network/presentation/screens/clients/feed_back/feed_back_list_screen.dart';
-import 'package:social_network/presentation/screens/clients/services/booking/booking_detail_screen.dart';
-import 'package:social_network/presentation/screens/clients/services/booking/booking_list_screen.dart';
-import 'package:social_network/presentation/screens/clients/services/booking/booking_schedule_screen.dart';
-import 'package:social_network/presentation/screens/clients/services/booking/booking_checkout_screen.dart';
-import 'package:social_network/presentation/screens/clients/services/booking_form_fill.dart';
-import 'package:social_network/presentation/screens/clients/services/my_shedule_screen.dart';
-import 'package:social_network/presentation/screens/clients/services/service_details_screen.dart';
-import 'package:social_network/presentation/screens/clients/services/services_screen.dart';
 import 'package:social_network/presentation/screens/clients/cart/cart_screen.dart';
 import 'package:social_network/presentation/screens/clients/contact/infor_contact_screen.dart';
 import 'package:social_network/presentation/screens/clients/dashboard/dash_board.dart';
 import 'package:social_network/presentation/screens/clients/dashboard/home_page/home_page.dart';
+import 'package:social_network/presentation/screens/clients/feed_back/feed_back_detail_screen.dart';
+import 'package:social_network/presentation/screens/clients/feed_back/feed_back_form_screen.dart';
+import 'package:social_network/presentation/screens/clients/feed_back/feed_back_list_screen.dart';
 import 'package:social_network/presentation/screens/clients/orders/check_out_screen.dart';
 import 'package:social_network/presentation/screens/clients/orders/complete_screen.dart';
 import 'package:social_network/presentation/screens/clients/posts/post_detail_screen.dart';
 import 'package:social_network/presentation/screens/clients/posts/posts_screen.dart';
+import 'package:social_network/presentation/screens/clients/service_booking/booking_checkout_screen.dart';
+import 'package:social_network/presentation/screens/clients/service_booking/booking_detail_screen.dart';
+import 'package:social_network/presentation/screens/clients/service_booking/booking_list_screen.dart';
+import 'package:social_network/presentation/screens/clients/service_booking/booking_schedule_screen.dart';
+import 'package:social_network/presentation/screens/clients/service_booking/booking_form_fill.dart';
+import 'package:social_network/presentation/screens/clients/services/my_shedule_screen.dart';
+import 'package:social_network/presentation/screens/clients/services/review_service_screen.dart';
+import 'package:social_network/presentation/screens/clients/services/service_details_screen.dart';
+import 'package:social_network/presentation/screens/clients/services/services_screen.dart';
 import 'package:social_network/presentation/screens/splash/splash.dart';
 import 'package:social_network/router.dart';
 import 'package:social_network/sl.dart';
@@ -59,6 +59,7 @@ class RouterClient extends AppRouter {
   static const String servicBookingCheckout = '/service/booking/checkout';
   static const String bookingList = '/booking/list';
   static const String bookingDetail = '/booking/detail';
+  static const String serviceReviews = '/service/reviews';
 
   // Schedule
   static const String mySchedule = '/my-schedule';
@@ -93,6 +94,7 @@ class RouterClient extends AppRouter {
       posts: (context) => const PostsScreen(),
       // service
       services: (context) => const ServicesScreen(),
+      serviceReviews: (context) => const ReviewsServiceScreen(),
       servicBookingFormSchedule: (context) => const BookingScheduleScreen(),
 
       // schedule
@@ -105,7 +107,7 @@ class RouterClient extends AppRouter {
     };
   }
 
-  static Route<dynamic> onGenerateRoute(RouteSettings settings) {
+  static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     final args = settings.arguments;
     switch (settings.name) {
       case productDetail:
@@ -150,11 +152,7 @@ class RouterClient extends AppRouter {
           builder: (context) =>
               FeedBackDetailsScreen(item: args as FeedBackModel),
         );
-
-      default:
-        return MaterialPageRoute(
-          builder: (context) => const DashBoardClientScreen(),
-        );
     }
+    return null;
   }
 }

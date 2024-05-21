@@ -1,7 +1,6 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:social_network/domain/models/ecom/cart_item.dart';
 import 'package:social_network/domain/models/ecom/product_model.dart';
@@ -343,9 +342,7 @@ class _HomePageState extends State<HomePage>
                         return const Divider();
                       },
                       itemBuilder: (conxtext, index) {
-                        return Expanded(
-                          child: PreviewProductWidget(product: products[index]),
-                        );
+                        return PreviewProductWidget(product: products[index]);
                       },
                     ),
                   );

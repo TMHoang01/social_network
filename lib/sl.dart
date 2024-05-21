@@ -15,6 +15,7 @@ import 'package:social_network/data/datasources/feed_back/feed_back_remote.dart'
 import 'package:social_network/data/datasources/file_store.dart';
 import 'package:social_network/data/datasources/manage/employee_remote.dart';
 import 'package:social_network/data/datasources/service/booking_service_remote.dart';
+import 'package:social_network/data/datasources/service/review_service_remote.dart';
 import 'package:social_network/data/datasources/service/service_remote.dart';
 import 'package:social_network/data/datasources/user_remote.dart';
 import 'package:social_network/data/repository/auth_repository.dart';
@@ -36,6 +37,7 @@ import 'package:social_network/domain/repository/file_repository.dart';
 import 'package:social_network/domain/repository/manage/employee_repository.dart';
 import 'package:social_network/domain/repository/post/post_repository.dart';
 import 'package:social_network/domain/repository/service/booking_repository.dart';
+import 'package:social_network/domain/repository/service/review_repository.dart';
 import 'package:social_network/domain/repository/service/service_repository.dart';
 import 'package:social_network/domain/repository/user_repository.dart';
 import 'package:social_network/presentation/blocs/admins/category/category_bloc.dart';
@@ -61,6 +63,7 @@ import 'package:social_network/presentation/blocs/clients/my_feed_back_create/my
 import 'package:social_network/presentation/blocs/clients/order/order_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/post_detail/post_detail_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/posts/posts_bloc.dart';
+import 'package:social_network/presentation/blocs/clients/service_detail/service_detail_bloc.dart';
 import 'package:social_network/presentation/blocs/signin/signin_cubit.dart';
 import 'package:social_network/presentation/blocs/signup/signup_bloc.dart';
 import 'package:social_network/presentation/blocs/user_infor/user_infor_bloc.dart';
@@ -98,6 +101,7 @@ Future<void> setupLocator() async {
   sl.registerLazySingleton<UserRepository>(() => UserRepositoryIml(sl.call()));
   sl.registerFactory<UsersBloc>(() => UsersBloc(sl.call()));
 
+  // service
   sl.registerLazySingleton<ServiceRemoteDataSource>(
       () => ServiceRemoteDataSourceImpl());
   sl.registerLazySingleton<ServiceRepository>(
@@ -106,7 +110,12 @@ Future<void> setupLocator() async {
   sl.registerFactory<ServiceFormBloc>(
       () => ServiceFormBloc(sl.call(), sl.call()));
 
-  // service
+  sl.registerLazySingleton<ReviewServiceRemoteDataSource>(
+      () => ReviewServiceRemoteDataSourceImpl());
+  sl.registerLazySingleton<ReviewRepository>(
+      () => ReviewRepositoryIml(sl.call()));
+
+  // booking service
   sl.registerLazySingleton<BookingServiceRemoteDataSource>(
       () => BookingServiceRemoteDataSourceImpl());
   sl.registerLazySingleton<BookingRepository>(
@@ -173,6 +182,8 @@ void _initClient() {
   sl.registerFactory<BookingServiceBloc>(() => BookingServiceBloc(sl.call()));
   sl.registerFactory<BookingServiceCreateBloc>(
       () => BookingServiceCreateBloc(sl.call()));
+  sl.registerFactory<ServiceDetailBloc>(
+      () => ServiceDetailBloc(sl.call(), sl.call()));
 
   // my feed back
   sl.registerFactory<MyFeedBackBloc>(

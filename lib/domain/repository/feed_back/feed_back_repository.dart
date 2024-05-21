@@ -25,13 +25,13 @@ abstract class FeedBackRepository {
 }
 
 class FeedBackRepositoryImpl implements FeedBackRepository {
-  final FeedBackRemoteDataSource remoteDate;
+  final FeedBackRemoteDataSource remoteData;
 
-  FeedBackRepositoryImpl(this.remoteDate);
+  FeedBackRepositoryImpl(this.remoteData);
 
   @override
   Future<FeedBackModel?> add({required FeedBackModel feedBack}) async {
-    return remoteDate.add(feedBack: feedBack);
+    return remoteData.add(feedBack: feedBack);
   }
 
   @override
@@ -46,7 +46,7 @@ class FeedBackRepositoryImpl implements FeedBackRepository {
 
   @override
   Future<void> delete({required String id}) async {
-    return remoteDate.delete(id: id);
+    return remoteData.delete(id: id);
   }
 
   @override
@@ -54,24 +54,24 @@ class FeedBackRepositoryImpl implements FeedBackRepository {
       {DateTime? lastCreateAt,
       int limit = 15,
       Map<String, String>? filter}) async {
-    return remoteDate.getAll(
+    return remoteData.getAll(
         lastCreateAt: lastCreateAt, limit: limit, filter: filter);
   }
 
   @override
   Future<void> changeStatus(
       {String? id, required FeedBackStatus status}) async {
-    return remoteDate.changeStatus(id: id, status: status.toJson());
+    return remoteData.changeStatus(id: id, status: status.toJson());
   }
 
   @override
   Future<void> update({required FeedBackModel feedBack}) async {
-    return remoteDate.update(feedBack: feedBack);
+    return remoteData.update(feedBack: feedBack);
   }
 
   @override
   Stream<List<FeedBackModel>> getAllByUserId({required String userId}) async* {
-    final feedbacks = remoteDate.getAllByUserId(userId: userId);
+    final feedbacks = remoteData.getAllByUserId(userId: userId);
 
     yield* feedbacks;
   }

@@ -11,18 +11,35 @@ class ServicesScreen extends StatefulWidget {
 }
 
 class _ServicesScreenState extends State<ServicesScreen> {
+  void _initFetch(BuildContext context) {
+    context.read<ServicesBloc>().add(ServicesStarted());
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final state = context.read<ServicesBloc>().state;
+    if (state is ServicesInitial) {
+      _initFetch(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Services'),
+        title: const Text('Danh sách dịch vụ'),
       ),
       body: BlocConsumer<ServicesBloc, ServicesState>(
         listener: (context, state) {
           // TODO: implement listener
         },
         builder: (context, state) {
-          return _handleSate(state);
+          return RefreshIndicator(
+              onRefresh: () => Future.delayed(const Duration(seconds: 1), () {
+                    _initFetch(context);
+                  }),
+              child: _handleSate(state));
         },
       ),
     );
@@ -50,7 +67,9 @@ class _ServicesScreenState extends State<ServicesScreen> {
             ),
           ),
         ),
-      ServicesFailure(message: final message) => Center(child: Text(message)),
+      ServicesFailure(message: final message) => Center(
+          child:
+              InkWell(onTap: () => _initFetch(context), child: Text(message))),
       _ => const Center(child: CircularProgressIndicator()),
     };
   }

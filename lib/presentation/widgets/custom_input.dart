@@ -10,6 +10,7 @@ class CustomTextFormField extends StatefulWidget {
       this.textInputAction = TextInputAction.next,
       this.textInputType = TextInputType.text,
       this.maxLines,
+      this.maxLength,
       this.initialValue,
       this.hintText,
       this.prefix,
@@ -35,6 +36,7 @@ class CustomTextFormField extends StatefulWidget {
   TextInputAction? textInputAction;
   TextInputType? textInputType;
   int? maxLines;
+  int? maxLength;
   String? initialValue;
   String? hintText;
   Widget? prefix;
@@ -86,7 +88,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       child: TextFormField(
         readOnly: widget.readOnly ?? false,
         initialValue: widget.initialValue,
-        controller: widget.controller ?? null,
+        controller: widget.controller,
+        maxLength: widget.maxLength,
         focusNode: widget.focusNode,
         onFieldSubmitted: (_) => widget.onFieldSubmitted,
         onChanged: (value) {

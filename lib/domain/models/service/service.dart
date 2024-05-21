@@ -18,13 +18,14 @@ class ServiceModel extends Equatable {
   final PriceType? priceType;
   final List<PriceListItem>? priceList;
   final double? rating;
+  final Map<int, int>? ratingCount;
   final int? bookingCount;
   final DateTime? createdAt;
   final String? createdBy;
   final DateTime? updatedAt;
   final String? updatedBy;
 
-  ServiceModel({
+  const ServiceModel({
     this.id,
     this.type,
     this.image,
@@ -37,6 +38,7 @@ class ServiceModel extends Equatable {
     this.priceType,
     this.priceList,
     this.rating = 0.0,
+    this.ratingCount = const {},
     this.bookingCount = 0,
     this.createdAt,
     this.createdBy,
@@ -45,6 +47,27 @@ class ServiceModel extends Equatable {
   });
 
   get typeNames => type?.toName();
+  int get ratingCountTotal {
+    int total = 0;
+    ratingCount?.forEach((key, value) {
+      total += value;
+    });
+    return total;
+  }
+
+  double get ratingAverage {
+    if (ratingCountTotal == 0) {
+      return 0.0;
+    }
+    int sum = 0;
+    ratingCount?.forEach((key, value) {
+      sum += key * value;
+    });
+    String roundedString = (sum / ratingCountTotal).toStringAsFixed(1);
+    double roundedNumber = double.parse(roundedString);
+
+    return roundedNumber;
+  }
 
   factory ServiceModel.fromJson(Map<String, dynamic> json) {
     return ServiceModel(
@@ -64,7 +87,10 @@ class ServiceModel extends Equatable {
           ? List<PriceListItem>.from(
               json['priceList'].map((x) => PriceListItem.fromJson(x)))
           : [],
-      rating: json['rating'] ?? 0.0,
+      rating: json['rating'].toDouble() ?? 0.0,
+      ratingCount: json['ratingCount'] != null
+          ? _parseRatingCount(Map<String, dynamic>.from(json['ratingCount']))
+          : null,
       bookingCount: json['bookingCount'] ?? 0,
       createdAt: TextFormat.parseJson(json['createdAt']) ?? DateTime.now(),
       createdBy: json['createdBy'],
@@ -93,12 +119,21 @@ class ServiceModel extends Equatable {
       if (priceList != null)
         'priceList': priceList?.map((x) => x.toJson()).toList(),
       if (rating != null) 'rating': rating,
+      if (ratingCount != null) 'ratingCount': ratingCount,
       if (bookingCount != null) 'bookingCount': bookingCount,
       if (createdAt != null) 'createdAt': createdAt,
       if (createdBy != null) 'createdBy': createdBy,
       if (updatedAt != null) 'updatedAt': updatedAt,
       if (updatedBy != null) 'updatedBy': updatedBy,
     };
+  }
+
+  static Map<int, int> _parseRatingCount(Map<String, dynamic> json) {
+    final ratingCountMap = <int, int>{};
+    json.forEach((key, value) {
+      ratingCountMap[int.parse(key)] = value;
+    });
+    return ratingCountMap;
   }
 
   ServiceModel copyWith({
@@ -114,6 +149,12 @@ class ServiceModel extends Equatable {
     PriceType? priceType,
     List<PriceListItem>? priceList,
     double? rating,
+    Map<int, int>? ratingCount,
+    int? ratingCount1,
+    int? ratingCount2,
+    int? ratingCount3,
+    int? ratingCount4,
+    int? ratingCount5,
     int? bookingCount,
     DateTime? createdAt,
     String? createdBy,
@@ -126,12 +167,14 @@ class ServiceModel extends Equatable {
       image: image ?? this.image,
       isRecurringSevice: isRecurringSevice ?? this.isRecurringSevice,
       providerId: providerId ?? this.providerId,
+      providerName: providerName ?? this.providerName,
       title: title ?? this.title,
       description: description ?? this.description,
       priceBase: priceBase ?? this.priceBase,
       priceType: priceType ?? this.priceType,
       priceList: priceList ?? this.priceList,
       rating: rating ?? this.rating,
+      ratingCount: ratingCount ?? this.ratingCount,
       bookingCount: bookingCount ?? this.bookingCount,
       createdAt: createdAt ?? this.createdAt,
       createdBy: createdBy ?? this.createdBy,
@@ -147,12 +190,14 @@ class ServiceModel extends Equatable {
         image,
         isRecurringSevice,
         providerId,
+        providerName,
         title,
         description,
         priceBase,
         priceType,
         priceList,
         rating,
+        ratingCount,
         bookingCount,
         createdAt,
         createdBy,

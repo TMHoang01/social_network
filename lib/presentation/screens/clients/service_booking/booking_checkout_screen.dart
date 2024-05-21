@@ -205,6 +205,7 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
 
                 CustomContainer(
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Padding(
                         padding: EdgeInsets.only(left: 16.0, top: 8.0),
@@ -216,7 +217,6 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                           ),
                         ),
                       ),
-                      const Spacer(),
                       Padding(
                         padding: const EdgeInsets.only(right: 16.0),
                         child: Text(

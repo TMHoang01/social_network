@@ -75,7 +75,6 @@ class ItemBookingCard extends StatelessWidget {
             children: [
               Text(TextFormat.formatDate(item.createdAt!,
                   formatType: 'dd/MM/yyyy HH:mm')),
-              const Spacer(),
               Text(
                 '${TextFormat.formatMoney(item.total)}đ',
                 style: const TextStyle(

@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_network/presentation/blocs/clients/infor_contact/infor_contact_bloc.dart';
 import 'package:social_network/presentation/widgets/custom_input.dart';
 import 'package:social_network/presentation/widgets/custom_button.dart';
+import 'package:social_network/presentation/widgets/widgets.dart';
+import 'package:social_network/router.dart';
 import 'package:social_network/utils/logger.dart';
 
 class InforContactScreen extends StatefulWidget {
@@ -47,11 +49,9 @@ class _InforContactScreenState extends State<InforContactScreen> {
         bloc: blocContact,
         listener: (context, state) {
           if (state is InforContactError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-              ),
-            );
+            showSnackBarError(context, state.message);
+          } else if (state is InforContactUpdated) {
+            navService.pop(context);
           }
         },
         builder: (context, state) {
@@ -117,7 +117,6 @@ class _InforContactScreenState extends State<InforContactScreen> {
                                   username: _txtUsername.text,
                                 ),
                               );
-                          logger.i("onPressed save infor contact success");
                         } else {
                           logger.i("onPressed save infor contact fail");
                         }

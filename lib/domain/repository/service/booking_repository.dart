@@ -15,13 +15,13 @@ abstract class BookingRepository {
 }
 
 class BookingRepositoryIml implements BookingRepository {
-  final BookingServiceRemoteDataSource remoteDate;
+  final BookingServiceRemoteDataSource remoteData;
 
-  BookingRepositoryIml(this.remoteDate);
+  BookingRepositoryIml(this.remoteData);
 
   @override
   Future<BookingService?> add({required BookingService bookingService}) async {
-    return remoteDate.add(booking: bookingService);
+    return remoteData.add(booking: bookingService);
   }
 
   @override
@@ -32,23 +32,23 @@ class BookingRepositoryIml implements BookingRepository {
 
   @override
   Future<List<BookingService>> getAll() async {
-    return await remoteDate.getAll();
+    return await remoteData.getAll();
   }
 
   @override
   Future<List<BookingService>> getAllByUserId({required String userId}) async {
-    return await remoteDate.getAllByUserId(userId: userId);
+    return await remoteData.getAllByUserId(userId: userId);
   }
 
   @override
   Future<void> updateStatus(
       {required String id, required BookingStatus status}) async {
-    return await remoteDate.updateStatus(id: id, status: status);
+    return await remoteData.updateStatus(id: id, status: status);
   }
 
   @override
   Future<List<BookingService>> getScheduleInDay(DateTime date) async {
     final string = TextFormat.formatDate(date);
-    return await remoteDate.getScheduleInDay(string);
+    return await remoteData.getScheduleInDay(string);
   }
 }

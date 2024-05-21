@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_network/domain/models/service/service.dart';
+import 'package:social_network/presentation/widgets/widgets.dart';
 
 class ServiceDetailScreen extends StatelessWidget {
   final ServiceModel service;
@@ -12,8 +13,13 @@ class ServiceDetailScreen extends StatelessWidget {
         title: Text('Chi tiết dịch vụ'),
       ),
       body: SingleChildScrollView(
-        child: Center(
-          child: Text('Chi tiết dịch vụ$service'),
+        child: Column(
+          children: [
+            ReadMoreText(text: service.description ?? ''),
+            Center(
+              child: Text('Chi tiết dịch vụ$service'),
+            ),
+          ],
         ),
       ),
     );

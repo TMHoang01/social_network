@@ -53,6 +53,8 @@ class UserModel {
     this.status,
   });
 
+  String get uid => id ?? '';
+
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['id'],

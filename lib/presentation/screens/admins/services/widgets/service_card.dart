@@ -71,13 +71,14 @@ class ServiceCardWidget extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 4, vertical: 4),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const SizedBox(width: 8),
                           Text(
-                            'Đánh giá: ${service.rating}',
+                            'Đánh giá: ${service.ratingAverage}',
                             style: theme.textTheme.titleSmall,
                           ),
                           const SizedBox(width: 8),

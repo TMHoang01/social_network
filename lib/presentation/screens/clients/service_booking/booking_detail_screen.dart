@@ -186,6 +186,7 @@ class _BookingCheckDetailScreenState extends State<BookingCheckDetailScreen> {
 
             CustomContainer(
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Padding(
                     padding: EdgeInsets.only(top: 8.0),
@@ -197,7 +198,6 @@ class _BookingCheckDetailScreenState extends State<BookingCheckDetailScreen> {
                       ),
                     ),
                   ),
-                  const Spacer(),
                   Padding(
                     padding: const EdgeInsets.only(right: 16.0),
                     child: Text(

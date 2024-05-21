@@ -4,7 +4,7 @@ import 'package:social_network/domain/models/service/enum_service.dart';
 import 'package:social_network/domain/models/service/schedule_booking.dart';
 import 'package:social_network/presentation/blocs/clients/booking_service_create/booking_service_create_bloc.dart';
 import 'package:social_network/presentation/screens/clients/router_client.dart';
-import 'package:social_network/presentation/screens/clients/services/booking/booking_date.dart';
+import 'package:social_network/presentation/screens/clients/service_booking/booking_date.dart';
 import 'package:social_network/presentation/widgets/widgets.dart';
 import 'package:social_network/router.dart';
 import 'package:social_network/utils/constants.dart';

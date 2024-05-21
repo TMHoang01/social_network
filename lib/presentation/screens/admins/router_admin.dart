@@ -83,7 +83,7 @@ class RouterAdmin extends AppRouter {
     employAdd: (context) => const EmployeeCreateAccountScreen(),
   };
 
-  static Route<dynamic> onGenerateRoute(RouteSettings settings) {
+  static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     final args = settings.arguments;
     switch (settings.name) {
       case productDetail:
@@ -153,9 +153,7 @@ class RouterAdmin extends AppRouter {
         );
 
       default:
-        return MaterialPageRoute(
-          builder: (context) => const DashBoarAdmindScreen(),
-        );
+        return null;
     }
   }
 }

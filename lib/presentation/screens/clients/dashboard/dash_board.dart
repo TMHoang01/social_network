@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_network/presentation/blocs/auth/auth_bloc.dart';
-import 'package:social_network/presentation/screens/clients/cart/cart_screen.dart';
 import 'package:social_network/presentation/screens/clients/dashboard/home_page/home_page.dart';
 import 'package:social_network/presentation/screens/clients/dashboard/settings/setting_screen.dart';
-import 'package:social_network/presentation/screens/clients/services/booking/booking_list_screen.dart';
+import 'package:social_network/presentation/screens/clients/service_booking/booking_list_screen.dart';
 import 'package:social_network/router.dart';
 import 'package:social_network/utils/constants.dart';
 
@@ -26,10 +25,10 @@ class _DashBoardClientScreenState extends State<DashBoardClientScreen> {
 
   @override
   void initState() {
+    super.initState();
     if (navService.canPop(context)) {
       navService.pop(context);
     }
-    super.initState();
   }
 
   @override
