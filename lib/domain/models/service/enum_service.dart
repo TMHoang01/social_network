@@ -23,6 +23,31 @@ enum BookingStatus {
   static BookingStatus fromJson(String json) => values.byName(json);
 }
 
+enum ScheduleItemStatus {
+  pending,
+  canceled,
+  checkedIn,
+  completed;
+
+  String toJson() => name;
+  static ScheduleItemStatus fromJson(String json) => values.byName(json);
+
+  String toName() {
+    switch (this) {
+      case ScheduleItemStatus.pending:
+        return 'Chờ xử lý';
+      case ScheduleItemStatus.canceled:
+        return 'Hủy';
+      case ScheduleItemStatus.checkedIn:
+        return 'Đã checkin';
+      case ScheduleItemStatus.completed:
+        return 'Hoàn thành';
+      default:
+        return '';
+    }
+  }
+}
+
 enum BookingRepeatType {
   weekly,
   monthly;

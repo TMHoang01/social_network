@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_network/utils/utils.dart';
 
 class ReadMoreText extends StatefulWidget {
   final String text;
@@ -7,7 +8,7 @@ class ReadMoreText extends StatefulWidget {
   const ReadMoreText({
     Key? key,
     required this.text,
-    this.trimLength = 100,
+    this.trimLength = 200,
   }) : super(key: key);
 
   @override
@@ -27,18 +28,47 @@ class _ReadMoreTextState extends State<ReadMoreText> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(displayText),
+        Text(
+          displayText,
+          style: const TextStyle(fontSize: 16),
+        ),
         if (isTextLong)
-          Center(
-            child: TextButton(
-              onPressed: () {
+          Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: kSecondaryLightColor.withOpacity(0.3),
+                  spreadRadius: 1,
+                  blurRadius: 5,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            child: InkWell(
+              onTap: () {
                 setState(() {
                   isExpanded = !isExpanded;
                 });
               },
-              child: Text(isExpanded ? 'Thu gọn' : 'Xem Thêm'),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Center(
+                  child: Text(isExpanded ? 'Thu gọn' : 'Xem Thêm'),
+                ),
+              ),
             ),
           ),
+        // if (isTextLong)
+        //   Center(
+        //     child: TextButton(
+        //       onPressed: () {
+        //         setState(() {
+        //           isExpanded = !isExpanded;
+        //         });
+        //       },
+        //       child: Text(isExpanded ? 'Thu gọn' : 'Xem Thêm'),
+        //     ),
+        //   ),
       ],
     );
   }

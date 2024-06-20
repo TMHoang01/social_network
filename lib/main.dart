@@ -12,8 +12,8 @@ import 'package:social_network/domain/repository/service/service_repository.dart
 import 'package:social_network/domain/repository/user_repository.dart';
 import 'package:social_network/firebase_options.dart';
 import 'package:social_network/presentation/blocs/auth/auth_bloc.dart';
-import 'package:social_network/presentation/screens/admins/app_admin.dart';
-import 'package:social_network/presentation/screens/clients/app_client.dart';
+import 'package:social_network/presentation/provider/screens/app_admin.dart';
+import 'package:social_network/presentation/resident/app_client.dart';
 import 'package:social_network/router.dart';
 import 'package:social_network/sl.dart';
 import 'package:social_network/utils/constants.dart';
@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
           builder: (context, state) {
             if (state is Authenticated) {
               switch (state.user.roles) {
-                case Role.admin:
+                case Role.provider:
                   return const AdminApp();
                 case Role.user:
                   return const ClientApp();

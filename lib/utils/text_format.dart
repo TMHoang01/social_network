@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 // format số tiền
@@ -41,5 +42,16 @@ class TextFormat {
     } catch (e) {
       return null;
     }
+  }
+
+  static String? timeOfDayToJson(TimeOfDay? time) {
+    if (time == null) return null;
+    return '${time.hour}:${time.minute}';
+  }
+
+  static TimeOfDay? timeOfDateFromJson(String? time) {
+    if (time == null || time.isEmpty) return null;
+    final split = time.split(':');
+    return TimeOfDay(hour: int.parse(split[0]), minute: int.parse(split[1]));
   }
 }

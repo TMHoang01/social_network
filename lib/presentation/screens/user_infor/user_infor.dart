@@ -50,7 +50,7 @@ class _SelectUserRoleTypeScreenState extends State<SelectUserRoleTypeScreen> {
 
     return BlocListener<UserInforBloc, UserInforState>(
       listener: (context, state) {
-        logger.d('UserInforUpdateRoleStarted $state');
+        // logger.d('UserInforUpdateRoleStarted $state');
         if (state is UserInforUpdateRoleStarted) {
           // pageController is 1
           _pageController.animateToPage(0,
@@ -65,7 +65,10 @@ class _SelectUserRoleTypeScreenState extends State<SelectUserRoleTypeScreen> {
               duration: const Duration(milliseconds: 400),
               curve: Curves.easeInOut);
         } else if (state is UserInforUpdateInforSuccess) {
-          navService.pushNamedAndRemoveUntil(context, AppRouter.home);
+          _dialogBuilder(context);
+        } else if (state is UserInforUpdateInforFailure) {
+          showSnackBarError(context, 'Cập nhập thông tin thất bại');
+          // logger.d('UserInforUpdateInforFailure $state');
         }
       },
       child: PageView(
@@ -88,7 +91,7 @@ class _SelectUserRoleTypeScreenState extends State<SelectUserRoleTypeScreen> {
             appBar: AppBar(
               leading: IconButton(
                   icon: const Icon(Icons.arrow_back), onPressed: _onBackHome),
-              title: const Text('Đăng ký cư dân'),
+              title: const Text('Đăng ký tài khoản'),
             ),
             body: Container(
               width: size.width,
@@ -175,15 +178,59 @@ class _SelectUserRoleTypeScreenState extends State<SelectUserRoleTypeScreen> {
   Widget _buildFormUserInfor() {
     return SingleChildScrollView(
       child: BlocBuilder<UserInforBloc, UserInforState>(
+        buildWhen: (previous, current) {
+          if (current is UserInforResidentFormStarted ||
+              current is UserInforProviderFormStarted) {
+            return true;
+          }
+          return false;
+        },
         builder: (context, state) {
           if (state is UserInforProviderFormStarted) {
             return const ProviderFormWidget();
           } else if (state is UserInforResidentFormStarted) {
             return const ResidentFormWidget();
-          } else
-            return const Text('data');
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
         },
       ),
+    );
+  }
+
+  Future<void> _dialogBuilder(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // title: const Text('Basic dialog title'),
+          content: const Text(
+            'Bạn đã đăng ký tài khoản thành công .\nVui lòng liên hệ quản trị viên để kích hoạt tài khoản.',
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Xác nhận'),
+              onPressed: () async {
+                final String email = userCurrent?.email ?? '';
+                context.read<AuthBloc>().add(SignOutRequested());
+                // delay 1s
+
+                context.read<AuthBloc>().add(AuthLoginPrefilled(
+                      email: email,
+                      password: '',
+                    ));
+                navService.pushNamedAndRemoveUntil(context, AppRouter.signIn);
+                // navService.pop(context);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

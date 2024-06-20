@@ -43,6 +43,7 @@ const Color contentColorCyan = Color(0xFF50E4FF);
 class ImageConstant {
   static const String imgLogo = 'assets/images/logo.png';
   static const String imgNotFound = 'assets/images/image_not_found.png';
+  static const String imgMapF1 = 'assets/images/floor_plan_1.jpg';
 
   static const String iconGoogle = 'assets/icons/google.svg';
   static const String iconFacebook = 'assets/images/google.svg';

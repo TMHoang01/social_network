@@ -18,7 +18,7 @@ class _ResidentFormWidgetState extends State<ResidentFormWidget> {
   final _phoneController = TextEditingController(text: '0987654321');
   final _adressController =
       TextEditingController(text: 'Khu A Chung cư 123 P123');
-  final _jobController = TextEditingController(text: 'SInh vieen');
+  final _jobController = TextEditingController(text: 'Nhân viên văn phòng');
   final _dateController = TextEditingController();
   final _fileController = TextEditingController();
   DateTime _dates = DateTime.now();
@@ -89,40 +89,13 @@ class _ResidentFormWidgetState extends State<ResidentFormWidget> {
 
             PickerDateInput(
               context,
+              title: 'Ngày sinh',
+              controller: _dateController,
               onDateSelected: (date) {
                 logger.d(date);
                 _dates = date;
               },
             ),
-            // CustomTextFormField(
-            //   hintText: 'Ngày sinh',
-            //   controller: _dateController,
-            //   textInputType: TextInputType.datetime,
-            //   validator: (value) {
-            //     if (value == null || value.isEmpty) {
-            //       return 'Vui lòng nhập ngày sinh';
-            //     }
-            //     return null;
-            //   },
-            //   suffix: IconButton(
-            //     icon: const Icon(Icons.calendar_today),
-            //     onPressed: () {
-            //       showDatePicker(
-            //         context: context,
-            //         initialDate: DateTime.now(),
-            //         firstDate: DateTime(1900),
-            //         lastDate: DateTime(2050),
-            //       ).then((value) {
-            //         if (value != null) {
-            //           setState(() {
-            //             _dates = value;
-            //             _dateController.text = TextFormat.formatDate(value);
-            //           });
-            //         }
-            //       });
-            //     },
-            //   ),
-            // ),
 
             const SizedBox(height: 12),
             CustomTextFormField(

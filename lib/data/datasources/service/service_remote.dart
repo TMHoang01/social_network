@@ -9,6 +9,8 @@ abstract class ServiceRemoteDataSource {
   Future<void> delete({required String id});
 
   Stream<List<ServiceModel>> getAll();
+
+  Stream<List<ServiceModel>> getAllByProvider({required String userId});
 }
 
 class ServiceRemoteDataSourceImpl implements ServiceRemoteDataSource {
@@ -48,6 +50,24 @@ class ServiceRemoteDataSourceImpl implements ServiceRemoteDataSource {
     try {
       final response =
           colection.orderBy('createdAt', descending: true).snapshots();
+      yield* response.map((event) => event.docs.map((e) {
+            final data = e.data() as Map<String, dynamic>;
+            return ServiceModel.fromDocumentSnapshot(e);
+          }).toList());
+      yield [];
+    } catch (e) {
+      logger.e(e);
+      throw Exception(e.toString());
+    }
+  }
+
+  @override
+  Stream<List<ServiceModel>> getAllByProvider({required String userId}) async* {
+    try {
+      final response = colection
+          .where('providerId', isEqualTo: userId)
+          .orderBy('createdAt', descending: true)
+          .snapshots();
       yield* response.map((event) => event.docs.map((e) {
             final data = e.data() as Map<String, dynamic>;
             return ServiceModel.fromDocumentSnapshot(e);

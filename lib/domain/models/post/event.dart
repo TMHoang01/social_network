@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_network/domain/models/post/joiners.dart';
 import 'package:social_network/domain/models/post/post.dart';
+import 'package:social_network/utils/firebase.dart';
 import 'package:social_network/utils/text_format.dart';
 
 enum EventType {
@@ -57,6 +58,13 @@ class EventModel extends PostModel {
             updatedAt: updatedAt,
             updatedBy: updatedBy,
             status: status);
+
+  bool get isEnded => endDate != null && endDate!.isBefore(DateTime.now());
+  bool get checkFullJoiners {
+    if (maxJoiners == null) return false;
+    if (joinersCount == null) return false;
+    return joinersCount! >= maxJoiners!;
+  }
 
   @override
   factory EventModel.fromJson(Map<String, dynamic> json) {
@@ -194,4 +202,22 @@ class EventModel extends PostModel {
         allowInvite,
         organizersOnlyCanInvite,
       ];
+
+  bool checkUserJoin(String userId) {
+    return joinerIds?.contains(userId) ?? false;
+  }
+
+  String joinersCountText() {
+    if (joinerIds == null) return '0 người đăng ký tham gia';
+    String id = userCurrent?.uid ?? '';
+    final count = joinerIds!.length;
+    if (checkUserJoin(id)) {
+      String text = count == 1
+          ? 'Bạn đã đăng ký tham gia'
+          : 'Bạn và ${count - 1} người đăng ký tham gia';
+      return text;
+    }
+
+    return '$count người đăng ký  tham gia';
+  }
 }

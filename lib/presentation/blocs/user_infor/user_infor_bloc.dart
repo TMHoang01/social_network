@@ -53,7 +53,7 @@ class UserInforBloc extends Bloc<UserInforEvent, UserInforState> {
       UserInforUpdateInfor event, Emitter<UserInforState> emit) async {
     final state = this.state;
     UserModel user = event.user.copyWith(
-      id: firebaseAuth.currentUser!.uid,
+      id: userCurrent?.id,
     );
     if (state is UserInforProviderFormStarted) {
       user = user.copyWith(roles: Role.provider);

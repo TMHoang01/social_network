@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_network/domain/models/ecom/infor_contact.dart';
-import 'package:social_network/presentation/screens/clients/router_client.dart';
+import 'package:social_network/presentation/resident/router_client.dart';
 import 'package:social_network/router.dart';
 import 'package:social_network/utils/utils.dart';
 

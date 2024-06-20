@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:social_network/utils/constants.dart';
 
 // ignore: must_be_immutable
@@ -6,6 +7,7 @@ class CustomButton extends StatelessWidget {
   CustomButton(
       {super.key,
       this.margin,
+      this.padding,
       this.isDisable = false,
       this.onPressed,
       this.width,
@@ -16,6 +18,8 @@ class CustomButton extends StatelessWidget {
       this.suffixWidget});
 
   EdgeInsetsGeometry? margin;
+
+  EdgeInsetsGeometry? padding;
 
   bool? isDisable;
 
@@ -48,6 +52,8 @@ class CustomButton extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
+            padding: padding ??
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

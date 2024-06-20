@@ -62,7 +62,7 @@ class CartModel extends Equatable {
       'items': items,
       'total': total,
       'status': status,
-      'created_at': createdAt,
+      'createdAt': createdAt,
     };
   }
 

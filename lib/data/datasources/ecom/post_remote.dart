@@ -9,11 +9,18 @@ abstract class PostRemoteDataSource {
   Future<String?> add({required PostModel post});
   Future<void> update({required PostModel post});
   Future<void> delete({required String id});
-  Future<List<PostModel>> getAll();
+  Future<List<PostModel>> getAll(
+      {DateTime? lastCreateAt,
+      int limit = LIMIT_PAGE,
+      Map<String, String>? filter});
   Future<List<PostModel>> paginateQuey(
       {int limit = 20, String? query, String? type, DateTime? lastUpdate});
 
   Future<void> joinEvent({required String id, required JoinersModel joiner});
+
+  Future<void> leaveEvent({required String id, required String userId});
+
+  Future<PostModel> get({required String id});
 }
 
 class PostRemoteDataSourceImpl implements PostRemoteDataSource {
@@ -24,6 +31,25 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
     try {
       final response = await colection.add(post.toJson());
       return response.id;
+    } on FirebaseException catch (e) {
+      logger.e(e.toString());
+      throw Exception(e.toString());
+    }
+  }
+
+  @override
+  Future<PostModel> get({required String id}) async {
+    try {
+      final response = await colection.doc(id).get();
+      final data = response.data() as Map<String, dynamic>;
+      switch (data['type']) {
+        case 'news':
+          return NewsModel.fromDocumentSnapshot(response);
+        case 'event':
+          return EventModel.fromDocumentSnapshot(response);
+        default:
+          return PostModel.fromDocumentSnapshot(response);
+      }
     } on FirebaseException catch (e) {
       logger.e(e.toString());
       throw Exception(e.toString());
@@ -51,10 +77,24 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
   }
 
   @override
-  Future<List<PostModel>> getAll() async {
+  Future<List<PostModel>> getAll(
+      {DateTime? lastCreateAt,
+      int limit = LIMIT_PAGE,
+      Map<String, String>? filter}) async {
     try {
-      final response =
-          await colection.orderBy('createdAt', descending: true).get();
+      Query query = colection.orderBy('createdAt', descending: true);
+
+      if (lastCreateAt != null) {
+        query = query.startAfter([lastCreateAt]);
+      }
+      if (filter != null) {
+        filter.forEach((key, value) {
+          query = query.where(key, isEqualTo: value);
+        });
+      }
+      query = query.limit(limit);
+      final response = await query.get();
+
       return response.docs.map((e) {
         final data = e.data() as Map<String, dynamic>;
         switch (data['type']) {
@@ -133,6 +173,35 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
         transaction.update(
             postRef, {'joinerIds': joinerIds, 'joinersCount': joinersCount});
         transaction.set(joiners, joiner.toJson());
+      });
+    } on FirebaseException catch (e) {
+      logger.e(e.toString());
+      throw Exception(e.toString());
+    }
+  }
+
+  @override
+  Future<void> leaveEvent({required String id, required String userId}) async {
+    try {
+      final postRef = colection.doc(id);
+      final querySnapshot = await postRef
+          .collection('joiners')
+          .where('id', isEqualTo: userId)
+          .get();
+      if (querySnapshot.docs.isEmpty) {
+        throw Exception('Người dùng chưa đăng ký tham gia sự kiện này!');
+      }
+      final joiners = querySnapshot.docs.first.reference;
+      await firestore.runTransaction((transaction) async {
+        final DocumentSnapshot postSnapshot = await transaction.get(postRef);
+        final event = EventModel.fromDocumentSnapshot(postSnapshot);
+        final joinersCount = event.joinersCount ?? 0 - 1;
+        // Update array joinerIds
+        final joinerIds = event.joinerIds ?? [];
+        joinerIds.remove(userId);
+        transaction.update(
+            postRef, {'joinerIds': joinerIds, 'joinersCount': joinersCount});
+        transaction.delete(joiners);
       });
     } on FirebaseException catch (e) {
       logger.e(e.toString());

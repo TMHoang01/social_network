@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_network/utils/utils.dart';
 
 class ChipCard extends StatelessWidget {
   final Color? backgroundColor;
@@ -17,9 +18,9 @@ class ChipCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 2),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: backgroundColor ?? Colors.grey,
+        color: backgroundColor ?? kGrayLight,
         border: Border.all(
-          color: backgroundColor ?? Colors.grey,
+          color: backgroundColor ?? kGrayLight,
         ),
         borderRadius: BorderRadius.circular(20),
       ),

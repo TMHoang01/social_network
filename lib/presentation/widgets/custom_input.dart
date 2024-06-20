@@ -93,7 +93,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         focusNode: widget.focusNode,
         onFieldSubmitted: (_) => widget.onFieldSubmitted,
         onChanged: (value) {
-          if (widget.onChanged != null) {
+          if (widget.onChanged != null && value.isNotEmpty) {
             widget.onChanged!(value);
           }
         },

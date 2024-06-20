@@ -4,7 +4,6 @@ import 'package:formz/formz.dart';
 import 'package:social_network/presentation/blocs/auth/auth_bloc.dart';
 import 'package:social_network/presentation/blocs/signin/signin_cubit.dart';
 import 'package:social_network/presentation/widgets/widgets.dart';
-import 'package:social_network/presentation/screens/clients/router_client.dart';
 import 'package:social_network/router.dart';
 import 'package:social_network/utils/app_styles.dart';
 import 'package:social_network/utils/constants.dart';
@@ -50,6 +49,8 @@ class SignInScreen extends StatelessWidget {
                 //     context, RouterClient.dashboard);
               } else if (state is AuthRegisterNeedInfo) {
                 navService.pushNamed(context, AppRouter.signUpfor);
+              } else if (state is AuthRegisterNeedVerify) {
+                _buildDialogVerify(context);
               } else if (state is AuthError) {
                 showSnackBar(context, state.error, Colors.red);
               }
@@ -138,6 +139,28 @@ class SignInScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  _buildDialogVerify(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Xác thực tài khoản'),
+          content: const Text(
+              'Vui lòng liên hệ với quản trị viên để xác thực tài khoản của bạn'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                context.read<AuthBloc>().add(SignOutRequested());
+                navService.pop(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 

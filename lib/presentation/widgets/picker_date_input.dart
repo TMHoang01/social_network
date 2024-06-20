@@ -28,7 +28,7 @@ class _PickerDateInputState extends State<PickerDateInput> {
     return CustomTextFormField(
       margin:
           widget.margin ?? const EdgeInsets.only(left: 20, right: 20, top: 4),
-      hintText: widget.title ?? 'Chọn thờ gian',
+      hintText: widget.title ?? 'Chọn thời gian',
       controller: widget.controller,
       textInputType: TextInputType.datetime,
       validator: (value) {
@@ -39,7 +39,7 @@ class _PickerDateInputState extends State<PickerDateInput> {
       },
       suffix: IconButton(
         icon: const Icon(Icons.calendar_today),
-        onPressed: () {
+        onPressed: () async {
           showDatePicker(
             context: widget.context,
             initialDate: DateTime.now(),

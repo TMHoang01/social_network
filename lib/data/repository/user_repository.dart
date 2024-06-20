@@ -1,7 +1,7 @@
 import 'package:social_network/data/datasources/user_remote.dart';
 import 'package:social_network/domain/models/user_model.dart';
 import 'package:social_network/domain/repository/user_repository.dart';
-import 'package:social_network/presentation/blocs/admins/users/users_bloc.dart';
+import 'package:social_network/presentation/provider/blocs/users/users_bloc.dart';
 
 class UserRepositoryIml implements UserRepository {
   UserRemote _userRemote;

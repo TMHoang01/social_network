@@ -11,6 +11,7 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
+        logger.d('SplashScreen $state');
         if (state is UnAuthenticated || state is AuthError) {
           logger.d('UhAuthenticated');
           navService.pushNamedAndRemoveUntil(context, AppRouter.signIn);

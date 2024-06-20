@@ -72,7 +72,7 @@ class _ImageInputPikerState extends State<ImageInputPiker> {
         },
         child: CustomImageView(
           height: 150,
-          width: 150,
+          // width: 150,
           file: file,
           url: widget.url,
         ),

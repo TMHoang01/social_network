@@ -12,6 +12,8 @@ abstract class BookingRepository {
   Future<List<BookingService>> getAll();
 
   Future<List<BookingService>> getScheduleInDay(DateTime date);
+
+  Future<void> acceptBooking({required BookingService booking});
 }
 
 class BookingRepositoryIml implements BookingRepository {
@@ -50,5 +52,10 @@ class BookingRepositoryIml implements BookingRepository {
   Future<List<BookingService>> getScheduleInDay(DateTime date) async {
     final string = TextFormat.formatDate(date);
     return await remoteData.getScheduleInDay(string);
+  }
+
+  @override
+  Future<void> acceptBooking({required BookingService booking}) async {
+    return await remoteData.acceptBooking(booking: booking);
   }
 }

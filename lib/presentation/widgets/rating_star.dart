@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:social_network/utils/utils.dart';
 
 class RatingStarIcon extends StatelessWidget {
   final double? rating;

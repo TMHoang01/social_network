@@ -7,6 +7,8 @@ abstract class ServiceRepository {
   Future<void> update({required ServiceModel service});
   Future<void> delete({required String id});
   Stream<List<ServiceModel>> getAll();
+
+  Stream<List<ServiceModel>> getAllByProvider({required String userId});
 }
 
 class ServiceRepositoryImpl extends ServiceRepository {
@@ -33,5 +35,10 @@ class ServiceRepositoryImpl extends ServiceRepository {
   @override
   Stream<List<ServiceModel>> getAll() async* {
     yield* serviceRemoteDataSource.getAll();
+  }
+
+  @override
+  Stream<List<ServiceModel>> getAllByProvider({required String userId}) async* {
+    yield* serviceRemoteDataSource.getAllByProvider(userId: userId);
   }
 }

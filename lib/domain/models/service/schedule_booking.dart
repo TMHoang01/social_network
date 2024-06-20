@@ -29,12 +29,7 @@ class ScheduleBooking extends Equatable {
   factory ScheduleBooking.fromJson(Map<String, dynamic> json) {
     return ScheduleBooking(
       startDate: TextFormat.parseJson(json['startDate']),
-      startTime: json['startTime'] != null
-          ? TimeOfDay(
-              hour: int.parse(json['startTime'].split(':')[0]),
-              minute: int.parse(json['startTime'].split(':')[1]),
-            )
-          : null,
+      startTime: TextFormat.timeOfDateFromJson(json['startTime']),
       endDate: TextFormat.parseJson(json['endDate']),
       repeatCount: json['repeatCount'],
       isReapeat: json['isReapeat'],
@@ -55,7 +50,7 @@ class ScheduleBooking extends Equatable {
     return {
       if (startDate != null) 'startDate': startDate,
       if (startTime != null)
-        'startTime': '${startTime!.hour}:${startTime!.minute}',
+        'startTime': TextFormat.timeOfDayToJson(startTime!),
       if (endDate != null) 'endDate': endDate,
       if (repeatCount != null) 'repeatCount': repeatCount,
       if (isReapeat != null) 'isReapeat': isReapeat,
@@ -156,18 +151,4 @@ class ScheduleBooking extends Equatable {
         dayRepeat,
         scheduleDates
       ];
-}
-
-class ScheduleItem {
-  final DateTime date; // Ngày hẹn
-  final TimeOfDay? time; // Giờ hẹn
-  final String status;
-  final String? note; // Ghi chú
-
-  ScheduleItem({
-    required this.date,
-    this.time,
-    required this.status,
-    this.note,
-  });
 }

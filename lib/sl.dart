@@ -16,6 +16,7 @@ import 'package:social_network/data/datasources/file_store.dart';
 import 'package:social_network/data/datasources/manage/employee_remote.dart';
 import 'package:social_network/data/datasources/service/booking_service_remote.dart';
 import 'package:social_network/data/datasources/service/review_service_remote.dart';
+import 'package:social_network/data/datasources/service/schedule_service_remote.dart';
 import 'package:social_network/data/datasources/service/service_remote.dart';
 import 'package:social_network/data/datasources/user_remote.dart';
 import 'package:social_network/data/repository/auth_repository.dart';
@@ -38,35 +39,43 @@ import 'package:social_network/domain/repository/manage/employee_repository.dart
 import 'package:social_network/domain/repository/post/post_repository.dart';
 import 'package:social_network/domain/repository/service/booking_repository.dart';
 import 'package:social_network/domain/repository/service/review_repository.dart';
+import 'package:social_network/domain/repository/service/schedule_repository.dart';
 import 'package:social_network/domain/repository/service/service_repository.dart';
 import 'package:social_network/domain/repository/user_repository.dart';
-import 'package:social_network/presentation/blocs/admins/category/category_bloc.dart';
-import 'package:social_network/presentation/blocs/admins/employee_form/employee_form_bloc.dart';
-import 'package:social_network/presentation/blocs/admins/employees/employees_bloc.dart';
-import 'package:social_network/presentation/blocs/admins/feed_back_detail/feed_back_detail_bloc.dart';
-import 'package:social_network/presentation/blocs/admins/feed_backs/feed_backs_bloc.dart';
-import 'package:social_network/presentation/blocs/admins/post_detail/post_detail_bloc.dart';
-import 'package:social_network/presentation/blocs/admins/post_form/post_form_bloc.dart';
-import 'package:social_network/presentation/blocs/admins/posts/posts_bloc.dart';
-import 'package:social_network/presentation/blocs/admins/products/product_bloc.dart';
-import 'package:social_network/presentation/blocs/admins/service_booking/service_booking_bloc.dart';
-import 'package:social_network/presentation/blocs/admins/service_form/service_form_bloc.dart';
-import 'package:social_network/presentation/blocs/admins/services/services_bloc.dart';
-import 'package:social_network/presentation/blocs/admins/users/users_bloc.dart';
+import 'package:social_network/presentation/provider/ecom/blocs/category/category_bloc.dart';
+import 'package:social_network/presentation/provider/blocs/employees/employees_bloc.dart';
+import 'package:social_network/presentation/provider/feed_back/blocs/feed_back_detail/feed_back_detail_bloc.dart';
+import 'package:social_network/presentation/provider/feed_back/blocs/feed_backs/feed_backs_bloc.dart';
+import 'package:social_network/presentation/provider/post/blocs/post_detail/post_detail_bloc.dart';
+import 'package:social_network/presentation/provider/post/blocs/post_form/post_form_bloc.dart';
+import 'package:social_network/presentation/provider/post/blocs/posts/posts_bloc.dart';
+import 'package:social_network/presentation/provider/ecom/blocs/products/product_bloc.dart';
+import 'package:social_network/presentation/provider/service/blocs/schedule_service/schedule_service_bloc.dart';
+import 'package:social_network/presentation/provider/service/blocs/service_booking/service_booking_bloc.dart';
+import 'package:social_network/presentation/provider/service/blocs/service_form/service_form_bloc.dart';
+import 'package:social_network/presentation/provider/service/blocs/services_my/my_services_bloc.dart';
+import 'package:social_network/presentation/provider/blocs/users/users_bloc.dart';
 import 'package:social_network/presentation/blocs/auth/auth_bloc.dart';
-import 'package:social_network/presentation/blocs/clients/booking_service_create/booking_service_create_bloc.dart';
-import 'package:social_network/presentation/blocs/clients/booking_service/booking_service_bloc.dart';
-import 'package:social_network/presentation/blocs/clients/cart/cart_bloc.dart';
-import 'package:social_network/presentation/blocs/clients/infor_contact/infor_contact_bloc.dart';
-import 'package:social_network/presentation/blocs/clients/my_feed_back/my_feed_back_bloc.dart';
-import 'package:social_network/presentation/blocs/clients/my_feed_back_create/my_feed_back_create_bloc.dart';
-import 'package:social_network/presentation/blocs/clients/order/order_bloc.dart';
-import 'package:social_network/presentation/blocs/clients/post_detail/post_detail_bloc.dart';
-import 'package:social_network/presentation/blocs/clients/posts/posts_bloc.dart';
-import 'package:social_network/presentation/blocs/clients/service_detail/service_detail_bloc.dart';
+import 'package:social_network/presentation/resident/features/service/blocs/booking_service_create/booking_service_create_bloc.dart';
+import 'package:social_network/presentation/resident/features/service/blocs/booking_service/booking_service_bloc.dart';
+import 'package:social_network/presentation/resident/features/ecom/blocs/cart/cart_bloc.dart';
+import 'package:social_network/presentation/resident/contact/blocs/infor_contact/infor_contact_bloc.dart';
+import 'package:social_network/presentation/resident/features/feed_back/blocs/my_feed_back/my_feed_back_bloc.dart';
+import 'package:social_network/presentation/resident/features/feed_back/blocs/my_feed_back_create/my_feed_back_create_bloc.dart';
+import 'package:social_network/presentation/resident/features/ecom/blocs/order/order_bloc.dart';
+import 'package:social_network/presentation/resident/features/post/blocs/post_detail/post_detail_bloc.dart';
+import 'package:social_network/presentation/resident/features/post/blocs/posts/posts_bloc.dart';
+import 'package:social_network/presentation/resident/features/service/blocs/service_detail/service_detail_bloc.dart';
+import 'package:social_network/presentation/resident/features/service/blocs/services/services_bloc.dart';
 import 'package:social_network/presentation/blocs/signin/signin_cubit.dart';
 import 'package:social_network/presentation/blocs/signup/signup_bloc.dart';
 import 'package:social_network/presentation/blocs/user_infor/user_infor_bloc.dart';
+import 'package:social_network/presentation/resident/parking/blocs/my_vehicle/vehicle_list_bloc.dart';
+import 'package:social_network/presentation/resident/parking/blocs/parking/parking_bloc.dart';
+import 'package:social_network/presentation/resident/parking/data/parking_remote.dart';
+import 'package:social_network/presentation/resident/parking/data/vehicle_remote.dart';
+import 'package:social_network/presentation/resident/parking/domain/repository/paking_lot_repository.dart';
+import 'package:social_network/presentation/resident/parking/domain/repository/vehicle_repository.dart';
 
 final sl = GetIt.instance;
 
@@ -106,7 +115,7 @@ Future<void> setupLocator() async {
       () => ServiceRemoteDataSourceImpl());
   sl.registerLazySingleton<ServiceRepository>(
       () => ServiceRepositoryImpl(sl.call()));
-  sl.registerFactory<ServicesBloc>(() => ServicesBloc(sl.call()));
+  sl.registerFactory<MyServicesBloc>(() => MyServicesBloc(sl.call()));
   sl.registerFactory<ServiceFormBloc>(
       () => ServiceFormBloc(sl.call(), sl.call()));
 
@@ -120,6 +129,11 @@ Future<void> setupLocator() async {
       () => BookingServiceRemoteDataSourceImpl());
   sl.registerLazySingleton<BookingRepository>(
       () => BookingRepositoryIml(sl.call()));
+  // schedule service
+  sl.registerLazySingleton<ScheduleServiceRemoteDataSource>(
+      () => ScheduleServiceRemoteDataSourceImpl());
+  sl.registerLazySingleton<ScheduleServiceRepository>(
+      () => ScheduleServiceRepositoryImpl(sl.call()));
 
   // feed back
   sl.registerLazySingleton<FeedBackRemoteDataSource>(
@@ -128,11 +142,11 @@ Future<void> setupLocator() async {
       () => FeedBackRepositoryImpl(sl.call()));
 
   _initAuth();
-  _initClient();
-  _initAdmin();
+  _initResident();
+  _initProvider();
 }
 
-void _initAdmin() {
+void _initProvider() {
   sl.registerFactory<ManageProductBloc>(() => ManageProductBloc(
       productRepository: sl.call(), fileRepository: sl.call()));
 
@@ -156,13 +170,15 @@ void _initAdmin() {
   sl.registerFactory<EmployeeRepository>(
       () => EmployeeRepositoryImpl(sl.call()));
   sl.registerFactory<EmployeesBloc>(() => EmployeesBloc(sl.call()));
-  sl.registerFactory<EmployeeFormBloc>(() => EmployeeFormBloc(sl.call()));
 
   // booking service
   sl.registerFactory<ServiceBookingBloc>(() => ServiceBookingBloc(sl.call()));
+
+  // schedule service
+  sl.registerFactory<ScheduleServiceBloc>(() => ScheduleServiceBloc(sl.call()));
 }
 
-void _initClient() {
+void _initResident() {
   sl.registerLazySingleton<InforContactRemote>(() => InforContactRemote());
   sl.registerLazySingleton<InforContactRepository>(
       () => InforContactRepositoryIml(inforContactRemote: sl.call()));
@@ -184,12 +200,29 @@ void _initClient() {
       () => BookingServiceCreateBloc(sl.call()));
   sl.registerFactory<ServiceDetailBloc>(
       () => ServiceDetailBloc(sl.call(), sl.call()));
+  sl.registerFactory<ServicesBloc>(() => ServicesBloc(sl.call()));
 
   // my feed back
   sl.registerFactory<MyFeedBackBloc>(
       () => MyFeedBackBloc(sl.call(), sl.call()));
   sl.registerFactory<MyFeedBackCreateBloc>(
       () => MyFeedBackCreateBloc(sl.call(), sl.call()));
+
+  // parking
+  sl.registerLazySingleton<ParkingRemoteDataSource>(
+    () => ParkingRemoteDataSourceImpl(),
+  );
+  sl.registerLazySingleton<ParkingLotRepository>(
+    () => ParkingLotRepositoryImpl(sl.call()),
+  );
+  sl.registerLazySingleton<VehicleRemoteDataSource>(
+    () => VehicleRemoteDataSourceImpl(),
+  );
+  sl.registerLazySingleton<VehicleRepository>(
+    () => VehicleRepositoryImpl(sl.call()),
+  );
+  sl.registerFactory<MyVehicleBloc>(() => MyVehicleBloc(sl.call()));
+  sl.registerFactory<ParkingBloc>(() => ParkingBloc(sl.call()));
 }
 
 void _initAuth() {

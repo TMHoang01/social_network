@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:social_network/domain/models/user_model.dart';
 import 'package:social_network/domain/repository/auth_repository.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -20,16 +22,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthError(e.toString()));
         emit(UnAuthenticated());
       }
-    });
-    on<SignInRequested>(_signInWithEmailAndPassword);
+    }, transformer: sequential());
+    on<SignInRequested>(_signInWithEmailAndPassword, transformer: sequential());
 
-    on<SignUpRequested>(_signUp);
+    on<SignUpRequested>(_signUp, transformer: sequential());
 
-    on<GoogleSignInRequested>(_signInWithGoogle);
+    on<GoogleSignInRequested>(_signInWithGoogle, transformer: sequential());
 
-    on<SignOutRequested>(_signOut);
+    on<SignOutRequested>(_signOut, transformer: sequential());
 
-    on<AuthLoginPrefilled>(_loginPrefilled);
+    on<AuthLoginPrefilled>(_loginPrefilled, transformer: sequential());
   }
 
   Future<void> _getCurrentUser(Emitter<AuthState> emit) async {
@@ -37,9 +39,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (user != null) {
       if (user.roles == null) {
         emit(AuthRegisterNeedInfo());
-      } else {
-        emit(Authenticated(user));
+        return;
       }
+      if (user.status != StatusUser.active) {
+        emit(AuthRegisterNeedVerify());
+        return;
+      }
+
+      emit(Authenticated(user));
     } else {
       emit(UnAuthenticated());
     }
@@ -90,6 +97,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   FutureOr<void> _loginPrefilled(
       AuthLoginPrefilled event, Emitter<AuthState> emit) async {
+    // delay 1s for user see the prefilled email and password
+    await Future.delayed(const Duration(seconds: 1));
     emit(AuthLoginInitial(email: event.email, password: event.password));
   }
 

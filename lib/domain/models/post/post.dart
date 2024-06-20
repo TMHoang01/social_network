@@ -48,6 +48,8 @@ class PostModel extends Equatable {
     this.status,
   });
 
+  get typeString => type?.toName();
+
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
       id: json['id'],

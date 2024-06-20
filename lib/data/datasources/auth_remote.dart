@@ -63,7 +63,7 @@ class AuthFirebase {
           await _firebaseAuth.signInWithCredential(credential);
 
       final user = userCredential.user;
-      logger.i(user);
+      // logger.i(user);
       final doc = await usersRef.doc(user!.uid).get();
       // logger.i(doc);
 
@@ -94,20 +94,16 @@ class AuthFirebase {
       var uid = _firebaseAuth.currentUser?.uid;
       UserModel? user;
       if (uid != null) {
-        await usersRef.doc(uid).get().then((doc) {
-          // merge user to the user from firestore
-          if (doc.exists) {
-            user = UserModel.fromDocumentSnapshot(doc);
-          } else {
-            usersRef.doc(uid).set({
-              'username': _firebaseAuth.currentUser?.displayName ?? '',
-              'email': _firebaseAuth.currentUser?.email ?? '',
-              'created_at': DateTime.now(),
-              'id': uid,
-              'avatar': _firebaseAuth.currentUser?.photoURL ?? '',
-            });
-          }
-        });
+        final doc = await usersRef.doc(uid).get();
+        if (doc.exists) {
+          user = UserModel.fromDocumentSnapshot(doc);
+        } else {
+          await saveUserToFirestore(
+              _firebaseAuth.currentUser?.displayName ?? '',
+              _firebaseAuth.currentUser!,
+              _firebaseAuth.currentUser?.email ?? '',
+              '');
+        }
       }
       if (user == null && uid != null) {
         return null;
@@ -127,10 +123,9 @@ class AuthFirebase {
         'id': user.uid,
         'username': name,
         'email': email,
-        'country': country,
         'avatar': user.photoURL ?? '',
-        'bio': '',
         'createdAt': DateTime.now(),
+        'status': StatusUser.pending.toJson(),
       });
       await usersRef.doc(user.uid).set(userModel.toJson());
     } catch (e) {

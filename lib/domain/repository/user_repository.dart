@@ -1,5 +1,5 @@
 import 'package:social_network/domain/models/user_model.dart';
-import 'package:social_network/presentation/blocs/admins/users/users_bloc.dart';
+import 'package:social_network/presentation/provider/blocs/users/users_bloc.dart';
 
 abstract class UserRepository {
   Future<UserModel> getUserById(String id);

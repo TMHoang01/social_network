@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_network/domain/models/user_model.dart';
-import 'package:social_network/presentation/blocs/admins/users/users_bloc.dart';
+import 'package:social_network/presentation/provider/blocs/users/users_bloc.dart';
 import 'package:social_network/utils/firebase.dart';
 
 class UserRemote {

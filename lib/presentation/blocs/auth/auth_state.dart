@@ -34,3 +34,5 @@ class AuthRegisterLoading extends AuthState {}
 class AuthRegisterSuccess extends AuthState {}
 
 class AuthRegisterNeedInfo extends AuthState {}
+
+class AuthRegisterNeedVerify extends AuthState {}

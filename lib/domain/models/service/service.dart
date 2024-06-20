@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:social_network/domain/models/service/price_list.dart';
+import 'package:social_network/domain/models/service/service_detail.dart';
+import 'package:social_network/domain/models/service/service_detail_people_care.dart';
 import 'package:social_network/utils/text_format.dart';
 
 import './enum_service.dart';
@@ -24,6 +26,7 @@ class ServiceModel extends Equatable {
   final String? createdBy;
   final DateTime? updatedAt;
   final String? updatedBy;
+  final ServiceDetail? serviceDetail;
 
   const ServiceModel({
     this.id,
@@ -44,6 +47,7 @@ class ServiceModel extends Equatable {
     this.createdBy,
     this.updatedAt,
     this.updatedBy,
+    this.serviceDetail,
   });
 
   get typeNames => type?.toName();
@@ -70,9 +74,23 @@ class ServiceModel extends Equatable {
   }
 
   factory ServiceModel.fromJson(Map<String, dynamic> json) {
+    final type = ServiceType.fromJson(json['type']);
+    ServiceDetail? serviceDetail;
+    if (json['serviceDetail'] != null) {
+      switch (type) {
+        case ServiceType.peopleCare:
+          serviceDetail =
+              ServiceDetailPeopleCare.fromJson(json['serviceDetail']);
+          break;
+
+        default:
+          serviceDetail = ServiceDetail.fromJson(json['serviceDetail']);
+          break;
+      }
+    }
     return ServiceModel(
       id: json['id'],
-      type: json['type'] != null ? ServiceType.fromJson(json['type']) : null,
+      type: type,
       image: json['image'],
       isRecurringSevice: json['isRecurringSevice'],
       providerId: json['providerId'],
@@ -95,6 +113,8 @@ class ServiceModel extends Equatable {
       createdAt: TextFormat.parseJson(json['createdAt']) ?? DateTime.now(),
       createdBy: json['createdBy'],
       updatedAt: TextFormat.parseJson(json['updatedAt']) ?? DateTime.now(),
+      updatedBy: json['updatedBy'],
+      serviceDetail: serviceDetail,
     );
   }
 
@@ -125,6 +145,7 @@ class ServiceModel extends Equatable {
       if (createdBy != null) 'createdBy': createdBy,
       if (updatedAt != null) 'updatedAt': updatedAt,
       if (updatedBy != null) 'updatedBy': updatedBy,
+      if (serviceDetail != null) 'serviceDetail': serviceDetail?.toJson(),
     };
   }
 
@@ -150,16 +171,12 @@ class ServiceModel extends Equatable {
     List<PriceListItem>? priceList,
     double? rating,
     Map<int, int>? ratingCount,
-    int? ratingCount1,
-    int? ratingCount2,
-    int? ratingCount3,
-    int? ratingCount4,
-    int? ratingCount5,
     int? bookingCount,
     DateTime? createdAt,
     String? createdBy,
     DateTime? updatedAt,
     String? updatedBy,
+    ServiceDetail? serviceDetail,
   }) {
     return ServiceModel(
       id: id ?? this.id,
@@ -180,6 +197,7 @@ class ServiceModel extends Equatable {
       createdBy: createdBy ?? this.createdBy,
       updatedAt: updatedAt ?? this.updatedAt,
       updatedBy: updatedBy ?? this.updatedBy,
+      serviceDetail: serviceDetail ?? this.serviceDetail,
     );
   }
 
@@ -203,5 +221,6 @@ class ServiceModel extends Equatable {
         createdBy,
         updatedAt,
         updatedBy,
+        serviceDetail,
       ];
 }
