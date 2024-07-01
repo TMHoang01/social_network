@@ -9,8 +9,19 @@ import 'package:social_network/presentation/resident/router_client.dart';
 import 'package:social_network/presentation/widgets/custom_button.dart';
 import 'package:social_network/router.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
+
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<CartBloc>().add(GetCart());
+  }
 
   @override
   Widget build(BuildContext context) {

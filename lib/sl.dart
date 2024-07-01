@@ -13,6 +13,7 @@ import 'package:social_network/data/datasources/ecom/post_remote.dart';
 import 'package:social_network/data/datasources/ecom/product_repository.dart';
 import 'package:social_network/data/datasources/feed_back/feed_back_remote.dart';
 import 'package:social_network/data/datasources/file_store.dart';
+import 'package:social_network/data/datasources/guest_access/guest_access_remote.dart';
 import 'package:social_network/data/datasources/manage/employee_remote.dart';
 import 'package:social_network/data/datasources/service/booking_service_remote.dart';
 import 'package:social_network/data/datasources/service/review_service_remote.dart';
@@ -35,6 +36,7 @@ import 'package:social_network/domain/repository/ecom/order_repository.dart';
 import 'package:social_network/domain/repository/ecom/product_repository.dart';
 import 'package:social_network/domain/repository/feed_back/feed_back_repository.dart';
 import 'package:social_network/domain/repository/file_repository.dart';
+import 'package:social_network/domain/repository/guest_access/guest_access_repository.dart';
 import 'package:social_network/domain/repository/manage/employee_repository.dart';
 import 'package:social_network/domain/repository/post/post_repository.dart';
 import 'package:social_network/domain/repository/service/booking_repository.dart';
@@ -56,6 +58,7 @@ import 'package:social_network/presentation/provider/service/blocs/service_form/
 import 'package:social_network/presentation/provider/service/blocs/services_my/my_services_bloc.dart';
 import 'package:social_network/presentation/provider/blocs/users/users_bloc.dart';
 import 'package:social_network/presentation/blocs/auth/auth_bloc.dart';
+import 'package:social_network/presentation/resident/features/guest_access/blocs/guest_access/guest_access_bloc.dart';
 import 'package:social_network/presentation/resident/features/service/blocs/booking_service_create/booking_service_create_bloc.dart';
 import 'package:social_network/presentation/resident/features/service/blocs/booking_service/booking_service_bloc.dart';
 import 'package:social_network/presentation/resident/features/ecom/blocs/cart/cart_bloc.dart';
@@ -223,6 +226,13 @@ void _initResident() {
   );
   sl.registerFactory<MyVehicleBloc>(() => MyVehicleBloc(sl.call()));
   sl.registerFactory<ParkingBloc>(() => ParkingBloc(sl.call()));
+
+  // guest access
+  sl.registerLazySingleton<GuestAccessRemoteDataSource>(
+      () => GuestAccessRemoteDataSourceImpl());
+  sl.registerLazySingleton<GuestAccessRepository>(
+      () => GuestAccessRepositoryImpl(sl.call()));
+  sl.registerFactory<GuestAccessBloc>(() => GuestAccessBloc(sl.call()));
 }
 
 void _initAuth() {

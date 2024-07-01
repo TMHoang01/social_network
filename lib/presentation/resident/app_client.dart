@@ -17,6 +17,7 @@ import 'package:social_network/presentation/resident/features/ecom/blocs/order/o
 import 'package:social_network/presentation/resident/features/ecom/blocs/products/product_bloc.dart';
 import 'package:social_network/presentation/resident/features/feed_back/blocs/my_feed_back/my_feed_back_bloc.dart';
 import 'package:social_network/presentation/resident/features/feed_back/blocs/my_feed_back_create/my_feed_back_create_bloc.dart';
+import 'package:social_network/presentation/resident/features/guest_access/blocs/guest_access/guest_access_bloc.dart';
 import 'package:social_network/presentation/resident/features/post/blocs/posts/posts_bloc.dart';
 import 'package:social_network/presentation/resident/features/service/blocs/booking_service/booking_service_bloc.dart';
 import 'package:social_network/presentation/resident/features/service/blocs/booking_service_create/booking_service_create_bloc.dart';
@@ -82,6 +83,9 @@ class ClientApp extends StatelessWidget {
           // parking
           BlocProvider(create: (_) => sl<MyVehicleBloc>()),
           BlocProvider(create: (_) => sl<ParkingBloc>()),
+
+          // guest access
+          BlocProvider(create: (_) => sl<GuestAccessBloc>()),
         ],
         child: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {

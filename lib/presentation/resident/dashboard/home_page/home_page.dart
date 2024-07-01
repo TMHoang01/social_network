@@ -66,9 +66,17 @@ class _HomePageState extends State<HomePage>
       },
     ),
     ItemHomePage(
-      title: 'Lịch hẹn',
+      title: 'Khách thăm',
       color: Colors.orange,
       icon: FontAwesomeIcons.userClock,
+      onTap: (BuildContext context) {
+        navService.pushNamed(context, RouterClient.guestAccess);
+      },
+    ),
+    ItemHomePage(
+      title: 'Lịch hẹn',
+      color: Colors.cyan,
+      icon: FontAwesomeIcons.calendarWeek,
       onTap: (BuildContext context) {
         navService.pushNamed(context, RouterClient.mySchedule);
       },
@@ -121,7 +129,7 @@ class _HomePageState extends State<HomePage>
                   // Text(' ');
                   IconButton(
                     onPressed: () {
-                      navService.pushNamed(context, RouterClient.cart);
+                      // navService.pushNamed(context, RouterClient.cart);
                     },
                     icon: const Icon(Icons.notifications),
                   ),

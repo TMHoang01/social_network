@@ -66,7 +66,7 @@ class UserInforBloc extends Bloc<UserInforEvent, UserInforState> {
       final imageUrl = await _uploadFile(
         event.avatar,
       );
-      user = user.copyWith(avatar: imageUrl);
+      user = user.copyWith(avatar: imageUrl, status: StatusUser.pending);
       await authRepository.updateInforUser(user);
       emit(UserInforUpdateInforSuccess());
     } catch (e) {

@@ -2,67 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_network/presentation/blocs/auth/auth_bloc.dart';
-import 'package:social_network/router.dart';
-
-class SettingScreen2 extends StatefulWidget {
-  const SettingScreen2({super.key});
-
-  @override
-  State<SettingScreen2> createState() => _SettingScreen2State();
-}
-
-class _SettingScreen2State extends State<SettingScreen2>
-    with AutomaticKeepAliveClientMixin {
-  int selectedIndex = 0;
-
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Cài đặt"),
-      ),
-      body: Column(
-        children: [
-          Center(
-            child: Text(
-              '$selectedIndex',
-              style: const TextStyle(fontSize: 24),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                selectedIndex++;
-              });
-            },
-            child: const Text('Go to Setting'),
-          ),
-          BlocConsumer<AuthBloc, AuthState>(
-            listener: (context, state) {
-              // if (state is UnAuthenticated) {
-              //   Navigator.pushNamedAndRemoveUntil(
-              //       context, AppRouter.signIn, (route) => false);
-              // }
-              navService.pushNamedAndRemoveUntil(context, AppRouter.signIn);
-            },
-            builder: (context, state) {
-              return ElevatedButton(
-                onPressed: () {
-                  context.read<AuthBloc>().add(SignOutRequested());
-                },
-                child: const Text('Logout'),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -79,60 +18,48 @@ class _SettingScreenState extends State<SettingScreen> {
       data: _isDark ? ThemeData.dark() : ThemeData.light(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Settings"),
-        ),
+            // title: const Text("Cài đặt"),
+            ),
         body: Center(
           child: Container(
             constraints: const BoxConstraints(maxWidth: 400),
             child: ListView(
               children: [
-                _SingleSection(
-                  title: "General",
+                const _SingleSection(
+                  title: "Chung",
                   children: [
                     _CustomListTile(
-                        title: "Dark Mode",
-                        icon: Icons.dark_mode_outlined,
-                        trailing: Switch(
-                            value: _isDark,
-                            onChanged: (value) {
-                              setState(() {
-                                _isDark = value;
-                              });
-                            })),
-                    const _CustomListTile(
-                        title: "Notifications",
+                        title: "Thông tin tài khoản",
+                        icon: Icons.person_outline_rounded),
+                    _CustomListTile(
+                        title: "Cài đặt thông báo",
                         icon: Icons.notifications_none_rounded),
-                    const _CustomListTile(
-                        title: "Security Status",
-                        icon: CupertinoIcons.lock_shield),
+                    _CustomListTile(
+                        title: "Lịch trình", icon: Icons.calendar_today_rounded)
                   ],
                 ),
                 const Divider(),
                 const _SingleSection(
-                  title: "Organization",
+                  title: "Thông tin chung cư",
                   children: [
                     _CustomListTile(
-                        title: "Profile", icon: Icons.person_outline_rounded),
+                        title: "Dịch vụ", icon: Icons.message_outlined),
                     _CustomListTile(
-                        title: "Messaging", icon: Icons.message_outlined),
+                        title: "Tiện ích", icon: Icons.phone_outlined),
                     _CustomListTile(
-                        title: "Calling", icon: Icons.phone_outlined),
-                    _CustomListTile(
-                        title: "People", icon: Icons.contacts_outlined),
-                    _CustomListTile(
-                        title: "Calendar", icon: Icons.calendar_today_rounded)
+                        title: "Điều khoản", icon: Icons.contacts_outlined),
                   ],
                 ),
                 const Divider(),
                 _SingleSection(
                   children: [
                     const _CustomListTile(
-                        title: "Help & Feedback",
+                        title: "Hỗ trợ & Hỏi đáp",
                         icon: Icons.help_outline_rounded),
                     const _CustomListTile(
-                        title: "About", icon: Icons.info_outline_rounded),
+                        title: "Giới thiệu", icon: Icons.info_outline_rounded),
                     _CustomListTile(
-                      title: "Sign out",
+                      title: "Đăng xuất",
                       icon: Icons.exit_to_app_rounded,
                       onTap: () {
                         context.read<AuthBloc>().add(SignOutRequested());

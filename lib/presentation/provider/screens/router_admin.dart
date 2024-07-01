@@ -31,7 +31,7 @@ import 'package:social_network/router.dart';
 class RouterAdmin extends AppRouter {
   static const String initialRoute = dashboard;
   static const String splash = '/splash';
-  static const String dashboard = '/admin/dashboard';
+  static const String dashboard = '/';
   static const String products = '/admin/product/list';
   static const String productDetail = '/admin/product/detail';
   static const String productEdit = '/admin/product/edit';

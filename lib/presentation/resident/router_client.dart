@@ -14,9 +14,13 @@ import 'package:social_network/presentation/resident/contact/screens/infor_conta
 
 import 'package:social_network/presentation/resident/dashboard/dash_board.dart';
 import 'package:social_network/presentation/resident/dashboard/home_page/home_page.dart';
+import 'package:social_network/presentation/resident/features/ecom/screens/products/products_screen.dart';
 import 'package:social_network/presentation/resident/features/feed_back/screens/feed_back_detail_screen.dart';
 import 'package:social_network/presentation/resident/features/feed_back/screens/feed_back_form_screen.dart';
 import 'package:social_network/presentation/resident/features/feed_back/screens/feed_back_list_screen.dart';
+import 'package:social_network/presentation/resident/features/guest_access/screens/guest_access_detail_screen.dart';
+import 'package:social_network/presentation/resident/features/guest_access/screens/guest_access_form_screen.dart';
+import 'package:social_network/presentation/resident/features/guest_access/screens/guest_access_list_creen.dart';
 
 import 'package:social_network/presentation/resident/features/post/screens/post_detail_screen.dart';
 import 'package:social_network/presentation/resident/features/post/screens/posts_screen.dart';
@@ -39,7 +43,7 @@ import 'package:social_network/router.dart';
 import 'package:social_network/sl.dart';
 
 class RouterClient extends AppRouter {
-  static const String initialRoute = dashboard;
+  static const String initialRoute = home;
 
   static const String home = '/home';
   static const String splash = '/splash';
@@ -83,10 +87,18 @@ class RouterClient extends AppRouter {
   static const String parkingVehicleCreate = '/parking/my-vehicle/create';
   static const String parkingVehicleEdit = '/parking/my-vehicle/edit';
 
+  // guest access
+  static const String guestAccess = '/guest-access';
+  static const String guestAccessAdd = '/guest-access/add';
+  static const String guestAccessEdit = '/guest-access/edit';
+  static const String guestAccessDetail = '/guest-access/detail';
+
   static const String settings = '/settings';
 
   static Map<String, WidgetBuilder> get routes {
     return <String, WidgetBuilder>{
+      '/message': ((context) => Message()),
+
       // home: (BuildContext context) => BottomAppBar()
 
       // signIn: (context) => const SignInScreen(),
@@ -94,11 +106,11 @@ class RouterClient extends AppRouter {
       ...AppRouter.routes,
       splash: (context) => SplashScreen(),
 
-      home: (context) => const HomePage(),
+      // home: (context) => const HomePage(),
       dashboard: (context) => const DashBoardClientScreen(),
       products: (context) => BlocProvider(
             create: (context) => sl.get<ManageProductBloc>(),
-            child: const ManageProductsScreen(),
+            child: const ProductsScreen(),
           ),
       cart: (context) => const CartScreen(),
       checkOut: (context) => const CheckOutScreen(),
@@ -123,6 +135,11 @@ class RouterClient extends AppRouter {
       parkingVehicle: (context) => const ListMyVehicleScreen(),
       parkingVehicleCreate: (context) => const FormResgitterVehicleScreen(),
       parking: (context) => const ParkingMapScreen(),
+
+      // guest access
+      guestAccess: (context) => const GuestAccessListScreen(),
+      guestAccessAdd: (context) => const GuestAccessFormScreen(),
+      guestAccessDetail: (context) => const GuestAccessDetailScreen(),
     };
   }
 

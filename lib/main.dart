@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:social_network/data/datasources/auth_remote.dart';
 import 'package:social_network/data/datasources/ecom/category_repository.dart';
+import 'package:social_network/domain/services/notification/notification_services.dart';
 import 'package:social_network/domain/models/user_model.dart';
 import 'package:social_network/domain/repository/ecom/order_repository.dart';
 import 'package:social_network/domain/repository/ecom/product_repository.dart';
@@ -17,7 +21,6 @@ import 'package:social_network/presentation/resident/app_client.dart';
 import 'package:social_network/router.dart';
 import 'package:social_network/sl.dart';
 import 'package:social_network/utils/constants.dart';
-import 'package:social_network/utils/firebase.dart';
 import 'package:social_network/utils/logger.dart';
 
 class SimpleBlocDelegate extends BlocObserver {
@@ -49,7 +52,10 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await setupLocator();
 
-  await geFireBaseMessaging();
+  // // init notification
+  await PushNotification.init();
+  await PushNotification.localNotiInit();
+  await PushNotification.handlerInit();
 
   runApp(const MyApp());
 }
@@ -72,16 +78,20 @@ class MyApp extends StatelessWidget {
         create: (context) => sl<AuthBloc>()..add(CheckAuthRequested()),
         child: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
+            // logger.w('auth request ${state}');
             if (state is Authenticated) {
+              // logger.w('auth request ${state.user.roles}');
+              navigatorKey = GlobalKey<NavigatorState>();
               switch (state.user.roles) {
                 case Role.provider:
                   return const AdminApp();
-                case Role.user:
+                case Role.resident:
                   return const ClientApp();
                 default:
                   return const ClientApp();
               }
             } else {
+              // logger.w('auth request ${state}');
               return MyMaterialApp(
                 initialRoute: AppRouter.initialRoute,
                 routes: AppRouter.routes,
@@ -146,6 +156,7 @@ class MyMaterialApp extends StatelessWidget {
       initialRoute: initialRoute,
       routes: routes,
       onGenerateRoute: onGenerateRoute,
+      navigatorKey: navigatorKey,
     );
   }
 }

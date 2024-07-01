@@ -35,7 +35,6 @@ class _PickerDateInputState extends State<PickerDateInput> {
         if (value == null || value.isEmpty) {
           return 'Vui lòng nhập chọn thời gian';
         }
-        return null;
       },
       suffix: IconButton(
         icon: const Icon(Icons.calendar_today),

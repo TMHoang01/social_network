@@ -108,6 +108,21 @@ class AuthFirebase {
       if (user == null && uid != null) {
         return null;
       }
+      if (user?.roles != Role.provider && user?.roles != Role.resident) {
+        _firebaseAuth.signOut();
+        throw Exception('Bạn không có quyền truy cập.');
+      } else {
+        if (user?.status == StatusUser.pending) {
+          _firebaseAuth.signOut();
+          throw Exception(
+              'Tài khoản cần liên lạc với quản trị viên để kích hoạt.');
+        }
+        if (user?.status == StatusUser.locked) {
+          _firebaseAuth.signOut();
+          throw Exception(
+              'Tài khoản đã bị khóa. Vui lòng liên hệ với quản trị viên để mở');
+        }
+      }
       logger.i('user: $user');
       return user;
     } catch (e) {

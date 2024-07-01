@@ -133,6 +133,6 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(username: $username, email: $email, roles: $roles)';
+    return 'UserModel(username: $username, email: $email, roles: $roles,status: $status, avatar: $avatar, id: $id, phone: $phone, address: $address, createdAt: $createdAt, birthDay: $birthDay, job: $job, description: $description)';
   }
 }

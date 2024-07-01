@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:social_network/domain/models/ecom/product_model.dart';
 import 'package:social_network/presentation/provider/ecom/blocs/products/product_bloc.dart';
-import 'package:social_network/presentation/provider/screens/router_admin.dart';
+import 'package:social_network/presentation/resident/features/ecom/blocs/cart/cart_bloc.dart';
+import 'package:social_network/presentation/resident/router_client.dart';
 import 'package:social_network/presentation/widgets/custom_image_view.dart';
-import 'package:social_network/presentation/widgets/custom_input.dart';
 import 'package:social_network/router.dart';
 import 'package:social_network/utils/utils.dart';
 
-class ManageProductsScreen extends StatefulWidget {
-  const ManageProductsScreen({super.key});
+class ProductsScreen extends StatefulWidget {
+  const ProductsScreen({super.key});
 
   @override
-  State<ManageProductsScreen> createState() => _ManageProductsScreenState();
+  State<ProductsScreen> createState() => _ProductsScreenState();
 }
 
-class _ManageProductsScreenState extends State<ManageProductsScreen> {
+class _ProductsScreenState extends State<ProductsScreen> {
   @override
   void initState() {
     context.read<ManageProductBloc>().add(GetManageProductsEvent());
@@ -52,7 +53,7 @@ class _ManageProductsScreenState extends State<ManageProductsScreen> {
                       context.read<ManageProductBloc>().listProducts;
                   logger.i(products.length);
                   int length = products.length;
-                  return Container(
+                  return SizedBox(
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
                     child: SingleChildScrollView(
@@ -65,9 +66,9 @@ class _ManageProductsScreenState extends State<ManageProductsScreen> {
                           ProductModel product = products[index];
                           return InkWell(
                             onTap: () {
-                              logger.d(product);
+                              // logger.d(product);
                               navService.pushNamed(
-                                  context, RouterAdmin.productEdit,
+                                  context, RouterClient.productDetail,
                                   args: product);
                             },
                             child: ListTile(
@@ -98,7 +99,7 @@ class _ManageProductsScreenState extends State<ManageProductsScreen> {
                     ),
                   );
                 }
-                return const Text('No data found');
+                return Text('Không có dữ liệu');
               },
             ),
           ],
@@ -111,19 +112,22 @@ class _ManageProductsScreenState extends State<ManageProductsScreen> {
     return AppBar(
       title: const Text("Danh sách sản phẩm"),
       actions: [
-        // item add prodcut
-        IconButton(
-          style: ButtonStyle(),
-          onPressed: () {
-            navService.pushNamed(context, RouterAdmin.productAdd);
+        BlocBuilder<CartBloc, CartState>(
+          builder: (context, state) {
+            return Row(
+              children: [
+                // Text(' ');
+                IconButton(
+                  onPressed: () {
+                    navService.pushNamed(context, RouterClient.cart);
+                  },
+                  icon: const Icon(FontAwesomeIcons.cartArrowDown),
+                ),
+              ],
+            );
           },
-          icon: const Icon(Icons.add),
         ),
       ],
     );
-  }
-
-  _showPopupMenu(BuildContext context, ProductModel product) {
-    navService.pushNamed(context, RouterAdmin.productDetail, args: product);
   }
 }
