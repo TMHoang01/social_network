@@ -41,8 +41,8 @@ class ContentNewsDetails extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      // fontWeight: FontWeight.bold,
                     ),
                   ),
                 )
@@ -55,19 +55,20 @@ class ContentNewsDetails extends StatelessWidget {
             ),
           ),
           actions: [
-            IconButton(
-              onPressed: () {
-                showBottomSheetApp(
-                  context: context,
-                  child: PostBottomSheet(
+            if (userCurrent?.id == post.createdBy)
+              IconButton(
+                onPressed: () {
+                  showBottomSheetApp(
                     context: context,
-                    post: post,
-                    onEditPressed: onBottomUpEditPressed,
-                  ),
-                );
-              },
-              icon: const Icon(Icons.more_vert),
-            )
+                    child: PostBottomSheet(
+                      context: context,
+                      post: post,
+                      onEditPressed: onBottomUpEditPressed,
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.more_vert),
+              )
           ],
         ),
         SliverToBoxAdapter(

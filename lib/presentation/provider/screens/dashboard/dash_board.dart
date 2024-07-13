@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_network/presentation/provider/screens/dashboard/home_page/home_page.dart';
-import 'package:social_network/presentation/provider/screens/dashboard/post/posts_screen.dart';
+import 'package:social_network/presentation/provider/post/sreens/posts_screen.dart';
 import 'package:social_network/presentation/provider/screens/dashboard/settings/setting_screen.dart';
 import 'package:social_network/presentation/provider/ecom/screens/products_screen.dart';
 import 'package:social_network/presentation/provider/service/screens/service_booking/service_booking_list_screen.dart';

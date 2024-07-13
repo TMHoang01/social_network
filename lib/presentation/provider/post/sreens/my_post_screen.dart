@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_network/domain/models/post/post.dart';
+import 'package:social_network/presentation/provider/post/blocs/my_post_provider/my_post_provider_bloc.dart';
 import 'package:social_network/presentation/provider/post/blocs/post_form/post_form_bloc.dart';
-import 'package:social_network/presentation/provider/post/blocs/posts/posts_bloc.dart';
 import 'package:social_network/presentation/provider/post/sreens/widgets/post_card.dart';
+import 'package:social_network/presentation/provider/post/sreens/widgets/post_card_my_provider.dart';
 import 'package:social_network/presentation/provider/screens/router_admin.dart';
 import 'package:social_network/presentation/widgets/widgets.dart';
 import 'package:social_network/router.dart';
 import 'package:social_network/sl.dart';
-import 'package:social_network/utils/utils.dart';
+import 'package:social_network/utils/logger.dart';
 
-// final  context.read<PostsBloc>() = sl.get<PostsBloc>()..add(PostsStarted());
-
-class PostsScreen extends StatefulWidget {
-  const PostsScreen({super.key});
+class MyPostProviderScreen extends StatefulWidget {
+  const MyPostProviderScreen({super.key});
 
   @override
-  State<PostsScreen> createState() => _PostsScreenState();
+  State<MyPostProviderScreen> createState() => _MyPostProviderScreenState();
 }
 
-class _PostsScreenState extends State<PostsScreen>
-// with AutomaticKeepAliveClientMixin<PostsScreen>
-{
-  // @override
-  // bool get wantKeepAlive => true;
+class _MyPostProviderScreenState extends State<MyPostProviderScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<MyPostProviderBloc>().add(MyPostProviderStarted());
+  }
 
   final List<PostFormBloc> _postCreateBlocs = [];
   _handleNewPostBtn(BuildContext context) {
@@ -148,9 +148,6 @@ class _PostsScreenState extends State<PostsScreen>
 
   @override
   Widget build(BuildContext context) {
-    // super.build(context);
-    Size size = MediaQuery.of(context).size;
-
     final pendingPosts = _postCreateBlocs.map(
       (bloc) {
         return BlocProvider.value(
@@ -160,8 +157,8 @@ class _PostsScreenState extends State<PostsScreen>
             listener: (context, state) {
               if (state is PostFormCreateSuccess) {
                 context
-                    .read<PostsBloc>()
-                    .add(PostInsertStarted(post: state.post));
+                    .read<MyPostProviderBloc>()
+                    .add(MyPostProviderInsertStarted(post: state.post));
               }
             },
             builder: (context, state) {
@@ -176,78 +173,53 @@ class _PostsScreenState extends State<PostsScreen>
         );
       },
     ).toList();
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Bài đăng'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              _handleNewPostBtn(context);
+
+    return BlocBuilder<MyPostProviderBloc, MyPostProviderState>(
+      builder: (context, state) {
+        Widget wdiget = Container();
+        if (state.status == MyPostProviderStatus.loading) {
+          wdiget = const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state.status == MyPostProviderStatus.error) {
+          wdiget = Text(state.message ?? '');
+        } else {
+          wdiget = ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: state.list.length,
+            separatorBuilder: (context, index) => const SizedBox(height: 2),
+            itemBuilder: (context, index) {
+              final post = state.list[index];
+              return PostCardMyProviderWidget(post: post);
             },
-            icon: const Icon(
-              Icons.add,
-              // color: Colors.white,
-            ),
+          );
+        }
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Danh sách bài đăng của tôi'),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  _handleNewPostBtn(context);
+                },
+                icon: const Icon(
+                  Icons.add,
+                  // color: Colors.white,
+                ),
+              ),
+            ],
           ),
-          // PopupMenuButton(
-          //   itemBuilder: (context) => [
-          //     const PopupMenuItem(
-          //       value: 1,
-          //       child: Text('Đăng xuất'),
-          //     ),
-          //   ],
-          // ),
-        ],
-      ),
-      body: BlocProvider.value(
-        value: context.read<PostsBloc>(),
-        child: Container(
-          width: size.width,
-          height: size.height,
-          color: kOfWhite,
-          child: SingleChildScrollView(
+          body: SingleChildScrollView(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 10),
                 ...pendingPosts,
-                _buildListPost(),
+                wdiget,
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildListPost() {
-    return BlocBuilder<PostsBloc, PostsState>(
-      bloc: context.read<PostsBloc>(),
-      builder: (context, state) {
-        return (switch (state) {
-          PostsLoadInProgress() => const Center(
-              child: CircularProgressIndicator(),
-            ),
-          PostsLoadSuccess(posts: final posts) => ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: posts.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 2),
-              itemBuilder: (context, index) {
-                final post = posts[index];
-                return PostCardWidget(post: post);
-              },
-            ),
-          PostsLoadFailure(error: final error) => Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  context.read<PostsBloc>().add(PostsStarted());
-                },
-                child: Text(error),
-              ),
-            ),
-          _ => const SizedBox(),
-        });
+        );
       },
     );
   }

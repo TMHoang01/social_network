@@ -4,6 +4,7 @@ import 'package:social_network/main.dart';
 import 'package:social_network/presentation/provider/ecom/blocs/category/category_bloc.dart';
 import 'package:social_network/presentation/provider/blocs/employees/employees_bloc.dart';
 import 'package:social_network/presentation/provider/feed_back/blocs/feed_backs/feed_backs_bloc.dart';
+import 'package:social_network/presentation/provider/post/blocs/my_post_provider/my_post_provider_bloc.dart';
 import 'package:social_network/presentation/provider/post/blocs/posts/posts_bloc.dart';
 import 'package:social_network/presentation/provider/ecom/blocs/products/product_bloc.dart';
 import 'package:social_network/presentation/provider/service/blocs/service_booking/service_booking_bloc.dart';
@@ -33,6 +34,7 @@ class AdminApp extends StatelessWidget {
             create: (_) => sl<FeedBacksBloc>()..add(FeedBacksStarted())),
         BlocProvider(create: (_) => sl<EmployeesBloc>()),
         BlocProvider(create: (_) => sl<ServiceBookingBloc>()),
+        BlocProvider(create: (_) => sl<MyPostProviderBloc>()),
       ],
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {

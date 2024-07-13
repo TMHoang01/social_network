@@ -7,8 +7,9 @@ import 'package:social_network/domain/models/service/booking_service.dart';
 import 'package:social_network/domain/models/service/service.dart';
 import 'package:social_network/domain/models/user_model.dart';
 import 'package:social_network/presentation/provider/post/blocs/post_form/post_form_bloc.dart';
+import 'package:social_network/presentation/provider/post/sreens/my_post_screen.dart';
 import 'package:social_network/presentation/provider/screens/dashboard/dash_board.dart';
-import 'package:social_network/presentation/provider/screens/dashboard/post/posts_screen.dart';
+import 'package:social_network/presentation/provider/post/sreens/posts_screen.dart';
 
 import 'package:social_network/presentation/provider/screens/employee/employee_list_screen.dart';
 import 'package:social_network/presentation/provider/screens/employee/employee_select_screen.dart';
@@ -38,6 +39,7 @@ class RouterAdmin extends AppRouter {
   static const String productAdd = '/admin/product/add';
 
   static const String post = '/admin/post';
+  static const String postMyProvider = '/admin/post/me/provider';
   static const String postDetail = '/admin/post/detail';
   static const String postEdit = '/admin/post/edit';
   static const String postAdd = '/admin/post/add';
@@ -74,6 +76,7 @@ class RouterAdmin extends AppRouter {
     products: (context) => const ManageProductsScreen(),
     productAdd: (context) => const ProductFormDetail(),
     post: (context) => const PostsScreen(),
+    postMyProvider: (context) => const MyPostProviderScreen(),
     users: (context) => const UsersScreen(),
     services: (context) => const ServicesScreen(),
     bookings: (context) => const ServiceBookingListScreen(),

@@ -44,7 +44,7 @@ class _AdminHomePageState extends State<AdminHomePage>
       icon: FontAwesomeIcons.hornbill,
       color: Colors.yellow,
       onTap: (BuildContext context) {
-        navService.pushNamed(context, RouterAdmin.post);
+        navService.pushNamed(context, RouterAdmin.postMyProvider);
       },
     ),
   ];

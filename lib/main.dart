@@ -1,19 +1,16 @@
-import 'dart:convert';
-
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:social_network/data/datasources/auth_remote.dart';
 import 'package:social_network/data/datasources/ecom/category_repository.dart';
-import 'package:social_network/domain/services/notification/notification_services.dart';
 import 'package:social_network/domain/models/user_model.dart';
 import 'package:social_network/domain/repository/ecom/order_repository.dart';
 import 'package:social_network/domain/repository/ecom/product_repository.dart';
 import 'package:social_network/domain/repository/file_repository.dart';
 import 'package:social_network/domain/repository/service/service_repository.dart';
 import 'package:social_network/domain/repository/user_repository.dart';
+import 'package:social_network/domain/services/notification/notification_services.dart';
 import 'package:social_network/firebase_options.dart';
 import 'package:social_network/presentation/blocs/auth/auth_bloc.dart';
 import 'package:social_network/presentation/provider/screens/app_admin.dart';

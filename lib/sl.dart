@@ -48,6 +48,7 @@ import 'package:social_network/presentation/provider/ecom/blocs/category/categor
 import 'package:social_network/presentation/provider/blocs/employees/employees_bloc.dart';
 import 'package:social_network/presentation/provider/feed_back/blocs/feed_back_detail/feed_back_detail_bloc.dart';
 import 'package:social_network/presentation/provider/feed_back/blocs/feed_backs/feed_backs_bloc.dart';
+import 'package:social_network/presentation/provider/post/blocs/my_post_provider/my_post_provider_bloc.dart';
 import 'package:social_network/presentation/provider/post/blocs/post_detail/post_detail_bloc.dart';
 import 'package:social_network/presentation/provider/post/blocs/post_form/post_form_bloc.dart';
 import 'package:social_network/presentation/provider/post/blocs/posts/posts_bloc.dart';
@@ -155,6 +156,7 @@ void _initProvider() {
 
   //post
   sl.registerFactory<PostsBloc>(() => PostsBloc(sl.call()));
+  sl.registerFactory<MyPostProviderBloc>(() => MyPostProviderBloc(sl.call()));
   sl.registerFactory<PostFormBloc>(
     () => PostFormBloc(postRepository: sl.call(), fileRepository: sl.call()),
   );
