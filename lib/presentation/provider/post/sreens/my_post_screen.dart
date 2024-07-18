@@ -22,6 +22,10 @@ class _MyPostProviderScreenState extends State<MyPostProviderScreen> {
   @override
   void initState() {
     super.initState();
+    initLoadData();
+  }
+
+  initLoadData() {
     context.read<MyPostProviderBloc>().add(MyPostProviderStarted());
   }
 
@@ -210,13 +214,19 @@ class _MyPostProviderScreenState extends State<MyPostProviderScreen> {
               ),
             ],
           ),
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(height: 10),
-                ...pendingPosts,
-                wdiget,
-              ],
+          body: RefreshIndicator(
+            onRefresh: () => Future.delayed(const Duration(seconds: 1), () {
+              // print('object');
+              initLoadData();
+            }),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
+                  ...pendingPosts,
+                  wdiget,
+                ],
+              ),
             ),
           ),
         );

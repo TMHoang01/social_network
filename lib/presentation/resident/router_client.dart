@@ -8,12 +8,10 @@ import 'package:social_network/domain/models/service/service.dart';
 import 'package:social_network/presentation/provider/ecom/blocs/products/product_bloc.dart';
 import 'package:social_network/presentation/resident/features/ecom/screens/cart/cart_screen.dart';
 import 'package:social_network/presentation/provider/ecom/screens/product_detail.dart';
-import 'package:social_network/presentation/provider/ecom/screens/products_screen.dart';
 import 'package:social_network/presentation/provider/service/screens/service_booking/service_booking_detail_screen.dart';
 import 'package:social_network/presentation/resident/contact/screens/infor_contact_screen.dart';
 
 import 'package:social_network/presentation/resident/dashboard/dash_board.dart';
-import 'package:social_network/presentation/resident/dashboard/home_page/home_page.dart';
 import 'package:social_network/presentation/resident/features/ecom/screens/products/products_screen.dart';
 import 'package:social_network/presentation/resident/features/feed_back/screens/feed_back_detail_screen.dart';
 import 'package:social_network/presentation/resident/features/feed_back/screens/feed_back_form_screen.dart';
@@ -26,7 +24,7 @@ import 'package:social_network/presentation/resident/features/post/screens/post_
 import 'package:social_network/presentation/resident/features/post/screens/posts_screen.dart';
 import 'package:social_network/presentation/resident/features/service/screens/service_booking/widgets/booking_checkout_screen.dart';
 import 'package:social_network/presentation/resident/features/service/screens/service_booking/booking_detail_screen.dart';
-import 'package:social_network/presentation/resident/features/service/screens/service_booking/booking_list_screen.dart';
+import 'package:social_network/presentation/resident/features/service/screens/service_booking/my_booking_list_screen.dart';
 import 'package:social_network/presentation/resident/features/service/screens/service_booking/booking_schedule_screen.dart';
 import 'package:social_network/presentation/resident/features/service/screens/service_booking/booking_form_fill.dart';
 import 'package:social_network/presentation/resident/features/service/screens/services/my_shedule_screen.dart';
@@ -99,10 +97,6 @@ class RouterClient extends AppRouter {
     return <String, WidgetBuilder>{
       '/message': ((context) => Message()),
 
-      // home: (BuildContext context) => BottomAppBar()
-
-      // signIn: (context) => const SignInScreen(),
-      // signUp: (context) => const SignUpScreen(),
       ...AppRouter.routes,
       splash: (context) => SplashScreen(),
 
@@ -179,13 +173,13 @@ class RouterClient extends AppRouter {
       // booking
       case bookingList:
         return MaterialPageRoute(
-          builder: (context) => const MyServiceBookingListScreen(),
+          builder: (context) => const ServiceBookingResidentListScreen(),
         );
 
       case bookingDetail:
         return MaterialPageRoute(
           builder: (context) =>
-              BookingCheckDetailScreen(booking: args as BookingService),
+              BookingCheckDetailResidentScreen(booking: args as BookingService),
         );
 
       case feedbackDetail:

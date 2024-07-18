@@ -142,14 +142,14 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                     },
                   ),
                 ),
-                actions: [
-                  IconButton(
-                    onPressed: () {
-                      _handleBottomSheet(txt);
-                    },
-                    icon: const Icon(Icons.more_vert),
-                  )
-                ],
+                // actions: [
+                //   IconButton(
+                //     onPressed: () {
+                //       _handleBottomSheet(txt);
+                //     },
+                //     icon: const Icon(Icons.more_vert),
+                //   )
+                // ],
               ),
               SliverToBoxAdapter(
                 child: switch (post.type) {

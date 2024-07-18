@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_network/domain/models/service/review_service.dart';
+import 'package:social_network/presentation/resident/features/service/blocs/service_detail/service_detail_bloc.dart';
 import 'package:social_network/presentation/widgets/widgets.dart';
 import 'package:social_network/utils/utils.dart';
 
@@ -24,17 +26,23 @@ class ReviewContentItem extends StatelessWidget {
           title: Text(
             review.userName ?? 'Cư dân ẩn danh',
           ),
-          trailing: InkWell(
-            child: PopupMenuButton(
-              itemBuilder: (context) => [
-                PopupMenuItem(
-                  onTap: onTapIcon,
-                  value: 1,
-                  child: const Text('Xóa bình luận'),
-                ),
-              ],
-            ),
-          ),
+          trailing: (userCurrent?.id == review.userId)
+              ? InkWell(
+                  child: PopupMenuButton(
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        onTap: () {
+                          context
+                              .read<ServiceDetailBloc>()
+                              .add(ServiceDetailDeleteMyReview());
+                        },
+                        value: 1,
+                        child: const Text('Xóa bình luận'),
+                      ),
+                    ],
+                  ),
+                )
+              : null,
         ),
         Row(
           children: [

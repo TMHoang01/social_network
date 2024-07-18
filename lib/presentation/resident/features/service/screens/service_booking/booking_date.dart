@@ -1,4 +1,8 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
+import 'package:social_network/domain/repository/service/schedule_repository.dart';
+import 'package:social_network/sl.dart';
 import 'package:social_network/utils/utils.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -32,15 +36,40 @@ class _BookingDateWidgetState extends State<BookingDateWidget> {
     return availableDates;
   }
 
+  Map<DateTime, List> _eventsList = {};
+
   @override
   void initState() {
     super.initState();
+  }
 
-    logger.d('BookingDateWidget initState ${widget.isBefore}');
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    loadEvent();
+  }
+
+  Future<void> loadEvent() async {
+    final sheduleRepo = sl.get<ScheduleServiceRepository>();
+    _eventsList =
+        await sheduleRepo.schedulesInMonth(userCurrent?.id ?? '', _focusedDay);
+    super.setState(() {}); // to update widget data
+  }
+
+  int getHashCode(DateTime key) {
+    return key.day * 1000000 + key.month * 10000 + key.year;
   }
 
   @override
   Widget build(BuildContext context) {
+    final _events = LinkedHashMap<DateTime, List>(
+      equals: isSameDay,
+      hashCode: getHashCode,
+    )..addAll(_eventsList);
+    List getEventForDay(DateTime day) {
+      return _events[day] ?? [];
+    }
+
     return Column(
       children: [
         TableCalendar(
@@ -48,6 +77,7 @@ class _BookingDateWidgetState extends State<BookingDateWidget> {
           lastDay: kLastDay,
           focusedDay: _focusedDay,
           currentDay: _selectedDay,
+          eventLoader: getEventForDay,
           calendarFormat: widget.calendarFormat,
           selectedDayPredicate: (day) {
             return isSameDay(_selectedDay, day);
@@ -65,8 +95,16 @@ class _BookingDateWidgetState extends State<BookingDateWidget> {
             formatButtonVisible: false,
           ),
           onPageChanged: (focusedDay) {
-            // No need to call `setState()` here
+            logger.i(' onPageChanged $focusedDay');
+            if (!isSameDay(_selectedDay, focusedDay)) {
+              setState(() {
+                _selectedDay = focusedDay;
+                widget.onDateSelected!(focusedDay);
+                _focusedDay = focusedDay;
+              });
+            }
             _focusedDay = focusedDay;
+            loadEvent();
           },
         ),
       ],

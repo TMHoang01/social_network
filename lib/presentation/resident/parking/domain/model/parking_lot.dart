@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:social_network/utils/text_format.dart';
 
 enum ParkingLotStatus {
   available,
@@ -40,47 +41,54 @@ class ParkingLot extends Equatable {
   final String? vehicleLicensePlate;
   final String? ticketId;
   final String? ticketCode;
+  final DateTime? timestamp;
 
-  const ParkingLot(
-      {this.id,
-      required this.x,
-      required this.y,
-      required this.w,
-      required this.h,
-      required this.floor,
-      required this.zone,
-      required this.slot,
-      this.status,
-      this.vehicleLicensePlate,
-      this.ticketId,
-      this.ticketCode});
+  const ParkingLot({
+    this.id,
+    required this.x,
+    required this.y,
+    required this.w,
+    required this.h,
+    required this.floor,
+    required this.zone,
+    required this.slot,
+    this.status,
+    this.vehicleLicensePlate,
+    this.ticketId,
+    this.ticketCode,
+    this.timestamp,
+  });
   String get name => '$zone$slot';
-  ParkingLot copyWith(
-      {String? id,
-      double? x,
-      double? y,
-      double? w,
-      double? h,
-      String? floor,
-      String? zone,
-      String? slot,
-      ParkingLotStatus? status,
-      String? vehicleLicensePlate,
-      String? ticketId,
-      String? ticketCode}) {
+  ParkingLot copyWith({
+    String? id,
+    double? x,
+    double? y,
+    double? w,
+    double? h,
+    String? floor,
+    String? zone,
+    String? slot,
+    ParkingLotStatus? status,
+    String? vehicleLicensePlate,
+    String? ticketId,
+    String? ticketCode,
+    DateTime? timestamp,
+  }) {
     return ParkingLot(
-        id: id ?? this.id,
-        x: x ?? this.x,
-        y: y ?? this.y,
-        w: w ?? this.w,
-        h: h ?? this.h,
-        floor: floor ?? this.floor,
-        zone: zone ?? this.zone,
-        slot: slot ?? this.slot,
-        status: status ?? this.status,
-        vehicleLicensePlate: vehicleLicensePlate ?? this.vehicleLicensePlate,
-        ticketId: ticketId ?? this.ticketId,
-        ticketCode: ticketCode ?? this.ticketCode);
+      id: id ?? this.id,
+      x: x ?? this.x,
+      y: y ?? this.y,
+      w: w ?? this.w,
+      h: h ?? this.h,
+      floor: floor ?? this.floor,
+      zone: zone ?? this.zone,
+      slot: slot ?? this.slot,
+      status: status ?? this.status,
+      vehicleLicensePlate: vehicleLicensePlate ?? this.vehicleLicensePlate,
+      ticketId: ticketId ?? this.ticketId,
+      ticketCode: ticketCode ?? this.ticketCode,
+      timestamp: timestamp ?? this.timestamp,
+    );
   }
 
   get isAvailable {
@@ -96,19 +104,21 @@ class ParkingLot extends Equatable {
 
   factory ParkingLot.fromJson(Map<String, dynamic> json) {
     return ParkingLot(
-        x: json['x'],
-        y: json['y'],
-        w: json['w'],
-        h: json['h'],
-        floor: json['floor'],
-        zone: json['zone'],
-        slot: json['slot'],
-        status: json['status'] != null
-            ? ParkingLotStatus.fromJson(json['status'])
-            : null,
-        vehicleLicensePlate: json['vehicleLicensePlate'],
-        ticketId: json['ticketId'],
-        ticketCode: json['titketCode']);
+      x: json['x'],
+      y: json['y'],
+      w: json['w'],
+      h: json['h'],
+      floor: json['floor'],
+      zone: json['zone'],
+      slot: json['slot'],
+      status: json['status'] != null
+          ? ParkingLotStatus.fromJson(json['status'])
+          : null,
+      vehicleLicensePlate: json['vehicleLicensePlate'],
+      ticketId: json['ticketId'],
+      ticketCode: json['titketCode'],
+      timestamp: TextFormat.parseJson(json['timestamp']),
+    );
   }
 
   factory ParkingLot.fromDocumentSnapshot(DocumentSnapshot doc) {
@@ -131,7 +141,8 @@ class ParkingLot extends Equatable {
       if (vehicleLicensePlate != null)
         'vehicleLicensePlate': vehicleLicensePlate,
       if (ticketId != null) 'ticketId': ticketId,
-      if (ticketCode != null) 'titketCode': ticketCode
+      if (ticketCode != null) 'titketCode': ticketCode,
+      if (timestamp != null) 'timestamp': timestamp,
     };
   }
 

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_network/presentation/resident/contact/blocs/infor_contact/infor_contact_bloc.dart';
 import 'package:social_network/presentation/widgets/widgets.dart';
 import 'package:social_network/router.dart';
-import 'package:social_network/utils/logger.dart';
+import 'package:social_network/utils/utils.dart';
 
 class InforContactScreen extends StatefulWidget {
   const InforContactScreen({super.key});
@@ -23,9 +23,8 @@ class _InforContactScreenState extends State<InforContactScreen> {
   void initState() {
     super.initState();
     blocContact = context.read<InforContactBloc>();
-    if (blocContact.state is! InforContactLoaded) {
-      blocContact.add(GetInforContact());
-    }
+    blocContact.add(GetInforContact());
+    if (blocContact.state is! InforContactLoaded) {}
   }
 
   @override
@@ -53,8 +52,11 @@ class _InforContactScreenState extends State<InforContactScreen> {
         },
         builder: (context, state) {
           if (state is InforContactLoaded) {
-            _txtAddress.text = state.inforContact.address ?? '';
-            _txtPhone.text = state.inforContact.phone ?? '';
+            logger.i(state.inforContact);
+            _txtAddress.text =
+                state.inforContact.address ?? userCurrent?.address ?? '';
+            _txtPhone.text =
+                state.inforContact.phone ?? userCurrent?.phone ?? '';
             _txtUsername.text = state.inforContact.username ?? '';
           }
           return Padding(

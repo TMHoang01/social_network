@@ -67,7 +67,9 @@ class ContentNewsDetails extends StatelessWidget {
                     ),
                   );
                 },
-                icon: const Icon(Icons.more_vert),
+                icon: const Icon(
+                  Icons.more_vert,
+                ),
               )
           ],
         ),

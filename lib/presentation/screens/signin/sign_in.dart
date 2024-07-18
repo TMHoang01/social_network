@@ -84,7 +84,7 @@ class SignInScreen extends StatelessWidget {
                     ),
                     Padding(
                       padding:
-                          const EdgeInsets.only(left: 1, top: 10, right: 1),
+                          const EdgeInsets.only(left: 8, top: 10, right: 8),
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.end,
@@ -116,21 +116,23 @@ class SignInScreen extends StatelessWidget {
                             )
                           ]),
                     ),
-                    CustomButton(
-                      height: (50),
-                      title: "Đăng nhập bằng Google",
-                      backgroundColor: kPrimaryColor,
-                      prefixWidget: Container(
-                        margin: const EdgeInsets.only(right: 4),
-                        child: CustomImageView(
-                          svgPath: ImageConstant.iconGoogle,
-                          height: 20,
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: CustomButton(
+                        title: "Đăng nhập bằng Google",
+                        backgroundColor: kPrimaryColor,
+                        prefixWidget: Container(
+                          margin: const EdgeInsets.only(right: 4),
+                          child: CustomImageView(
+                            svgPath: ImageConstant.iconGoogle,
+                            height: 20,
+                          ),
                         ),
+                        onPressed: () {
+                          // onTapSigninwithgoogle(context);
+                          context.read<AuthBloc>().add(GoogleSignInRequested());
+                        },
                       ),
-                      onPressed: () {
-                        // onTapSigninwithgoogle(context);
-                        context.read<AuthBloc>().add(GoogleSignInRequested());
-                      },
                     ),
                   ],
                 ),
@@ -198,6 +200,8 @@ class FormLogin extends StatelessWidget {
             _builderFormFieldEmail(),
             const SizedBox(height: 10),
             _builderFormFieldPassword(),
+            const SizedBox(height: 10),
+
             BlocListener<SigninCubit, SigninState>(
               listenWhen: (previous, current) =>
                   previous.status != current.status,
@@ -212,30 +216,37 @@ class FormLogin extends StatelessWidget {
                 builder: (context, state) {
                   bool isLoading = (state is AuthLoginLoading);
 
-                  return CustomButton(
-                    height: 50,
-                    title: "Đăng nhập",
-                    margin: const EdgeInsets.only(left: 1, top: 10),
-                    prefixWidget: isLoading
-                        ? Transform.scale(
-                            scale: 0.5,
-                            child: const CircularProgressIndicator(),
-                          )
-                        : null,
-                    onPressed: () {
-                      if (isLoading) return;
-                      FocusScope.of(context).unfocus();
-                      final cubitLogin = context.read<SigninCubit>();
-                      cubitLogin.checkValidation();
-                      if (cubitLogin.state.isValid) {
-                        context.read<AuthBloc>().add(
-                              SignInRequested(cubitLogin.state.email.value,
-                                  cubitLogin.state.password.value),
-                            );
-                      } else {
-                        logger.i('Form login chưa chuẩn');
-                      }
-                    },
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CustomButton(
+                      padding: const EdgeInsets.symmetric(horizontal: 2),
+                      // height: 50,
+                      title: "Đăng nhập",
+                      margin: const EdgeInsets.only(
+                        left: 12,
+                        top: 10,
+                      ),
+                      prefixWidget: isLoading
+                          ? Transform.scale(
+                              scale: 0.5,
+                              child: const CircularProgressIndicator(),
+                            )
+                          : null,
+                      onPressed: () {
+                        if (isLoading) return;
+                        FocusScope.of(context).unfocus();
+                        final cubitLogin = context.read<SigninCubit>();
+                        cubitLogin.checkValidation();
+                        if (cubitLogin.state.isValid) {
+                          context.read<AuthBloc>().add(
+                                SignInRequested(cubitLogin.state.email.value,
+                                    cubitLogin.state.password.value),
+                              );
+                        } else {
+                          logger.i('Form login chưa chuẩn');
+                        }
+                      },
+                    ),
                   );
                 },
               ),

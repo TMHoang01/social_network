@@ -48,25 +48,23 @@ class _ServicesScreenState extends State<ServicesScreen> {
   Widget _handleSate(ServicesState state) {
     return switch (state) {
       ServicesLoaded(services: final services) => SingleChildScrollView(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView.separated(
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: 4),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: services.length,
-                    itemBuilder: (context, index) {
-                      final service = services[index];
-                      return ServiceCardWidget(service: service);
-                    },
-                  ),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView.separated(
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 4),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: services.length,
+                  itemBuilder: (context, index) {
+                    final service = services[index];
+                    return ServiceCardWidget(service: service);
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ServicesFailure(message: final message) => Center(

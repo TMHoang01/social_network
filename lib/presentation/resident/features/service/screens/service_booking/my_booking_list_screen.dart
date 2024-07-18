@@ -7,8 +7,8 @@ import 'package:social_network/presentation/resident/router_client.dart';
 import 'package:social_network/router.dart';
 import 'package:social_network/utils/utils.dart';
 
-class MyServiceBookingListScreen extends StatelessWidget {
-  const MyServiceBookingListScreen({super.key});
+class ServiceBookingResidentListScreen extends StatelessWidget {
+  const ServiceBookingResidentListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +17,11 @@ class MyServiceBookingListScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Đơn đặt dịch vụ'),
       ),
-      body: SingleChildScrollView(
-        child: RefreshIndicator(
-          onRefresh: () => Future.delayed(const Duration(seconds: 1), () {
-            context.read<ServiceBookingBloc>().add(ServiceBookingStarted());
-          }),
+      body: RefreshIndicator(
+        onRefresh: () => Future.delayed(const Duration(seconds: 1), () {
+          context.read<ServiceBookingBloc>().add(ServiceBookingStarted());
+        }),
+        child: SingleChildScrollView(
           child: Column(
             children: [
               BlocBuilder<ServiceBookingBloc, ServiceBookingState>(
@@ -38,6 +38,7 @@ class MyServiceBookingListScreen extends StatelessWidget {
                   }
                   return ListView.builder(
                     shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: state.list.length,
                     itemBuilder: (context, index) {
                       final item = state.list[index];
@@ -72,6 +73,7 @@ class ItemBookingCard extends StatelessWidget {
         },
         child: ListTile(
           title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(TextFormat.formatDate(item.createdAt!,
                   formatType: 'dd/MM/yyyy HH:mm')),

@@ -1,17 +1,17 @@
 part of 'service_booking_bloc.dart';
 
-sealed class ServiceBookingEvent extends Equatable {
-  const ServiceBookingEvent();
+sealed class ServiceBookingProviderEvent extends Equatable {
+  const ServiceBookingProviderEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class ServiceBookingStarted extends ServiceBookingEvent {}
+class ServiceBookingStarted extends ServiceBookingProviderEvent {}
 
-class ServiceBookingStartedByUser extends ServiceBookingEvent {}
+class ServiceBookingStartedByUser extends ServiceBookingProviderEvent {}
 
-class ServiceBookingUpdateStatus extends ServiceBookingEvent {
+class ServiceBookingUpdateStatus extends ServiceBookingProviderEvent {
   final String? bookingId;
   final BookingStatus? status;
 
@@ -21,7 +21,7 @@ class ServiceBookingUpdateStatus extends ServiceBookingEvent {
   List<Object> get props => [];
 }
 
-class ServiceBookingAcceptStatus extends ServiceBookingEvent {
+class ServiceBookingAcceptStatus extends ServiceBookingProviderEvent {
   final String? bookingId;
 
   ServiceBookingAcceptStatus(this.bookingId);
@@ -30,7 +30,7 @@ class ServiceBookingAcceptStatus extends ServiceBookingEvent {
   List<Object> get props => [];
 }
 
-class ServiceBookingDetailStarted extends ServiceBookingEvent {
+class ServiceBookingDetailStarted extends ServiceBookingProviderEvent {
   final String? bookingId;
 
   ServiceBookingDetailStarted(this.bookingId);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_network/presentation/resident/features/service/blocs/booking_service/booking_service_bloc.dart';
+import 'package:social_network/presentation/resident/features/service/blocs/schedule_booking_service/schedule_booking_service_bloc.dart';
 import 'package:social_network/presentation/resident/router_client.dart';
 import 'package:social_network/presentation/resident/features/service/screens/service_booking/booking_date.dart';
 import 'package:social_network/router.dart';
@@ -19,13 +19,13 @@ class _MyScheduleScreenState extends State<MyScheduleScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<BookingServiceBloc>(context)
-        .add(BookingServiceStared(_selectedDate));
+    BlocProvider.of<ScheduleServiceResidentBloc>(context)
+        .add(ScheduleBServiceStared(_selectedDate));
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<BookingServiceBloc, BookingServiceState>(
+    return BlocConsumer<ScheduleServiceResidentBloc, BookingServiceState>(
       listener: (context, state) {
         // TODO: implement listener
       },
@@ -41,8 +41,8 @@ class _MyScheduleScreenState extends State<MyScheduleScreen> {
                   isBefore: true,
                   calendarFormat: CalendarFormat.month,
                   onDateSelected: (date) {
-                    BlocProvider.of<BookingServiceBloc>(context)
-                        .add(BookingServiceStared(date ?? _selectedDate));
+                    BlocProvider.of<ScheduleServiceResidentBloc>(context)
+                        .add(ScheduleBServiceStared(date ?? _selectedDate));
                   },
                 ),
                 _builderListBooking(state),
@@ -55,26 +55,26 @@ class _MyScheduleScreenState extends State<MyScheduleScreen> {
   }
 
   Widget _builderListBooking(BookingServiceState state) {
-    if (state is BookingServiceLoading) {
+    if (state is ScheduleServiceLoading) {
       return const Center(
         child: CircularProgressIndicator(),
       );
     } else if (state is BookingServiceSuccess) {
       return ListView.builder(
         shrinkWrap: true,
-        itemCount: state.bookingService.length,
+        itemCount: state.scheduleService.length,
         itemBuilder: (context, index) {
-          final booking = state.bookingService[index];
+          final schedule = state.scheduleService[index];
           return Card(
             child: ListTile(
-              title: Text(booking.serviceName ?? ''),
-              subtitle: Text('${booking.schedule?.startTime?.hour}'
-                  ':${booking.schedule!.startTime?.minute}'),
+              title: Text(schedule.serviceName ?? ''),
+              subtitle: Text('${schedule.time?.hour}'
+                  ':${schedule.time?.minute}'),
               trailing: IconButton(
                 icon: const Icon(Icons.arrow_forward_rounded),
                 onPressed: () {
                   navService.pushNamed(context, RouterClient.bookingDetail,
-                      args: booking);
+                      args: schedule);
                 },
               ),
             ),

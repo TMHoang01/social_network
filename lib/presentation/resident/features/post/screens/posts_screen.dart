@@ -18,99 +18,46 @@ class PostsScreen extends StatefulWidget {
 class _PostsScreenState extends State<PostsScreen> {
   PostType? typePostSelected;
   @override
+  void initState() {
+    super.initState();
+    initLoadData();
+  }
+
+  initLoadData() {
+    context.read<PostsClientBloc>().add(const PostsStarted());
+  }
+
+  @override
   Widget build(BuildContext context) {
     // super.build(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bài đăng'),
+        title: const Text('Tin tức sự kiện'),
       ),
       body: Container(
         width: size.width,
         height: size.height,
         color: kOfWhite,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // // sreach bar
-              // CustomTextFormField(
-              //   margin: const EdgeInsets.all(10),
-              //   hintText: 'Tìm kiếm',
-              //   suffix: const Icon(Icons.search),
-              // ),
+        child: RefreshIndicator(
+          onRefresh: () => Future.delayed(const Duration(seconds: 1), () {
+            initLoadData();
+          }),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // // sreach bar
+                // CustomTextFormField(
+                //   margin: const EdgeInsets.all(10),
+                //   hintText: 'Tìm kiếm',
+                //   suffix: const Icon(Icons.search),
+                // ),
 
-              // // type post
-              // SingleChildScrollView(
-              //   scrollDirection: Axis.horizontal,
-              //   child: Padding(
-              //     padding: const EdgeInsets.all(8.0),
-              //     child: BlocBuilder<PostsClientBloc, PostsClientState>(
-              //       builder: (context, state) {
-              //         final canLoadMore = switch (state) {
-              //           PostsLoadmoreEndSuccess() => false,
-              //           _ => true,
-              //         };
-              //         return StatefulBuilder(
-              //           builder: (ctx, setState) {
-              //             return Row(
-              //               mainAxisAlignment: MainAxisAlignment.start,
-              //               children: [
-              //                 ChipCard(
-              //                   label: 'Tất cả',
-              //                   backgroundColor: typePostSelected == null
-              //                       ? kPrimaryColor
-              //                       : null,
-              //                   onTap: () {
-              //                     context
-              //                         .read<PostsClientBloc>()
-              //                         .add(PostsStarted());
-              //                     setState(() {
-              //                       typePostSelected = null;
-              //                     });
-              //                   },
-              //                 ),
-              //                 ChipCard(
-              //                   label: 'Sự kiện',
-              //                   backgroundColor:
-              //                       typePostSelected == PostType.event
-              //                           ? kPrimaryColor
-              //                           : null,
-              //                   onTap: () {
-              //                     if (canLoadMore) {
-              //                       context
-              //                           .read<PostsClientBloc>()
-              //                           .add(PostsLoadmoreEvent(type: ''));
-              //                     }
-              //                     setState(() {
-              //                       typePostSelected = PostType.event;
-              //                     });
-              //                   },
-              //                 ),
-              //                 ChipCard(
-              //                   label: 'Tin tức',
-              //                   backgroundColor:
-              //                       typePostSelected == PostType.news
-              //                           ? kPrimaryColor
-              //                           : null,
-              //                   onTap: () {
-              //                     setState(() {
-              //                       typePostSelected = PostType.news;
-              //                     });
-              //                   },
-              //                 ),
-              //               ],
-              //             );
-              //           },
-              //         );
-              //       },
-              //     ),
-              //   ),
-              // ),
-
-              const SizedBox(height: 10),
-              _buildListPost(),
-            ],
+                const SizedBox(height: 10),
+                _buildListPost(),
+              ],
+            ),
           ),
         ),
       ),
@@ -138,7 +85,7 @@ class _PostsScreenState extends State<PostsScreen> {
           PostsLoadFailure(error: final error) => Center(
               child: ElevatedButton(
                 onPressed: () {
-                  context.read<PostsClientBloc>().add(const PostsStarted());
+                  initLoadData();
                 },
                 child: Text(error),
               ),

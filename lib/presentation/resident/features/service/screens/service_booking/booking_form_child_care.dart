@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_network/domain/models/service/booking_service_child_care.dart';
-import 'package:social_network/presentation/resident/features/service/blocs/booking_service/booking_service_bloc.dart';
+import 'package:social_network/presentation/resident/features/service/blocs/schedule_booking_service/schedule_booking_service_bloc.dart';
 import 'package:social_network/presentation/resident/features/service/blocs/booking_service_create/booking_service_create_bloc.dart';
 import 'package:social_network/presentation/resident/contact/blocs/infor_contact/infor_contact_bloc.dart';
 import 'package:social_network/presentation/resident/router_client.dart';

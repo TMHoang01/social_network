@@ -20,8 +20,8 @@ class _DashBoarAdmindScreenState extends State<DashBoarAdmindScreen> {
     // const SettingScreen(),
     // const ProfileScreen(),
     const ServiceBookingListScreen(),
-    const Text('data'),
     const SettingScreen(),
+    const Text('data'),
     const Text('data'),
     const ManageProductsScreen(),
     const Text('data'),
@@ -67,12 +67,12 @@ class _DashBoarAdmindScreenState extends State<DashBoarAdmindScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.newspaper_rounded),
-            label: 'Tin tức',
+            label: 'Đơn đặt',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: 'Thông báo',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.notifications),
+          //   label: 'Thông báo',
+          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Cài đặt',

@@ -6,10 +6,10 @@ import 'package:social_network/utils/utils.dart';
 
 class InforContactCard extends StatelessWidget {
   final InforContactModel infor;
-  const InforContactCard({
-    super.key,
-    required this.infor,
-  });
+  final String? title;
+  final bool? hideChange;
+  const InforContactCard(
+      {super.key, required this.infor, this.title, this.hideChange});
   BoxDecoration _boxdecoration() {
     return BoxDecoration(
       color: Colors.white,
@@ -39,27 +39,28 @@ class InforContactCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Thông tin liên hệ',
-                  style: TextStyle(
+                Text(
+                  title ?? 'Thông tin liên hệ',
+                  style: const TextStyle(
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                InkWell(
-                  onTap: () {
-                    logger.i('change adrres');
-                  },
-                  child: InkWell(
+                if (hideChange == false)
+                  InkWell(
                     onTap: () {
-                      navService.pushNamed(context, RouterClient.contact);
+                      logger.i('change adrres');
                     },
-                    child: const Text(
-                      'Thay đổi',
-                      style: TextStyle(color: kSecondaryColor),
+                    child: InkWell(
+                      onTap: () {
+                        navService.pushNamed(context, RouterClient.contact);
+                      },
+                      child: const Text(
+                        'Thay đổi',
+                        style: TextStyle(color: kSecondaryColor),
+                      ),
                     ),
-                  ),
-                )
+                  )
               ],
             ),
             const SizedBox(width: 4),
@@ -68,7 +69,7 @@ class InforContactCard extends StatelessWidget {
                 const Icon(Icons.person, color: kPrimaryColor, size: 18),
                 const SizedBox(width: 8),
                 Text(
-                  '${infor.username}',
+                  '${infor.username ?? userCurrent?.username ?? ''}',
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ],
@@ -78,7 +79,7 @@ class InforContactCard extends StatelessWidget {
                 const Icon(Icons.phone, color: kPrimaryColor, size: 18),
                 const SizedBox(width: 8),
                 Text(
-                  '${infor.phone}',
+                  '${infor.phone ?? userCurrent?.phone ?? ''}',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: kGray,
                       ),
@@ -91,7 +92,7 @@ class InforContactCard extends StatelessWidget {
                 const Icon(Icons.location_on, color: kPrimaryColor, size: 18),
                 const SizedBox(width: 8),
                 Text(
-                  '${infor.address}',
+                  '${infor.address ?? userCurrent?.address ?? ''}',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: kGray,
                       ),

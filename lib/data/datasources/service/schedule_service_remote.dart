@@ -12,8 +12,9 @@ abstract class ScheduleServiceRemoteDataSource {
   Future<List<ScheduleItem>> getAllByUserId({required String userId});
   Future<List<ScheduleItem>> getAllByBookingId({required String bookingId});
 
-  Future<List<ScheduleItem>> getScheduleInDay(String date);
-
+  Future<List<ScheduleItem>> getScheduleInDay(String userId, DateTime date);
+  Future<Map<DateTime, List<ScheduleItem>>> schedulesInMonth(
+      String userId, DateTime month);
   Future<void> updateStatus(
       {required String id, required ScheduleItemStatus status});
 
@@ -57,8 +58,47 @@ class ScheduleServiceRemoteDataSourceImpl
   }
 
   @override
-  Future<List<ScheduleItem>> getScheduleInDay(String date) {
-    throw UnimplementedError();
+  Future<List<ScheduleItem>> getScheduleInDay(
+      String userId, DateTime date) async {
+    try {
+      final startOfDay = DateTime(date.year, date.month, date.day);
+      final endOfDay = DateTime(date.year, date.month, date.day, 23, 59, 59);
+      final response = await scheduleRef
+          .where('date', isGreaterThanOrEqualTo: startOfDay)
+          .where('date', isLessThanOrEqualTo: endOfDay)
+          .where('createdBy', isGreaterThanOrEqualTo: userId)
+          .get();
+
+      final list = response.docs
+          .map((e) => ScheduleItem.fromDocumentSnapshot(e))
+          .toList();
+      return list;
+    } on FirebaseException catch (e) {
+      logger.e(e.toString());
+      throw Exception(e.toString());
+    }
+  }
+
+  @override
+  Future<Map<DateTime, List<ScheduleItem>>> schedulesInMonth(
+      String userId, DateTime month) async {
+    try {
+      final firstDayOfMonth = DateTime(month.year, month.month, 1);
+      final lastDayOfMonth = DateTime(month.year, month.month + 1, 0);
+
+      Map<DateTime, List<ScheduleItem>> scheduleCounts = {};
+
+      for (int i = 0; i < lastDayOfMonth.day; i++) {
+        DateTime currentDay = DateTime(month.year, month.month, i + 1);
+        final schedules = await getScheduleInDay(userId, currentDay);
+        scheduleCounts[currentDay] = schedules;
+      }
+
+      return scheduleCounts;
+    } on FirebaseException catch (e) {
+      logger.e(e.toString());
+      throw Exception(e.toString());
+    }
   }
 
   @override

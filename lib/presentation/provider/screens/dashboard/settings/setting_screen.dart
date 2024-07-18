@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_network/presentation/blocs/auth/auth_bloc.dart';
+import 'package:social_network/router.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -18,8 +19,8 @@ class _SettingScreenState extends State<SettingScreen> {
       data: _isDark ? ThemeData.dark() : ThemeData.light(),
       child: Scaffold(
         appBar: AppBar(
-            // title: const Text("Cài đặt"),
-            ),
+          title: const Text("Cài đặt"),
+        ),
         body: Center(
           child: Container(
             constraints: const BoxConstraints(maxWidth: 400),
@@ -35,7 +36,8 @@ class _SettingScreenState extends State<SettingScreen> {
                         title: "Cài đặt thông báo",
                         icon: Icons.notifications_none_rounded),
                     _CustomListTile(
-                        title: "Lịch trình", icon: Icons.calendar_today_rounded)
+                        title: "Quản lý dịch vụ",
+                        icon: Icons.miscellaneous_services_outlined),
                   ],
                 ),
                 const Divider(),
@@ -45,9 +47,11 @@ class _SettingScreenState extends State<SettingScreen> {
                     _CustomListTile(
                         title: "Dịch vụ", icon: Icons.message_outlined),
                     _CustomListTile(
-                        title: "Tiện ích", icon: Icons.phone_outlined),
+                        title: "Liên hệ", icon: Icons.phone_outlined),
                     _CustomListTile(
                         title: "Điều khoản", icon: Icons.contacts_outlined),
+                    // _CustomListTile(
+                    //     title: "Lịch trình", icon: Icons.calendar_today_rounded)
                   ],
                 ),
                 const Divider(),
@@ -63,6 +67,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       icon: Icons.exit_to_app_rounded,
                       onTap: () {
                         context.read<AuthBloc>().add(SignOutRequested());
+                        navService.popAndPushNamed(context, AppRouter.signIn);
                       },
                     ),
                   ],

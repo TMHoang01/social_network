@@ -61,7 +61,7 @@ import 'package:social_network/presentation/provider/blocs/users/users_bloc.dart
 import 'package:social_network/presentation/blocs/auth/auth_bloc.dart';
 import 'package:social_network/presentation/resident/features/guest_access/blocs/guest_access/guest_access_bloc.dart';
 import 'package:social_network/presentation/resident/features/service/blocs/booking_service_create/booking_service_create_bloc.dart';
-import 'package:social_network/presentation/resident/features/service/blocs/booking_service/booking_service_bloc.dart';
+import 'package:social_network/presentation/resident/features/service/blocs/schedule_booking_service/schedule_booking_service_bloc.dart';
 import 'package:social_network/presentation/resident/features/ecom/blocs/cart/cart_bloc.dart';
 import 'package:social_network/presentation/resident/contact/blocs/infor_contact/infor_contact_bloc.dart';
 import 'package:social_network/presentation/resident/features/feed_back/blocs/my_feed_back/my_feed_back_bloc.dart';
@@ -74,6 +74,7 @@ import 'package:social_network/presentation/resident/features/service/blocs/serv
 import 'package:social_network/presentation/blocs/signin/signin_cubit.dart';
 import 'package:social_network/presentation/blocs/signup/signup_bloc.dart';
 import 'package:social_network/presentation/blocs/user_infor/user_infor_bloc.dart';
+import 'package:social_network/presentation/resident/features/service/screens/services/my_shedule_screen.dart';
 import 'package:social_network/presentation/resident/parking/blocs/my_vehicle/vehicle_list_bloc.dart';
 import 'package:social_network/presentation/resident/parking/blocs/parking/parking_bloc.dart';
 import 'package:social_network/presentation/resident/parking/data/parking_remote.dart';
@@ -200,7 +201,8 @@ void _initResident() {
       () => PostViewDetailBloc(sl.call(), sl.call()));
 
   // service
-  sl.registerFactory<BookingServiceBloc>(() => BookingServiceBloc(sl.call()));
+  sl.registerFactory<ScheduleServiceResidentBloc>(
+      () => ScheduleServiceResidentBloc(sl.call()));
   sl.registerFactory<BookingServiceCreateBloc>(
       () => BookingServiceCreateBloc(sl.call()));
   sl.registerFactory<ServiceDetailBloc>(

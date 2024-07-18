@@ -4,7 +4,6 @@ import 'package:social_network/domain/models/ecom/infor_contact.dart';
 import 'package:social_network/domain/models/service/booking_service.dart';
 import 'package:social_network/domain/models/service/enum_service.dart';
 import 'package:social_network/presentation/provider/service/blocs/service_booking/service_booking_bloc.dart';
-import 'package:social_network/presentation/resident/features/service/blocs/booking_service/booking_service_bloc.dart';
 import 'package:social_network/presentation/provider/service/screens/service_booking/widgets/widgets.dart';
 import 'package:social_network/presentation/widgets/widgets.dart';
 import 'package:social_network/router.dart';
@@ -30,7 +29,7 @@ class ServiceBookingDetailScreen extends StatelessWidget {
         if (booking.status == BookingStatus.pending) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Đặt lịch'),
+              title: const Text('Đặt lịch x'),
             ),
             body: SingleChildScrollView(
               child: _builderPendindStatus(),
@@ -53,7 +52,11 @@ class ServiceBookingDetailScreen extends StatelessWidget {
     return Column(
       children: [
         InforContactCard(
-            infor: booking.inforContact ?? const InforContactModel()),
+          infor: booking.inforContact ?? const InforContactModel(),
+          hideChange: true,
+          title: 'thông tin khách hàng',
+        ),
+
         // infor service
         CustomContainer(
           child: Column(
@@ -77,7 +80,7 @@ class ServiceBookingDetailScreen extends StatelessWidget {
               const SizedBox(width: 4),
               const SizedBox(width: 4),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -119,7 +122,7 @@ class ServiceBookingDetailScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        // infor cheulde
+        // infor schedule
         CustomContainer(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,7 +143,7 @@ class ServiceBookingDetailScreen extends StatelessWidget {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -178,6 +181,7 @@ class ServiceBookingDetailScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
+        // note
         CustomContainer(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,7 +235,7 @@ class ServiceBookingDetailScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-
+        // status
         serviceFormStateBlocSelector<BookingStatus?>(
           selector: (state) {
             return state.bookingSelected!.status;
@@ -241,7 +245,7 @@ class ServiceBookingDetailScreen extends StatelessWidget {
                 ? Colors.green
                 : status == BookingStatus.rejected
                     ? Colors.red
-                    : const Color.fromARGB(255, 234, 234, 53);
+                    : kSecondaryColor;
             Widget childStatus = CustomContainer(
               child: Padding(
                 padding: const EdgeInsets.only(top: 8.0),
@@ -360,6 +364,11 @@ class ServiceBookingDetailScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        InforContactCard(
+          infor: booking.inforContact ?? const InforContactModel(),
+          hideChange: true,
+          title: 'thông tin khách hàng',
+        ),
         CustomContainer(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -381,7 +390,7 @@ class ServiceBookingDetailScreen extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

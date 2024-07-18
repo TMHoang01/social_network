@@ -27,6 +27,7 @@ import 'package:social_network/presentation/provider/service/screens/services/se
 import 'package:social_network/presentation/provider/service/screens/services/my_services_screen.dart';
 import 'package:social_network/presentation/provider/screens/users/user_details_screen.dart';
 import 'package:social_network/presentation/provider/screens/users/users_screen.dart';
+import 'package:social_network/presentation/resident/features/service/screens/services/my_shedule_screen.dart';
 import 'package:social_network/router.dart';
 
 class RouterAdmin extends AppRouter {
@@ -55,6 +56,7 @@ class RouterAdmin extends AppRouter {
   //booking
   static const String bookings = '/admin/booking/list';
   static const String bookingDetail = '/admin/booking/detail';
+  static const String schedule = '/admin/schedule/';
 
   // feedback
   static const String feedback = '/admin/feedback';
@@ -80,6 +82,7 @@ class RouterAdmin extends AppRouter {
     users: (context) => const UsersScreen(),
     services: (context) => const ServicesScreen(),
     bookings: (context) => const ServiceBookingListScreen(),
+    schedule: (context) => const MyScheduleScreen(),
     feedback: (context) => const FeedBackListScreen(),
     employList: (context) => const EmployeeListScreen(),
   };
@@ -124,7 +127,7 @@ class RouterAdmin extends AppRouter {
       case serviceDetail:
         return MaterialPageRoute(
           builder: (context) =>
-              ServiceDetailScreen(service: args as ServiceModel),
+              ServiceDetailProviderScreen(service: args as ServiceModel),
         );
       // booking
       case bookingDetail:

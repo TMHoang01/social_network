@@ -14,13 +14,15 @@ abstract class ParkingRemoteDataSource {
 }
 
 class ParkingRemoteDataSourceImpl implements ParkingRemoteDataSource {
-  final storage = FirebaseFirestore.instance;
+  final firestore = FirebaseFirestore.instance;
   final String parking = 'parking';
+  final String parkingHistory = 'parkingHistory';
+  final String vehiclesTicket = 'vehicles';
 
   @override
   Future<List<ParkingLot>> getParkingLotsInFloor(String floor) async {
     try {
-      final querySnapshot = await storage
+      final querySnapshot = await firestore
           .collection(parking)
           .where('floor', isEqualTo: floor)
           .get();
@@ -43,14 +45,14 @@ class ParkingRemoteDataSourceImpl implements ParkingRemoteDataSource {
     // update transaction parking lot: status, vehicleLicensePlate, and ticketId
     // and vehicle: status, parkingFloor, parkingLotId
     try {
-      final response = await storage.runTransaction((transaction) async {
-        final lotRef = storage.collection(parking).doc(lot.id);
+      final response = await firestore.runTransaction((transaction) async {
+        final lotRef = firestore.collection(parking).doc(lot.id);
         final lotDoc = await transaction.get(lotRef);
         if (!lotDoc.exists) {
           throw Exception('Vị trí đỗ xe không tồn tại');
         }
 
-        final ticketRef = storage.collection('vehicles').doc(ticket.id);
+        final ticketRef = firestore.collection(vehiclesTicket).doc(ticket.id);
         final ticketDoc = await transaction.get(ticketRef);
         if (!ticketDoc.exists) {
           throw Exception('Không tìm thế thẻ xe');
@@ -81,14 +83,15 @@ class ParkingRemoteDataSourceImpl implements ParkingRemoteDataSource {
   Future<void> outParking(ParkingLot lot) async {
     // update parking lot status, vehicleLicensePlate, and ticketId
     try {
-      await storage.runTransaction((transaction) async {
-        final lotRef = storage.collection(parking).doc(lot.id);
+      await firestore.runTransaction((transaction) async {
+        final lotRef = firestore.collection(parking).doc(lot.id);
         final lotDoc = await transaction.get(lotRef);
         if (!lotDoc.exists) {
           throw Exception('Vị trí đỗ xe không tồn tại');
         }
 
-        final ticketRef = storage.collection('vehicles').doc(lot.ticketId);
+        final ticketRef =
+            firestore.collection(vehiclesTicket).doc(lot.ticketId);
         final ticketDoc = await transaction.get(ticketRef);
         if (!ticketDoc.exists) {
           throw Exception('Không tìm thế thẻ xe');

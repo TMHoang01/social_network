@@ -30,4 +30,8 @@ class ServiceDetailAddReviewSubmit extends ServiceDetailEvent {
   List<Object> get props => [review];
 }
 
+class ServiceDetailDeleteMyReview extends ServiceDetailEvent {}
+
+class ServiceDetailRefreshReview extends ServiceDetailEvent {}
+
 class ServiceDetailLoadMoreReview extends ServiceDetailEvent {}

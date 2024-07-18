@@ -107,8 +107,14 @@ class ReviewServiceRemoteDataSourceImpl
       if (review.id == null || review.serviceId == null) {
         throw Exception('Lỗi thực hiện');
       }
-      final ref = db.doc('services/${review.serviceId}/reviews/${review.id}');
-      await ref.delete();
+      final refReview =
+          db.doc('services/${review.serviceId}/reviews/${review.id}');
+      await refReview.delete();
+      final rating = review.rating?.toInt();
+      final refService = db.doc('services/${review.serviceId}');
+      refService.update({
+        'ratingCount.$rating': FieldValue.increment(-1),
+      });
     } on Exception catch (e) {
       logger.e(e.toString());
       throw Exception(e.toString());

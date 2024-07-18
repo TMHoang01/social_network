@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:social_network/presentation/provider/screens/router_admin.dart';
+import 'package:social_network/presentation/resident/router_client.dart';
 import 'package:social_network/router.dart';
 import 'package:social_network/utils/utils.dart';
 
@@ -50,20 +51,28 @@ class _AdminHomePageState extends State<AdminHomePage>
   ];
 
   final manageShop = [
-    ItemHomePage(
-      title: 'Hàng hóa',
-      icon: FontAwesomeIcons.productHunt,
-      color: Colors.green,
-      onTap: (BuildContext context) {
-        navService.pushNamed(context, RouterAdmin.products);
-      },
-    ),
+    // ItemHomePage(
+    //   title: 'Hàng hóa',
+    //   icon: FontAwesomeIcons.productHunt,
+    //   color: Colors.green,
+    //   onTap: (BuildContext context) {
+    //     navService.pushNamed(context, RouterAdmin.products);
+    //   },
+    // ),
     ItemHomePage(
       title: 'Dịch vụ',
       icon: FontAwesomeIcons.servicestack,
       color: Colors.green,
       onTap: (BuildContext context) {
         navService.pushNamed(context, RouterAdmin.services);
+      },
+    ),
+    ItemHomePage(
+      title: 'Lịch hẹn',
+      icon: FontAwesomeIcons.calendarDays,
+      color: Colors.green,
+      onTap: (BuildContext context) {
+        navService.pushNamed(context, RouterAdmin.schedule);
       },
     ),
   ];

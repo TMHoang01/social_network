@@ -21,7 +21,10 @@ class ServiceDetailBloc extends Bloc<ServiceDetailEvent, ServiceDetailState> {
     on<SericeDetiailAddReviewInitial>(_onSericeDetiailAddReviewInitial);
     on<ServiceDetailAddReviewSubmit>(_onServiceDetailAddReview,
         transformer: droppable());
+    on<ServiceDetailDeleteMyReview>(_onServiceDetailDeleteMyReview);
     on<ServiceDetailLoadMoreReview>(_onServiceDetailLoadMoreReview,
+        transformer: droppable());
+    on<ServiceDetailRefreshReview>(_onServiceDetailRefreshReview,
         transformer: droppable());
   }
 
@@ -187,6 +190,37 @@ class ServiceDetailBloc extends Bloc<ServiceDetailEvent, ServiceDetailState> {
     }
   }
 
+  void _onServiceDetailDeleteMyReview(
+    ServiceDetailDeleteMyReview event,
+    Emitter<ServiceDetailState> emit,
+  ) async {
+    try {
+      if (state.myReview == null) {
+        return;
+      }
+      emit(state.copyWith(statusMyReview: ServiceDetailStatus.loading));
+      await reviewRepository.delete(review: state.myReview!);
+      final list = state.listReview
+          ?.where((element) => element.id != state.myReview?.id)
+          .toList();
+      final rating = state.myReview!.rating?.toInt() ?? 0;
+
+      Map<int, int>? ratingCount =
+          Map<int, int>.from(state.service?.ratingCount ?? {});
+
+      ratingCount[rating] = (ratingCount[rating] ?? 1) - 1;
+
+      final service = state.service?.copyWith(ratingCount: ratingCount);
+
+      emit(state.emptyMyReview(listReview: list, service: service));
+    } catch (e) {
+      emit(state.copyWith(
+        statusMyReview: ServiceDetailStatus.failure,
+        error: 'Xoá bình luận thất bại',
+      ));
+    }
+  }
+
   void _onServiceDetailLoadMoreReview(
     ServiceDetailLoadMoreReview event,
     Emitter<ServiceDetailState> emit,
@@ -209,6 +243,34 @@ class ServiceDetailBloc extends Bloc<ServiceDetailEvent, ServiceDetailState> {
       emit(newState);
     } catch (e) {
       emit(state.copyWith(status: ServiceDetailStatus.failure));
+    }
+  }
+
+  void _onServiceDetailRefreshReview(ServiceDetailRefreshReview event,
+      Emitter<ServiceDetailState> emit) async {
+    emit(state.copyWith(status: ServiceDetailStatus.loading));
+    try {
+      final serviceId = state.service?.id;
+      if (serviceId == null) {
+        emit(state.copyWith(status: ServiceDetailStatus.failure));
+        return;
+      }
+      final listReview = await reviewRepository.getAllByServiceId(
+        serviceId: serviceId,
+        limit: 15,
+      );
+
+      emit(
+        ServiceDetailState(
+          status: ServiceDetailStatus.loaded,
+          listReview: listReview,
+        ),
+      );
+    } catch (e) {
+      emit(state.copyWith(
+        status: ServiceDetailStatus.failure,
+        error: e.toString(),
+      ));
     }
   }
 }

@@ -34,41 +34,30 @@ class _ReadMoreTextState extends State<ReadMoreText> {
         ),
         if (isTextLong)
           Container(
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: kSecondaryLightColor.withOpacity(0.3),
-                  spreadRadius: 1,
-                  blurRadius: 5,
-                  offset: const Offset(0, 5),
-                ),
-              ],
-            ),
-            child: InkWell(
-              onTap: () {
-                setState(() {
-                  isExpanded = !isExpanded;
-                });
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Center(
-                  child: Text(isExpanded ? 'Thu gọn' : 'Xem Thêm'),
+            // decoration: BoxDecoration(
+            //   boxShadow: [
+            //     BoxShadow(
+            //       color: kSecondaryLightColor.withOpacity(0.3),
+            //       spreadRadius: 1,
+            //       blurRadius: 5,
+            //       offset: const Offset(0, 5),
+            //     ),
+            //   ],
+            // ),
+            child: Center(
+              child: TextButton(
+                onPressed: () {
+                  setState(() {
+                    isExpanded = !isExpanded;
+                  });
+                },
+                child: Text(
+                  isExpanded ? 'Thu gọn' : 'Xem Thêm',
+                  style: const TextStyle(color: kSecondaryColor),
                 ),
               ),
             ),
           ),
-        // if (isTextLong)
-        //   Center(
-        //     child: TextButton(
-        //       onPressed: () {
-        //         setState(() {
-        //           isExpanded = !isExpanded;
-        //         });
-        //       },
-        //       child: Text(isExpanded ? 'Thu gọn' : 'Xem Thêm'),
-        //     ),
-        //   ),
       ],
     );
   }

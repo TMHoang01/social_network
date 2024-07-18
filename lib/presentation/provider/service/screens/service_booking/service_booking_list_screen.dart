@@ -15,13 +15,13 @@ class ServiceBookingListScreen extends StatelessWidget {
     context.read<ServiceBookingBloc>().add(ServiceBookingStarted());
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Đơn đặt dịch vụ'),
+        title: const Text('Đơn đặt dịch vụ c'),
       ),
-      body: SingleChildScrollView(
-        child: RefreshIndicator(
-          onRefresh: () => Future.delayed(const Duration(seconds: 1), () {
-            context.read<ServiceBookingBloc>().add(ServiceBookingStarted());
-          }),
+      body: RefreshIndicator(
+        onRefresh: () => Future.delayed(const Duration(seconds: 1), () {
+          context.read<ServiceBookingBloc>().add(ServiceBookingStarted());
+        }),
+        child: SingleChildScrollView(
           child: Column(
             children: [
               BlocBuilder<ServiceBookingBloc, ServiceBookingState>(
@@ -38,6 +38,7 @@ class ServiceBookingListScreen extends StatelessWidget {
                   }
                   return ListView.builder(
                     shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: state.list.length,
                     itemBuilder: (context, index) {
                       final item = state.list[index];
@@ -96,7 +97,7 @@ class ItemBookingCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(item.serviceName ?? ''),
-              Text('Người đặt: ${item.userName ?? ''}'),
+              Text('Người đặt: ${item.userName}'),
             ],
           ),
           trailing: Container(

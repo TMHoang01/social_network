@@ -12,8 +12,9 @@ abstract class ScheduleServiceRepository {
   Future<List<ScheduleItem>> getAllByUserId({required String userId});
   Future<List<ScheduleItem>> getAllByBookingId({required String bookingId});
 
-  Future<List<ScheduleItem>> getScheduleInDay(String date);
-
+  Future<List<ScheduleItem>> getScheduleInDay(String useId, DateTime date);
+  Future<Map<DateTime, List<ScheduleItem>>> schedulesInMonth(
+      String userId, DateTime month);
   Future<void> updateStatus(
       {required String id, required ScheduleItemStatus status});
 
@@ -57,8 +58,15 @@ class ScheduleServiceRepositoryImpl implements ScheduleServiceRepository {
   }
 
   @override
-  Future<List<ScheduleItem>> getScheduleInDay(String date) async {
-    return await remoteData.getScheduleInDay(date);
+  Future<List<ScheduleItem>> getScheduleInDay(
+      String useId, DateTime date) async {
+    return await remoteData.getScheduleInDay(useId, date);
+  }
+
+  @override
+  Future<Map<DateTime, List<ScheduleItem>>> schedulesInMonth(
+      String userId, DateTime month) async {
+    return await remoteData.schedulesInMonth(userId, month);
   }
 
   @override

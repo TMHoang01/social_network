@@ -12,6 +12,7 @@ import 'package:social_network/presentation/provider/service/blocs/services_my/m
 import 'package:social_network/presentation/provider/blocs/users/users_bloc.dart';
 import 'package:social_network/presentation/blocs/auth/auth_bloc.dart';
 import 'package:social_network/presentation/provider/screens/router_admin.dart';
+import 'package:social_network/presentation/resident/features/service/blocs/schedule_booking_service/schedule_booking_service_bloc.dart';
 import 'package:social_network/sl.dart';
 
 class AdminApp extends StatelessWidget {
@@ -27,18 +28,18 @@ class AdminApp extends StatelessWidget {
         BlocProvider(
           create: (context) => sl<CategoryBloc>()..add(GetCategoriesEvent()),
         ),
-        BlocProvider(create: (context) => sl<PostsBloc>()..add(PostsStarted())),
+        BlocProvider(create: (context) => sl<PostsBloc>()),
         BlocProvider(create: (_) => sl<UsersBloc>()..add(UsersGetAllUsers())),
         BlocProvider(create: (_) => sl<MyServicesBloc>()),
         BlocProvider(
             create: (_) => sl<FeedBacksBloc>()..add(FeedBacksStarted())),
         BlocProvider(create: (_) => sl<EmployeesBloc>()),
         BlocProvider(create: (_) => sl<ServiceBookingBloc>()),
+        BlocProvider(create: (_) => sl<ScheduleServiceResidentBloc>()),
         BlocProvider(create: (_) => sl<MyPostProviderBloc>()),
       ],
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
-          // sl<CategoryBloc>().add(GetCategoriesEvent());
           return MyMaterialApp(
             initialRoute: RouterAdmin.initialRoute,
             routes: RouterAdmin.routes,

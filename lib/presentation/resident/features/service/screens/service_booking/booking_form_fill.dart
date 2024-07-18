@@ -3,13 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_network/domain/models/service/enum_service.dart';
 import 'package:social_network/domain/models/service/price_list.dart';
 import 'package:social_network/domain/models/service/service.dart';
-import 'package:social_network/presentation/resident/features/service/blocs/booking_service/booking_service_bloc.dart';
+import 'package:social_network/presentation/resident/features/service/blocs/schedule_booking_service/schedule_booking_service_bloc.dart';
 import 'package:social_network/presentation/resident/features/service/blocs/booking_service_create/booking_service_create_bloc.dart';
 import 'package:social_network/presentation/resident/contact/blocs/infor_contact/infor_contact_bloc.dart';
 import 'package:social_network/presentation/resident/router_client.dart';
 import 'package:social_network/presentation/screens/not_found/not_found_screen.dart';
 import 'package:social_network/presentation/widgets/widgets.dart';
 import 'package:social_network/router.dart';
+import 'package:social_network/utils/text_format.dart';
 
 class BookingFormFillScreen extends StatelessWidget {
   const BookingFormFillScreen({Key? key, required ServiceModel service})
@@ -147,11 +148,15 @@ class BookingFormFillScreen extends StatelessWidget {
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _textTile('Giá cơ bản'),
+                          _textTile('Giá dịch vụ'),
                           _textTile(
                             '${state.booking?.servicePriceBase}',
                           ),
-                        ])
+                        ]),
+                  // Text(
+                  //   '',
+                  //   style: TextStyle(color: Colors.grey),
+                  // ),
                 ],
               ),
             ),
@@ -209,9 +214,11 @@ class BookingFormFillScreen extends StatelessWidget {
   }
 
   void handleBooking(BuildContext context) {
-    final booking = context.read<BookingServiceCreateBloc>().state.booking;
+    final state = context.read<BookingServiceCreateBloc>().state;
+    final booking = state.booking;
     if (booking?.servicePriceType == PriceType.hourly ||
-        booking?.servicePriceType == PriceType.package) {
+        (booking?.servicePriceType == PriceType.package &&
+            state.service!.priceList!.isNotEmpty)) {
       if (booking?.servicePriceItem == null) {
         showSnackBarError(context, 'Vui lòng chọn gói đăng ký');
         return;
@@ -257,7 +264,7 @@ class BookingFormFillScreen extends StatelessWidget {
     return Expanded(
       child: SizedBox(
         child: SelectWidget(
-          text: '$num giờ ${(priceBase ?? 0) * num}',
+          text: '${TextFormat.formatMoney((priceBase ?? 0) * num)} / $num giờ ',
           isSelect: isSelect,
           onChanged: () {
             // setState(() {

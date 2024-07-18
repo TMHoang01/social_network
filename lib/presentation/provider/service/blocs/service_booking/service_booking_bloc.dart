@@ -10,10 +10,10 @@ part 'service_booking_event.dart';
 part 'service_booking_state.dart';
 
 class ServiceBookingBloc
-    extends Bloc<ServiceBookingEvent, ServiceBookingState> {
+    extends Bloc<ServiceBookingProviderEvent, ServiceBookingState> {
   final BookingRepository repository;
   ServiceBookingBloc(this.repository) : super(const ServiceBookingState()) {
-    on<ServiceBookingEvent>((event, emit) {});
+    on<ServiceBookingProviderEvent>((event, emit) {});
     on<ServiceBookingStarted>(_onServiceBookingStarted,
         transformer: droppable());
     on<ServiceBookingStartedByUser>(_onServiceBookingStartedByUser,

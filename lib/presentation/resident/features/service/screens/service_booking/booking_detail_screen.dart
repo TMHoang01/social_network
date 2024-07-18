@@ -3,18 +3,20 @@ import 'package:social_network/domain/models/ecom/infor_contact.dart';
 import 'package:social_network/domain/models/service/booking_service.dart';
 import 'package:social_network/domain/models/service/enum_service.dart';
 import 'package:social_network/presentation/widgets/widgets.dart';
+import 'package:social_network/router.dart';
 import 'package:social_network/utils/utils.dart';
 
-class BookingCheckDetailScreen extends StatefulWidget {
+class BookingCheckDetailResidentScreen extends StatefulWidget {
   final BookingService booking;
-  const BookingCheckDetailScreen({super.key, required this.booking});
+  const BookingCheckDetailResidentScreen({super.key, required this.booking});
 
   @override
-  State<BookingCheckDetailScreen> createState() =>
-      _BookingCheckDetailScreenState();
+  State<BookingCheckDetailResidentScreen> createState() =>
+      _BookingCheckDetailResidentScreenState();
 }
 
-class _BookingCheckDetailScreenState extends State<BookingCheckDetailScreen> {
+class _BookingCheckDetailResidentScreenState
+    extends State<BookingCheckDetailResidentScreen> {
   late final BookingService booking = widget.booking;
   @override
   void dispose() {
@@ -31,7 +33,7 @@ class _BookingCheckDetailScreenState extends State<BookingCheckDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Đặt lịch'),
+        title: const Text('Thông tin đơn đặt'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -61,7 +63,7 @@ class _BookingCheckDetailScreenState extends State<BookingCheckDetailScreen> {
                   const SizedBox(width: 4),
                   const SizedBox(width: 4),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -124,7 +126,7 @@ class _BookingCheckDetailScreenState extends State<BookingCheckDetailScreen> {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

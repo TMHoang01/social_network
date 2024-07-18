@@ -142,6 +142,16 @@ class _PostsScreenState extends State<PostsScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    initLoadData();
+  }
+
+  initLoadData() {
+    context.read<PostsBloc>().add(PostsStarted());
+  }
+
+  @override
   Widget build(BuildContext context) {
     // super.build(context);
     Size size = MediaQuery.of(context).size;
@@ -192,14 +202,19 @@ class _PostsScreenState extends State<PostsScreen> {
           width: size.width,
           height: size.height,
           color: kOfWhite,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 10),
-                ...pendingPosts,
-                _buildListPost(),
-              ],
+          child: RefreshIndicator(
+            onRefresh: () => Future.delayed(const Duration(seconds: 1), () {
+              initLoadData();
+            }),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 10),
+                  ...pendingPosts,
+                  _buildListPost(),
+                ],
+              ),
             ),
           ),
         ),
@@ -209,7 +224,7 @@ class _PostsScreenState extends State<PostsScreen> {
 
   Widget _buildListPost() {
     return BlocBuilder<PostsBloc, PostsState>(
-      bloc: context.read<PostsBloc>(),
+      // bloc: context.read<PostsBloc>(),
       builder: (context, state) {
         return (switch (state) {
           PostsLoadInProgress() => const Center(

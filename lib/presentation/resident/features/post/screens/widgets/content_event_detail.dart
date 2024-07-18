@@ -38,6 +38,7 @@ class ContentEventsDetail extends StatelessWidget {
             }
 
             Widget btnJoiner = CustomButton(
+              height: 40,
               onPressed: () {
                 context
                     .read<PostViewDetailBloc>()
@@ -50,6 +51,7 @@ class ContentEventsDetail extends StatelessWidget {
 
             if (event.checkUserJoin(userCurrent?.uid ?? '')) {
               btnJoiner = CustomButton(
+                height: 40,
                 onPressed: () {
                   _dialogBuilder(context);
                 },

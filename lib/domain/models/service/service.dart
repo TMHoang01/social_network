@@ -191,7 +191,9 @@ class ServiceModel extends Equatable {
       priceType: priceType ?? this.priceType,
       priceList: priceList ?? this.priceList,
       rating: rating ?? this.rating,
-      ratingCount: ratingCount ?? this.ratingCount,
+      ratingCount: ratingCount != null
+          ? Map<int, int>.from(ratingCount)
+          : this.ratingCount,
       bookingCount: bookingCount ?? this.bookingCount,
       createdAt: createdAt ?? this.createdAt,
       createdBy: createdBy ?? this.createdBy,

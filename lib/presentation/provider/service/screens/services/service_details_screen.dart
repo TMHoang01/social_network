@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:social_network/domain/models/service/service.dart';
 import 'package:social_network/presentation/widgets/widgets.dart';
 
-class ServiceDetailScreen extends StatelessWidget {
+class ServiceDetailProviderScreen extends StatelessWidget {
   final ServiceModel service;
-  const ServiceDetailScreen({super.key, required this.service});
+  const ServiceDetailProviderScreen({super.key, required this.service});
 
   @override
   Widget build(BuildContext context) {

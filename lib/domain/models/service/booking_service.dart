@@ -67,10 +67,17 @@ class BookingService extends Equatable {
   });
 
   factory BookingService.fromJson(Map<String, dynamic> json) {
+    final infor = json['inforContact'] != null
+        ? InforContactModel.fromJson(json['inforContact'])
+        : null;
+    // logger.i(infor);
+    String? userId = infor?.userId ?? userCurrent?.id;
+    String? userName = infor?.username ?? userCurrent?.username;
+
     return BookingService(
       id: json['id'],
-      userId: json['userId'],
-      userName: json['userName'],
+      userId: userId ?? '',
+      userName: userName ?? "",
       inforContact: json['inforContact'] != null
           ? InforContactModel.fromJson(json['inforContact'])
           : null,

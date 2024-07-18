@@ -4,7 +4,7 @@ import 'package:social_network/presentation/blocs/auth/auth_bloc.dart';
 import 'package:social_network/presentation/provider/service/screens/service_booking/service_booking_list_screen.dart';
 import 'package:social_network/presentation/resident/dashboard/home_page/home_page.dart';
 import 'package:social_network/presentation/resident/dashboard/settings/setting_screen.dart';
-import 'package:social_network/presentation/resident/features/service/screens/service_booking/booking_list_screen.dart';
+import 'package:social_network/presentation/resident/features/service/screens/service_booking/my_booking_list_screen.dart';
 import 'package:social_network/router.dart';
 import 'package:social_network/utils/constants.dart';
 
@@ -18,8 +18,7 @@ class DashBoardClientScreen extends StatefulWidget {
 class _DashBoardClientScreenState extends State<DashBoardClientScreen> {
   final List<Widget> _pages = [
     const HomePage(),
-    const ServiceBookingListScreen(),
-    // const MyServiceBookingListScreen(),
+    const ServiceBookingResidentListScreen(),
     const SettingScreen(),
   ];
   final PageController _pageController = PageController();

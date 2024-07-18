@@ -19,7 +19,7 @@ import 'package:social_network/presentation/resident/features/feed_back/blocs/my
 import 'package:social_network/presentation/resident/features/feed_back/blocs/my_feed_back_create/my_feed_back_create_bloc.dart';
 import 'package:social_network/presentation/resident/features/guest_access/blocs/guest_access/guest_access_bloc.dart';
 import 'package:social_network/presentation/resident/features/post/blocs/posts/posts_bloc.dart';
-import 'package:social_network/presentation/resident/features/service/blocs/booking_service/booking_service_bloc.dart';
+import 'package:social_network/presentation/resident/features/service/blocs/schedule_booking_service/schedule_booking_service_bloc.dart';
 import 'package:social_network/presentation/resident/features/service/blocs/booking_service_create/booking_service_create_bloc.dart';
 import 'package:social_network/presentation/resident/features/service/blocs/service_detail/service_detail_bloc.dart';
 import 'package:social_network/presentation/resident/features/service/blocs/services/services_bloc.dart';
@@ -71,7 +71,7 @@ class ClientApp extends StatelessWidget {
           // services
           BlocProvider(create: (_) => sl<ServicesBloc>()),
           BlocProvider(create: (_) => sl<ServiceDetailBloc>()),
-          BlocProvider(create: (_) => sl<BookingServiceBloc>()),
+          BlocProvider(create: (_) => sl<ScheduleServiceResidentBloc>()),
           BlocProvider(create: (_) => sl<BookingServiceCreateBloc>()),
           // booking
           BlocProvider(create: (_) => sl<ServiceBookingBloc>()),
@@ -89,12 +89,6 @@ class ClientApp extends StatelessWidget {
         ],
         child: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
-            if (state is Authenticated) {
-              context.read<InforContactBloc>().add(GetInforContact());
-              // context.read<CategoryBloc>().add(GetCategoriesEvent());
-              // context.read<CartBloc>().add(GetCart());
-              // context.read<OrderBloc>().add(const GetAllOrder());
-            }
             return MyMaterialApp(
               initialRoute: RouterClient.initialRoute,
               routes: RouterClient.routes,

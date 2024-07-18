@@ -97,6 +97,14 @@ class _HomePageState extends State<HomePage>
         navService.pushNamed(context, RouterClient.parking);
       },
     ),
+    // ItemHomePage(
+    //   title: 'Lịch hẹn của tôi',
+    //   icon: FontAwesomeIcons.squareParking,
+    //   color: Colors.green,
+    //   onTap: (BuildContext context) {
+    //     navService.pushNamed(context, RouterClient.mySchedule);
+    //   },
+    // ),
   ];
 
   late ProductBloc productBloc;
@@ -328,57 +336,58 @@ class _HomePageState extends State<HomePage>
             ),
             _buildPostsHome(context, postBloc2),
 
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0, left: 12.0, right: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Mua sắm", style: theme.textTheme.headlineSmall),
-                  InkWell(
-                    onTap: () {
-                      navService.pushNamed(context, RouterClient.products);
-                    },
-                    child: Text(
-                      "Xem thêm",
-                      style: theme.textTheme.headlineSmall?.copyWith(
-                        color: kSecondaryColor,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(top: 8.0, left: 12.0, right: 12),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       Text("Mua sắm", style: theme.textTheme.headlineSmall),
+            //       InkWell(
+            //         onTap: () {
+            //           navService.pushNamed(context, RouterClient.products);
+            //         },
+            //         child: Text(
+            //           "Xem thêm",
+            //           style: theme.textTheme.headlineSmall?.copyWith(
+            //             color: kSecondaryColor,
+            //             fontSize: 14,
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
 
-            const SizedBox(height: 10),
-            BlocBuilder<ProductBloc, ProductState>(
-              bloc: productBloc,
-              builder: (context, state) {
-                if (state is ProductLoading) {
-                  return const CircularProgressIndicator();
-                }
-                if (state is ProductSuccess) {
-                  final products = state.products;
-                  return SizedBox(
-                    height: size.width * 0.4,
-                    child: ListView.separated(
-                      itemCount: products.length,
-                      scrollDirection: Axis.horizontal,
-                      separatorBuilder: (context, index) {
-                        return const Divider();
-                      },
-                      itemBuilder: (conxtext, index) {
-                        return PreviewProductWidget(product: products[index]);
-                      },
-                    ),
-                  );
-                }
-                if (state is ProductError) {
-                  return const Text("Load product failure");
-                }
-                return const Text("State not found");
-              },
-            ),
+            // const SizedBox(height: 10),
+            // BlocBuilder<ProductBloc, ProductState>(
+            //   bloc: productBloc,
+            //   builder: (context, state) {
+            //     if (state is ProductLoading) {
+            //       return const CircularProgressIndicator();
+            //     }
+            //     if (state is ProductSuccess) {
+            //       final products = state.products;
+            //       return SizedBox(
+            //         height: size.width * 0.4,
+            //         child: ListView.separated(
+            //           itemCount: products.length,
+            //           scrollDirection: Axis.horizontal,
+            //           separatorBuilder: (context, index) {
+            //             return const Divider();
+            //           },
+            //           itemBuilder: (conxtext, index) {
+            //             return PreviewProductWidget(product: products[index]);
+            //           },
+            //         ),
+            //       );
+            //     }
+            //     if (state is ProductError) {
+            //       return const Text("Load product failure");
+            //     }
+            //     return const Text("State not found");
+            //   },
+            // ),
+
             const SizedBox(height: 10),
           ],
         ),
